@@ -1,0 +1,14 @@
+/* Kode css default */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+/* Kode dimulai dari sini CSS */
+
+/* kode Tailwind */
+@tailwind base;
+
+@tailwind components;
+
+@tailwind utilities;
