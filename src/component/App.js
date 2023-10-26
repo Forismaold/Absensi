@@ -1,11 +1,12 @@
 import React from 'react'
-import Salam from './Home/Salam'
+import Navbar from './Navbar/Navbar'
+import Base from './Base/Base'
 
 function App() {
   return (
-    <div>
-      <p>Ini forisma</p>
-      <Salam/>
+    <div className='bg-neutral-200 text-neutral-500 h-screen'>
+      <Navbar/>
+      <Base/>
     </div>
   )
 }
