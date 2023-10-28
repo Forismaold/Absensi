@@ -1,12 +1,10 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { MapContainer, Marker, Rectangle, TileLayer, Tooltip } from 'react-leaflet'
 import LoadingSvg from '../utils/LoadingIcon'
 import { faLocationCrosshairs } from '@fortawesome/free-solid-svg-icons'
-
-const first = [-7.4822300,  110.2220029]
-const second = [-7.4820399, 110.2222523]
-const center = [-7.4821396, 110.2221400]
+import { useDispatch, useSelector } from 'react-redux'
+import { setUserCoordinate } from '../../redux/coordinates'
 
 export default function Absen() {
     return <div className="">
@@ -16,24 +14,28 @@ export default function Absen() {
 }
 
 const MyMap = () => {
-    const [firstCoordinate, ] = useState(first)
-    const [secondCoordinate, ] = useState(second)
-    const [userCoor, setUserCoor] = useState([0,0])
+    const firstCoordinate = useSelector(state => state.coordinates.first)
+    const secondCoordinate = useSelector(state => state.coordinates.second)
+    const centerCoordinate = useSelector(state => state.coordinates.center)
+    const userCoordinate = useSelector(state => state.coordinates.user)
+
     const [loadingUserCoor, setLoadingUserCoor] = useState(false)
     const [showCoordinate, setShowCoordinate] = useState(false)
 
     const mapRef = useRef(null)
 
-    function getCurrentLocation(callback) {
+    const dispatch = useDispatch()
+
+    const getCurrentLocation = useCallback(() => {
         if (navigator.geolocation) {
             setLoadingUserCoor(true)
             navigator.geolocation.getCurrentPosition(
                 (position) => {
                     const { latitude, longitude } = position.coords
                     const value = [latitude, longitude]
-                    callback(value)
+                    dispatch(setUserCoordinate(value))
                     setLoadingUserCoor(false)
-                    mapRef.current?.flyTo(value, mapRef.current.getZoom())
+                    focusOnLocation(value)
                 },
                 (error) => {
                     console.error('Error getting location:', error)
@@ -44,7 +46,7 @@ const MyMap = () => {
             alert('Geolocation tidak didukung browsermu.')
             setLoadingUserCoor(false)
         }
-    }
+    },[dispatch])
 
     const focusOnLocation = (location) => {
         const map = mapRef.current
@@ -52,13 +54,13 @@ const MyMap = () => {
     }
 
     useEffect(() => {
-        getCurrentLocation(setUserCoor)
-    },[firstCoordinate])
+        getCurrentLocation()
+    },[getCurrentLocation])
 
     return (
         <div>
-            <MapContainer ref={mapRef} center={center} style={{ height: '20rem', width: '100%' }} zoom={18} scrollWheelZoom={false}>
-                <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" className='rounded-md'/>
+            <MapContainer ref={mapRef} center={centerCoordinate} style={{ height: '20rem', width: '100%' }} zoom={18} scrollWheelZoom={false}>
+                <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"/>
                     <Rectangle
                         bounds={[firstCoordinate, secondCoordinate]}
                         color="blue"
@@ -68,7 +70,7 @@ const MyMap = () => {
                         Lokasi Absen disini
                     </Tooltip>
                 </Rectangle>
-                <Marker position={userCoor}>
+                <Marker position={userCoordinate}>
                     <Tooltip>
                         Lokasi kamu disini
                     </Tooltip>
@@ -90,13 +92,10 @@ const MyMap = () => {
                     </div>
                 </div>
                 <div className='relative flex flex-1 flex-col shadow rounded p-2'>
-                    <button className='absolute top-1 right-1 flex items-center justify-center rounded text-neutral-100 bg-indigo-600 p-2' onClick={() => focusOnLocation(userCoor)}><FontAwesomeIcon icon={faLocationCrosshairs}/></button>
+                    <button className='absolute top-1 right-1 flex items-center justify-center rounded text-neutral-100 bg-indigo-600 p-2' onClick={() => focusOnLocation(userCoordinate)}><FontAwesomeIcon icon={faLocationCrosshairs}/></button>
                     <p>Lokasi kamu</p>
-                    <span>{userCoor[0]}, {userCoor[1]}</span>
-                    <button className='flex items-center justify-center rounded text-neutral-100 px-2 py-1 bg-indigo-600 min-h-[32px] mt-auto' onClick={() => {
-                        getCurrentLocation(setUserCoor)
-                        focusOnLocation(userCoor)
-                    }}>
+                    <span>{userCoordinate[0] || 0}, {userCoordinate[1] || 0}</span>
+                    <button className='flex items-center justify-center rounded text-neutral-100 px-2 py-1 bg-indigo-600 min-h-[32px] mt-auto' onClick={getCurrentLocation}>
                         {loadingUserCoor ? <LoadingSvg /> : <span>Segarkan</span>}
                     </button>
                 </div>

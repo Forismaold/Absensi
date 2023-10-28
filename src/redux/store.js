@@ -1,8 +1,8 @@
 import { configureStore } from '@reduxjs/toolkit';
-import example from './reducerExample'
+import coordinates from './coordinates';
 
 export default configureStore({
     reducer: {
-        example: example
+        coordinates: coordinates
     }
 });

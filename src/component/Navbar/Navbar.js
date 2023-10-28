@@ -11,16 +11,16 @@ export default function Navbar() {
     }, [lastRouteName])
 
     return <nav className="flex px-3 py-2 gap-2 flex-col md:flex-row">
-        <h4 className="font-montserrat text-neutral-700 font-extrabold text-2xl">Forisma.</h4>
-        <div className="flex justify-between w-full">
-            <div className="flex gap-2 text-neutral-600">
+        <h4 className="font-montserrat text-neutral-100 font-extrabold text-2xl">Forisma.</h4>
+        <div className="flex justify-between w-full text-neutral-300">
+            <div className="flex gap-2 text-neutral-200">
                 <Link to={'/absen'}>
-                <div className={`${routeName === 'ABSEN' && 'border-indigo-500'} h-full flex place-items-center pointer border-b-2 border-solid`}>
+                <div className={`${routeName === 'ABSEN' ? 'border-neutral-200': 'border-indigo-700'} h-full flex place-items-center pointer border-b-2 border-solid`}>
                     <span>Absen</span>
                 </div>
                 </Link>
                 <Link to={'/admin/dashboard'}>
-                <div className={`${routeName === 'DASHBOARD' && 'border-indigo-500'} h-full flex place-items-center pointer border-b-2 border-solid`}>
+                <div className={`${routeName === 'DASHBOARD' ? 'border-neutral-200' : 'border-indigo-700'} h-full flex place-items-center pointer border-b-2 border-solid`}>
                     <span>Dashboard</span>
                 </div>
                 </Link>
