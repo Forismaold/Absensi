@@ -94,7 +94,7 @@ const MyMap = () => {
                 <div className='relative flex flex-1 flex-col shadow-md rounded p-2'>
                     <button className='absolute top-1 right-1 flex items-center justify-center rounded text-neutral-100 bg-indigo-600 p-2' onClick={() => focusOnLocation(userCoordinate)}><FontAwesomeIcon icon={faLocationCrosshairs}/></button>
                     <p>Lokasi kamu</p>
-                    {userCoordinate && <span>{userCoordinate[0] || 0}, {userCoordinate[1] || 0}</span>}
+                    <span>{userCoordinate ? `${userCoordinate[0]}, ${userCoordinate[1]}` : '0, 0'}</span>
                     <button className='flex items-center justify-center rounded text-neutral-100 px-2 py-1 bg-indigo-600 min-h-[32px] mt-auto' onClick={getCurrentLocation}>
                         {loadingUserCoor ? <LoadingSvg /> : <span>Segarkan</span>}
                     </button>
