@@ -7,7 +7,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { setUserCoordinate } from '../../redux/coordinates'
 
 export default function Absen() {
-    return <div className="">
+    return <div>
         <p>ini halaman absen</p>
         <MyMap/>
     </div>
@@ -41,7 +41,7 @@ const MyMap = () => {
                     console.error('Error getting location:', error)
                     setLoadingUserCoor(false)
                 }
-                )
+            )
         } else {
             alert('Geolocation tidak didukung browsermu.')
             setLoadingUserCoor(false)
@@ -54,13 +54,13 @@ const MyMap = () => {
     }
 
     useEffect(() => {
-        getCurrentLocation()
-    },[getCurrentLocation])
+        if (!userCoordinate) getCurrentLocation()
+    },[getCurrentLocation, userCoordinate])
 
     return (
         <div>
             <MapContainer ref={mapRef} center={centerCoordinate} style={{ height: '20rem', width: '100%' }} zoom={18} scrollWheelZoom={false}>
-                <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"/>
+                <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" className='rounded-md'/>
                     <Rectangle
                         bounds={[firstCoordinate, secondCoordinate]}
                         color="blue"
@@ -70,17 +70,17 @@ const MyMap = () => {
                         Lokasi Absen disini
                     </Tooltip>
                 </Rectangle>
-                <Marker position={userCoordinate}>
+                <Marker position={userCoordinate? userCoordinate : [0,0]}>
                     <Tooltip>
                         Lokasi kamu disini
                     </Tooltip>
                 </Marker>
             </MapContainer>
             <div className='flex gap-2 flex-wrap mt-2 flex-col md:flex-row'>
-                <div className='relative flex flex-1 flex-col shadow rounded p-2'>
-                <button className='absolute top-1 right-1 flex items-center justify-center rounded text-neutral-100 bg-indigo-600 p-2' onClick={() => focusOnLocation(firstCoordinate)}><FontAwesomeIcon icon={faLocationCrosshairs}/></button>
+                <div className='relative flex flex-1 flex-col shadow-md rounded p-2'>
+                    <button className='absolute top-1 right-1 flex items-center justify-center rounded text-neutral-100 bg-indigo-600 p-2' onClick={() => focusOnLocation(firstCoordinate)}><FontAwesomeIcon icon={faLocationCrosshairs}/></button>
                     <p>Lokasi absen</p>
-                    <div onClick={() => setShowCoordinate(prev => !prev)}>
+                    <div onClick={() => setShowCoordinate(prev => !prev)} className='flex-1 cursor-pointer'>
                         {showCoordinate ?
                         <>
                             <span>{firstCoordinate[0] || ''}, {firstCoordinate[1] || ''}</span>
@@ -91,10 +91,10 @@ const MyMap = () => {
                         }
                     </div>
                 </div>
-                <div className='relative flex flex-1 flex-col shadow rounded p-2'>
+                <div className='relative flex flex-1 flex-col shadow-md rounded p-2'>
                     <button className='absolute top-1 right-1 flex items-center justify-center rounded text-neutral-100 bg-indigo-600 p-2' onClick={() => focusOnLocation(userCoordinate)}><FontAwesomeIcon icon={faLocationCrosshairs}/></button>
                     <p>Lokasi kamu</p>
-                    <span>{userCoordinate[0] || 0}, {userCoordinate[1] || 0}</span>
+                    {userCoordinate && <span>{userCoordinate[0] || 0}, {userCoordinate[1] || 0}</span>}
                     <button className='flex items-center justify-center rounded text-neutral-100 px-2 py-1 bg-indigo-600 min-h-[32px] mt-auto' onClick={getCurrentLocation}>
                         {loadingUserCoor ? <LoadingSvg /> : <span>Segarkan</span>}
                     </button>
