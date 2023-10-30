@@ -1,10 +1,10 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { MapContainer, Marker, Rectangle, TileLayer, Tooltip } from 'react-leaflet'
-import LoadingSvg from '../utils/LoadingIcon'
+import LoadingSvg from '../../utils/LoadingIcon'
 import { faLocationCrosshairs } from '@fortawesome/free-solid-svg-icons'
 import { useDispatch, useSelector } from 'react-redux'
-import { setUserCoordinate } from '../../redux/coordinates'
+import { setUserCoordinate } from '../../../redux/coordinates'
 
 export default function Absen() {
     return <div>

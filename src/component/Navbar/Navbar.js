@@ -12,8 +12,8 @@ export default function Navbar() {
 
     return <nav className="flex px-3 py-2 gap-2 flex-col md:flex-row">
         <h4 className="font-montserrat text-neutral-100 font-extrabold text-2xl">Forisma.</h4>
-        <div className="flex justify-between w-full text-neutral-300">
-            <div className="flex gap-2 text-neutral-200">
+        <div className="flex justify-between w-full text-neutral-200">
+            <div className="flex gap-2">
                 <Link to={'/absen'}>
                 <div className={`${routeName === 'ABSEN' ? 'border-neutral-200': 'border-indigo-700'} h-full flex place-items-center pointer border-b-2 border-solid`}>
                     <span>Absen</span>
@@ -26,9 +26,11 @@ export default function Navbar() {
                 </Link>
             </div>
             <div className="flex gap-2">
+                <Link to={'/akun'}>
                 <div className="h-full flex place-items-center pointer">
                     <span>Akun</span>
                 </div>
+                </Link>
             </div>
         </div>
     </nav>

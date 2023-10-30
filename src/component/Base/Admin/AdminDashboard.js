@@ -4,7 +4,7 @@ export default function AdminDashboard() {
     return <div>
         <p>ini halaman admin</p>
         <UsersList/>
-        </div>
+    </div>
 }
 
 function UsersList() {
