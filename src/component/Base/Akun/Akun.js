@@ -1,12 +1,45 @@
+import { faArrowRightFromBracket, faArrowRightToBracket, faRotate } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { Link } from 'react-router-dom'
 import { useState } from "react"
 import { useEffect } from "react"
 import { useSelector } from "react-redux"
 
 
 export default function Akun() {
+    const akun = useSelector(state => state.source.account)
     return <div>
         <p>Ini halaman akun</p>
-        <Profile/>
+        {akun?
+        <>
+            <Profile/>
+            <div className='mt-2 flex gap-2'>
+                <div className='flex gap-2 rounded p-2 px-3 items-center bg-red-200 text-red-600 cursor-pointer shadow'>
+                    <FontAwesomeIcon icon={faArrowRightFromBracket}/>
+                    <span>keluar</span>
+                </div>
+                <div className='flex gap-2 rounded p-2 px-3 items-center bg-neutral-200 text-neutral-600 cursor-pointer shadow'>
+                    <FontAwesomeIcon icon={faRotate}/>
+                    <span>Ganti</span>
+                </div>
+            </div>
+        </>
+        : <div>
+            <div className='mt-2 flex gap-2 items-center justify-center'>
+                <Link to={'/akun/masuk'}>
+                <div className='flex gap-2 rounded p-2 px-3 items-center bg-neutral-200 text-neutral-600 cursor-pointer shadow'>
+                    <FontAwesomeIcon icon={faArrowRightToBracket}/>
+                    <span>Masuk</span>
+                </div>
+                </Link>
+                <p>atau</p>
+                <Link to={'/akun/daftar'}>
+                <div className='flex gap-2 rounded p-2 px-3 items-center bg-indigo-500 text-neutral-200 cursor-pointer shadow'>
+                    <span>Daftar</span>
+                </div>
+                </Link>
+            </div>
+        </div>}
     </div>
 }
 
@@ -14,11 +47,11 @@ function Profile() {
     const akun = useSelector(state => state.source.account)
     useEffect(() => console.log(akun),[akun])
     const [bioData,] = useState([
-        { property: 'Nama', value: akun.nama },
-        { property: 'Kelas', value: akun.kelas },
-        { property: 'Nomor Absen', value: akun.nomor_absen },
-        { property: 'Agama', value: akun.agama },
-        { property: 'Jenis Kelamin', value: akun.jenis_kelamin },
+        { prop: 'Nama', value: akun.nama },
+        { prop: 'Kelas', value: akun.kelas },
+        { prop: 'Nomor Absen', value: akun.nomor_absen },
+        { prop: 'Agama', value: akun.agama },
+        { prop: 'Jenis Kelamin', value: akun.jenis_kelamin },
     ])
     return <div className="flex flex-col shadow rounded-3xl overflow-hidden">
         <div className="flex flex-col sm:flex-row shadow-md rounded-md p-2 items-center gap-2">
@@ -31,16 +64,16 @@ function Profile() {
             </div>
         </div>
         <div className="px-4 mt-4">
-            {bioData.map(({ property, value }) => (
-                <ProfileBioCell key={property} property={property} value={value} />
+            {bioData.map(({ prop, value }) => (
+                <ProfileBioCell key={prop} prop={prop} value={value} />
             ))}
         </div>
     </div>
 }
 
-function ProfileBioCell({property, value}) {
+function ProfileBioCell({prop, value}) {
     return <div className="flex flex-col sm:flex-row border-b-[1px] border-solid border-neutral-400 last:border-transparent py-2">
-        <p className="sm:w-2/6 font-medium">{property}</p>
+        <p className="sm:w-2/6 font-medium">{prop}</p>
         <p>{value}</p>
     </div>
 }

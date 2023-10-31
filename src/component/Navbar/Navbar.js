@@ -10,7 +10,7 @@ export default function Navbar() {
         setRouteName(lastRouteName)
     }, [lastRouteName])
 
-    return <nav className="flex px-3 py-2 gap-2 flex-col md:flex-row">
+    return <nav className="flex px-3 py-2 gap-2 flex-col md:flex-row w-full">
         <h4 className="font-montserrat text-neutral-100 font-extrabold text-2xl">Forisma.</h4>
         <div className="flex justify-between w-full text-neutral-200">
             <div className="flex gap-2">
