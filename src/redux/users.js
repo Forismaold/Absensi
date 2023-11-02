@@ -1,10 +1,9 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { exampleUsers } from "../userSchema";
 
 const users = createSlice({
     name: 'users',
     initialState: {
-        users: exampleUsers
+        users: []
     },
     reducers: {
         setUsers: (state, action) => {
