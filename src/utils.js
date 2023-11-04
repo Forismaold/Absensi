@@ -43,7 +43,6 @@ export function getObjectLocalStorage(key) {
         const data = JSON.parse(dataString)
         return data
     } else {
-        console.log("Data tidak ditemukan di local storage.")
         return null
     }
 }
@@ -61,7 +60,6 @@ export function getDecryptObjectLocalStorage(key) {
             const data = dencryptObject(dataString)
             return data
         } else {
-            console.log("Data tidak ditemukan di local storage")
             return null
         }
     } catch (error) {

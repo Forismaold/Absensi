@@ -1,7 +1,6 @@
-import { faArrowRightFromBracket, faArrowRightToBracket, faLink } from '@fortawesome/free-solid-svg-icons'
+import { faArrowRightFromBracket, faLink } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { Link } from 'react-router-dom'
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import Modal from '../../utils/Modal'
 import { GoogleOAuthProvider, GoogleLogin } from '@react-oauth/google'
@@ -9,12 +8,12 @@ import { API, setLocalStorage } from '../../../utils'
 import axios from 'axios'
 import { refreshAccount } from '../../../redux/source'
 import { loadingToast } from '../../utils/myToast'
+import Auth from './Auth'
 
 
 export default function Akun() {
     const akun = useSelector(state => state.source.account)
 
-    useEffect(() => console.log(akun))
     const dispatch = useDispatch()
     
     function keluar() {
@@ -28,7 +27,7 @@ export default function Akun() {
         <>
             <Profile/>
             <hr />
-            <div className='mt-2 items-center flex gap-2'>
+            <div className='mt-2 items-center flex gap-2 flex-wrap'>
                 {akun.email ? <p>{akun.email}</p> : <TautkanDenganGoogle/>}
                 <div className='flex gap-2 rounded p-2 px-3 items-center bg-neutral-200 text-neutral-600 cursor-pointer shadow' onClick={keluar}>
                     <FontAwesomeIcon icon={faArrowRightFromBracket}/>
@@ -36,22 +35,7 @@ export default function Akun() {
                 </div>
             </div>
         </>
-        : <div>
-            <div className='mt-2 flex gap-2 items-center justify-center'>
-                <Link to={'/akun/masuk'}>
-                <div className='flex gap-2 rounded p-2 px-3 items-center bg-neutral-200 text-neutral-600 cursor-pointer shadow'>
-                    <FontAwesomeIcon icon={faArrowRightToBracket}/>
-                    <span>Masuk</span>
-                </div>
-                </Link>
-                <p>atau</p>
-                <Link to={'/akun/daftar'}>
-                <div className='flex gap-2 rounded p-2 px-3 items-center bg-indigo-500 text-neutral-200 cursor-pointer shadow'>
-                    <span>Daftar</span>
-                </div>
-                </Link>
-            </div>
-        </div>}
+        : <Auth/>}
     </div>
 }
 

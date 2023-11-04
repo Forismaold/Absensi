@@ -1,6 +1,6 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faArrowLeft, faKey, faUser } from '@fortawesome/free-solid-svg-icons'
-import { Link, useNavigate } from 'react-router-dom'
+import { faKey, faUser } from '@fortawesome/free-solid-svg-icons'
+import { useNavigate } from 'react-router-dom'
 // import { GoogleOAuthProvider, GoogleLogin } from "@react-oauth/google"
 import { API, setLocalStorage } from "../../../utils"
 import axios from "axios"
@@ -10,21 +10,15 @@ import { refreshAccount } from '../../../redux/source'
 import { loadingToast } from '../../utils/myToast'
 import ReCAPTCHA from "react-google-recaptcha";
 import { toast } from 'react-toastify'
+import { GoogleLogin, GoogleOAuthProvider } from '@react-oauth/google'
 
 
 export default function Login() {
-    return <div>
+    return <div className='flex flex-col'>
         <p>ini halaman login</p>
         <LoginForm/>
-        {/* <GoogleLoginButton/> */}
-        <div className='flex'>
-            <Link to={'/akun'}>
-            <div className="text-neutral-700 flex gap-2 items-center p-2 px-3 shadow cursor-pointer rounded-full">
-                <FontAwesomeIcon icon={faArrowLeft}/>
-                <p>Kembali</p>
-            </div>
-            </Link>
-        </div>
+        <span className='text-center'>atau</span>
+        <GoogleLoginButton/>
     </div>
 }
 
@@ -78,28 +72,45 @@ function LoginForm() {
                 <p>Kata sandi</p>
             </div>
             <input className='p-2 rounded shadow w-full' type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder='Kata sandi' autoComplete='off' required/>
-            <ReCAPTCHA sitekey={process.env.REACT_APP_RECAPTCHA_SITE} onChange={onChange}/>
+            <div className='max-w-full overflow-auto'>
+                <ReCAPTCHA sitekey={process.env.REACT_APP_RECAPTCHA_SITE} onChange={onChange}/>
+            </div>
             <button type='submit' className={`text-center rounded ${isRecaptchaVerified ? 'bg-indigo-500' : 'bg-indigo-300'} text-neutral-200 shadow p-2`}>Submit</button>
         </form>
     </div>
 }
 
-// function GoogleLoginButton() {
-//     async function handleSuccess(credential) {
-//         axios.post(API + '/akun/login', {credential: credential})
-//         .then(res => console.log(res))
-//         .catch(err => console.log(err))
-//     }
-//     return <div className="p-8 flex justify-center">
-//         <form action=""></form>
-//         <GoogleOAuthProvider clientId={process.env.REACT_APP_CLIENT_ID}>
-//             <GoogleLogin
-//                 onSuccess={handleSuccess}
-//                 onError={() => {
-//                     console.log('Login Failed')
-//                 }}
-//                 useOneTap
-//             />
-//         </GoogleOAuthProvider>
-//     </div>
-// }
+function GoogleLoginButton() {
+    const dispatch = useDispatch()
+    const navigate = useNavigate()
+
+    async function handleSuccess(credential) {
+        const promise = loadingToast()
+        try {
+            axios.post(API + '/akun/login/google', {...credential})
+            .then(res => {
+                setLocalStorage('account', res.data.user)
+                dispatch(refreshAccount())
+                navigate('/akun')
+                promise.onSuccess('Berhasil masuk ke akun')
+            })
+            .catch(err => {
+                if (err?.response?.status === 401) promise.onError(err?.response?.data.message)
+            })
+        } catch (error) {
+            promise.onError(error?.message || 'Server error')
+        }
+    }
+    return <div className="py-4 flex justify-center">
+        <form action=""></form>
+        <GoogleOAuthProvider clientId={process.env.REACT_APP_CLIENT_ID}>
+            <GoogleLogin
+                onSuccess={handleSuccess}
+                onError={() => {
+                    console.log('Login Failed')
+                }}
+                useOneTap
+            />
+        </GoogleOAuthProvider>
+    </div>
+}

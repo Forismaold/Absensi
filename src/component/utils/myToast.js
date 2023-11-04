@@ -24,7 +24,9 @@ export function loadingToast(text = 'Loading...', timeout = 90000) {
     }
 
     setTimeout(() => {
-        updateToast(toast.TYPE.DEFAULT, 'Waktu habis')
+        try {
+            updateToast(toast.TYPE.DEFAULT, 'Waktu habis')
+        } catch (error) {}
     }, timeout)
 
     return { element: promise, onSuccess, onError, close }
