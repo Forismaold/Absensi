@@ -1,0 +1,16 @@
+:root {
+    --toastify-color-progress-light: linear-gradient(
+      to right,
+      rgb(99, 102, 241),
+      rgb(79, 70, 229)
+    );
+  }
+  
+
+.Toastify__toast {
+    min-height: 32px;
+    margin-bottom: .5rem;
+}
+.Toastify__close-button {
+    display: none;
+}

@@ -6,6 +6,8 @@ import axios from "axios"
 import { useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { refreshAccount } from '../../../redux/source'
+import { toast } from 'react-toastify'
+import { loadingToast } from '../../utils/myToast'
 
 export default function Register() {
     return <div>
@@ -38,7 +40,7 @@ function RegisterForm() {
 
     function handleSubmit(e) {
         e.preventDefault()
-        if (password !== confirmPassword) return alert('Kata sandi dan Konfirmasi kata sandi tidak cocok!')
+        if (password !== confirmPassword) return toast.error('Kata sandi dan Konfirmasi kata sandi tidak cocok!')
         const dataToSend = {
             nama: nama.trim(),
             panggilan,
@@ -49,18 +51,20 @@ function RegisterForm() {
             password
         }
 
+        const promise = loadingToast('Membuat akun')
         try {
             axios.post(API + '/akun/daftar', dataToSend)
             .then(res => {
                 setLocalStorage('account', res.data.user)
                 dispatch(refreshAccount())
                 navigate('/akun')
+                promise.onSuccess('Berhasil membuat akun')
             })
             .catch(err => {
-                if (err?.response?.status === 409) alert(err?.response?.data.message)
+                if (err?.response?.status === 409) promise.onError(err?.response?.data.message)
             })
         } catch (error) {
-            console.log(error)
+            promise.onError(error.message)
         }
     }
 

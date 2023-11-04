@@ -7,6 +7,7 @@ import axios from "axios"
 import { useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { refreshAccount } from '../../../redux/source'
+import { loadingToast } from '../../utils/myToast'
 
 export default function Login() {
     return <div>
@@ -33,18 +34,21 @@ function LoginForm() {
 
     function handleSubmit(e) {
         e.preventDefault()
+        const promise = loadingToast('Mencari akun')
         try {
             axios.post(API + '/akun/login/form', {nama, password})
             .then(res => {
                 setLocalStorage('account', res.data.user)
-                console.log(res.data.user)
                 dispatch(refreshAccount())
                 navigate('/akun')
+                promise.onSuccess('Berhasil masuk ke akun')
             }).catch(err => {
-                if (err?.response?.status === 401) alert(err?.response?.data.message)
+                setNama('')
+                setPassword('')
+                if (err?.response?.status === 401) promise.onError(err?.response?.data.message)
             })
         } catch (error) {
-            
+            promise.onError(error?.message || 'Server error')
         }
     }
 

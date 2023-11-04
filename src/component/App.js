@@ -4,7 +4,7 @@ import Base from './Base/Base'
 
 function App() {
   return (
-    <div className='bg-indigo-500 text-neutral-500 min-h-screen overflow-auto flex flex-col items-center'>
+    <div className='relative bg-indigo-500 text-neutral-500 min-h-screen overflow-auto flex flex-col items-center'>
       <Navbar/>
       <Base/>
     </div>

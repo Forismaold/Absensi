@@ -57,6 +57,10 @@ const MyMap = () => {
         if (!userCoordinate) getCurrentLocation()
     },[getCurrentLocation, userCoordinate])
 
+    function focusUserLocation() {
+        if (userCoordinate) focusOnLocation(userCoordinate)
+    }
+
     return (
         <div>
             <MapContainer ref={mapRef} center={centerCoordinate} style={{ height: '20rem', width: '100%' }} zoom={18} scrollWheelZoom={false}>
@@ -92,7 +96,7 @@ const MyMap = () => {
                     </div>
                 </div>
                 <div className='relative flex flex-1 flex-col shadow-md rounded p-2'>
-                    <button className='absolute top-1 right-1 flex items-center justify-center rounded text-neutral-100 bg-indigo-600 p-2' onClick={() => focusOnLocation(userCoordinate)}><FontAwesomeIcon icon={faLocationCrosshairs}/></button>
+                    <button className={`absolute top-1 right-1 flex items-center justify-center rounded text-neutral-100 bg-indigo-${userCoordinate ? '600' : '200'} p-2`} onClick={focusUserLocation}><FontAwesomeIcon icon={faLocationCrosshairs}/></button>
                     <p>Lokasi kamu</p>
                     <span>{userCoordinate ? `${userCoordinate[0]}, ${userCoordinate[1]}` : '0, 0'}</span>
                     <button className='flex items-center justify-center rounded text-neutral-100 px-2 py-1 bg-indigo-600 min-h-[32px] mt-auto' onClick={getCurrentLocation}>

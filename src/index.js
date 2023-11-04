@@ -1,12 +1,16 @@
 import React from 'react'
 import { createRoot } from 'react-dom/client';
-import './styles/index.css'
 import { Provider } from 'react-redux';
 import App from './component/App'
 import reportWebVitals from './reportWebVitals'
 import MyErrorBoundary from './component/Error/MyErrorBoundary'
 import store from './redux/store'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import './styles/index.css'
+import './styles/toastyCostum.css'
+
 
 const root = createRoot(document.getElementById('root'))
 root.render(
@@ -17,6 +21,18 @@ root.render(
                     <Route path='*' element={<App />}/>
                 </Routes>
             </BrowserRouter>
+            <ToastContainer
+                position="top-center"
+                autoClose={50000}
+                // hideProgressBar
+                newestOnTop={false}
+                closeOnClick
+                rtl={false}
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover
+                theme="light"
+            />
         </Provider>
     </MyErrorBoundary>
 )

@@ -54,13 +54,17 @@ export function setEncryptObjectLocalStorage(key, data) {
 }
   
 export function getDecryptObjectLocalStorage(key) {
-    const dataString = localStorage.getItem(key)
-
-    if (dataString) {
-        const data = dencryptObject(dataString)
-        return data
-    } else {
-        console.log("Data tidak ditemukan di local storage")
-        return null
+    try {
+        const dataString = localStorage.getItem(key)
+        
+        if (dataString) {
+            const data = dencryptObject(dataString)
+            return data
+        } else {
+            console.log("Data tidak ditemukan di local storage")
+            return null
+        }
+    } catch (error) {
+        localStorage.removeItem(key)
     }
 }
