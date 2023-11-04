@@ -3,10 +3,13 @@ import { useDispatch, useSelector } from "react-redux"
 import { API } from "../../../utils"
 import axios from "axios"
 import { setUsers } from "../../../redux/users"
+import ButtonSendText from "../../utils/ButtonSendText"
 
 export default function AdminDashboard() {
+
     return <div>
         <p>ini halaman admin</p>
+        <ButtonSendText/>
         <UsersList/>
     </div>
 }
