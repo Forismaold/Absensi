@@ -1,10 +1,10 @@
-##Stack
+## Stack
 web: html css js
 framework: tailwindcss reactjs expressjs
 engine: nodeJS
 
 
-##Repository dan host
+## Repository dan host
 FrontEnd
 - Repo: https://github.com/Forisma/Absensi
 - Host: https://absensiswa.netlify.app
