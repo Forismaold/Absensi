@@ -8,6 +8,7 @@ import { useDispatch } from 'react-redux'
 import { refreshAccount } from '../../../redux/source'
 import { toast } from 'react-toastify'
 import { loadingToast } from '../../utils/myToast'
+import ReCAPTCHA from "react-google-recaptcha";
 
 export default function Register() {
     return <div>
@@ -35,12 +36,18 @@ function RegisterForm() {
     const [password, setPassword] = useState('')
     const [confirmPassword, setConfirmPassword] = useState('')
 
+    const [isRecaptchaVerified, setRecaptchaVerified] = useState(false);
+    function onChange(value) {
+        setRecaptchaVerified(true)
+    }
+
     const navigate = useNavigate()
     const dispatch = useDispatch()
 
     function handleSubmit(e) {
         e.preventDefault()
         if (password !== confirmPassword) return toast.error('Kata sandi dan Konfirmasi kata sandi tidak cocok!')
+        if (!isRecaptchaVerified) return toast.error('Silakan lengkapi reCAPTCHA')
         const dataToSend = {
             nama: nama.trim(),
             panggilan,
@@ -106,7 +113,8 @@ function RegisterForm() {
                 <option value="L">Laki-laki</option>
                 <option value="P">Perempuan</option>
             </select>
-            <button type='submit' className='text-center rounded bg-indigo-500 text-neutral-200 shadow p-2'>Submit</button>
+            <ReCAPTCHA sitekey={process.env.REACT_APP_RECAPTCHA_SITE} onChange={onChange}/>
+            <button type='submit' className={`text-center rounded ${isRecaptchaVerified ? 'bg-indigo-500' : 'bg-indigo-300'} text-neutral-200 shadow p-2`}>Submit</button>
         </form>
     </div>
 }

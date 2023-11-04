@@ -8,6 +8,9 @@ import { useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { refreshAccount } from '../../../redux/source'
 import { loadingToast } from '../../utils/myToast'
+import ReCAPTCHA from "react-google-recaptcha";
+import { toast } from 'react-toastify'
+
 
 export default function Login() {
     return <div>
@@ -32,8 +35,15 @@ function LoginForm() {
     const navigate = useNavigate()
     const dispatch = useDispatch()
 
+    function onChange(value) {
+        setRecaptchaVerified(true)
+    }
+
+    const [isRecaptchaVerified, setRecaptchaVerified] = useState(false);
+
     function handleSubmit(e) {
         e.preventDefault()
+        if (!isRecaptchaVerified) return toast.error('Silakan lengkapi reCAPTCHA')
         const promise = loadingToast('Mencari akun')
         try {
             axios.post(API + '/akun/login/form', {nama, password})
@@ -68,7 +78,8 @@ function LoginForm() {
                 <p>Kata sandi</p>
             </div>
             <input className='p-2 rounded shadow w-full' type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder='Kata sandi' autoComplete='off' required/>
-            <button type='submit' className='text-center rounded bg-indigo-500 text-neutral-200 shadow p-2'>Submit</button>
+            <ReCAPTCHA sitekey={process.env.REACT_APP_RECAPTCHA_SITE} onChange={onChange}/>
+            <button type='submit' className={`text-center rounded ${isRecaptchaVerified ? 'bg-indigo-500' : 'bg-indigo-300'} text-neutral-200 shadow p-2`}>Submit</button>
         </form>
     </div>
 }
