@@ -1,7 +1,9 @@
 import { useEffect, useState } from "react"
+import { useSelector } from "react-redux"
 import { Link, useLocation } from "react-router-dom"
 
 export default function Navbar() {
+    const akun = useSelector(state => state.source.account)
     const location = useLocation()
     const pathSegments = location?.pathname?.split('/') || 'ABSEN'
     const lastRouteName = pathSegments[pathSegments.length - 1]?.toLocaleUpperCase() || 'ABSEN'
@@ -27,9 +29,9 @@ export default function Navbar() {
             </div>
             <div className="flex gap-2">
                 <Link to={'/akun'}>
-                <div className="h-full flex place-items-center pointer">
-                    <span>Akun</span>
-                </div>
+                    <div className="h-full flex place-items-center pointer">
+                        {akun ? <img src={akun?.avatar} alt={akun?.nickname || akun?.nama} className="w-[32px] h-[32px] rounded-full shadow"/>: <span>Akun</span>}
+                    </div>
                 </Link>
             </div>
         </div>

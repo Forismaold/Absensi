@@ -43,22 +43,22 @@ function Profile() {
     const akun = useSelector(state => state.source.account)
     const [bioData,] = useState([
         { prop: 'Nama', value: akun.nama },
-        { prop: 'Kelas', value: akun.kelas },
-        { prop: 'Nomor Absen', value: akun.nomor_absen },
+        { prop: 'Kelas', value: `${akun.kelas}-${akun.nomorKelas}` },
+        { prop: 'Nomor Absen', value: akun.nomorAbsen },
         { prop: 'Agama', value: akun.agama },
-        { prop: 'Jenis Kelamin', value: akun.jenis_kelamin },
+        { prop: 'Jenis Kelamin', value: akun.jenisKelamin },
     ])
-    return <div className="flex flex-col shadow rounded-3xl overflow-hidden">
-        <div className="flex flex-col sm:flex-row shadow-md rounded-md p-2 items-center gap-2">
-            <img src={akun.avatar} alt={akun.nama} className="h-24 w-24 shadow rounded-full"/>
+    return <div className="flex flex-col shadow-md rounded-3xl overflow-hidden">
+        <div className="flex flex-col sm:flex-row shadow-md rounded-md p-2 items-center gap-2 bg-indigo-500 py-6">
+            <img src={akun.avatar} alt={akun.nama} className="h-24 w-24 shadow rounded-full mx-6"/>
             <div className="flex flex-col p-2 justify-center font-medium text-neutral-700 items-center sm:items-start">
-                <p className='break-all'>{akun.nama_panggilan||akun.nama}<span>#{akun.NIS||akun._id}</span></p>
+                <p className='break-all text-neutral-200'>{akun.nama_panggilan||akun.nama}<span>#{akun.NIS||akun._id}</span></p>
                 <div>{akun?.peran?.map(x => (
                     <span key={x} className="px-2 rounded-full bg-indigo-200 text-indigo-600 text-sm">{x}</span>
                 ))}</div>
             </div>
         </div>
-        <div className="px-4 mt-4">
+        <div className="px-4 my-4">
             {bioData.map(({ prop, value }) => (
                 <ProfileBioCell key={prop} prop={prop} value={value} />
             ))}

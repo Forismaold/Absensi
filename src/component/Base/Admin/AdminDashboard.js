@@ -31,7 +31,6 @@ function UsersList() {
 }
 
 function UsersGroup({title, data}) {
-    useEffect(() => console.log(data))
     return <div className='flex flex-col flex-1 shadow-md p-2 rounded overflow-hidden'>
         <p className="text-neutral-600 font-medium py-2">{title}</p>
         <div>
