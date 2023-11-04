@@ -7,21 +7,13 @@ export function loadingToast(text = 'Loading...', timeout = 90000) {
         </div>
     )
 
-    const updateToast = (type, message, isLoading = false) => {
-        toast.update(promise, { type, render: <p>{message}</p>, isLoading, autoClose: 3000 })
-    }
+    const updateToast = (type, message) => toast.update(promise, { type, render: <p>{message}</p>, isLoading: false, autoClose: 3000, closeOnClick: true, draggable: true })
 
-    const onSuccess = (message = 'Success') => {
-        updateToast(toast.TYPE.SUCCESS, message)
-    }
+    const onSuccess = (message = 'Success') => updateToast(toast.TYPE.SUCCESS, message)
 
-    const onError = (message = 'Error') => {
-        updateToast(toast.TYPE.ERROR, message)
-    }
+    const onError = (message = 'Error') => updateToast(toast.TYPE.ERROR, message)
 
-    const close = () => {
-        toast.dismiss(promise)
-    }
+    const close = () => toast.dismiss(promise)
 
     setTimeout(() => {
         try {
