@@ -5,7 +5,7 @@ const coordinates = createSlice({
     initialState: {
         first: [-7.4822300,  110.2220029],
         second: [-7.4820399, 110.2222523],
-        center: [-7.4820399, 110.2222523],
+        center: [-7.48213495, 110.2221276],
         user: null,
     },
     reducers: {

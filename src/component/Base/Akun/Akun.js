@@ -12,7 +12,7 @@ import Auth from './Auth'
 
 
 export default function Akun() {
-    const akun = useSelector(state => state.source.account)
+    const account = useSelector(state => state.source.account)
 
     const dispatch = useDispatch()
     
@@ -23,12 +23,12 @@ export default function Akun() {
 
     return <div>
         <p>Ini halaman akun</p>
-        {akun?
+        {account?
         <>
             <Profile/>
             <hr />
             <div className='mt-2 items-center flex gap-2 flex-wrap'>
-                {akun.email ? <p>{akun.email}</p> : <TautkanDenganGoogle/>}
+                {account.email ? <p>{account.email}</p> : <TautkanDenganGoogle/>}
                 <div className='flex gap-2 rounded p-2 px-3 items-center bg-neutral-200 text-neutral-600 cursor-pointer shadow' onClick={keluar}>
                     <FontAwesomeIcon icon={faArrowRightFromBracket}/>
                     <span>keluar</span>

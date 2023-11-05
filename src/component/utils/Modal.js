@@ -16,6 +16,7 @@ function MyOverlay({onClose, children}) {
     function handleOnClose(e) {
         if (e.target.classList.contains('overlay')) onClose()
     }
+
     return <div onClick={handleOnClose} className="overlay fixed top-0 b-0 r-0 l-0 h-full w-full bg-neutral-900/[.5] z-[1] p-4 flex justify-center items-center">
         {children}
     </div>
