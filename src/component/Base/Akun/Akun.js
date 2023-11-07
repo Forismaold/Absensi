@@ -80,7 +80,7 @@ function TautkanDenganGoogle() {
     const dispatch = useDispatch()
 
     async function handleSuccess(credential) {
-        const promise = loadingToast()
+        const promise = loadingToast('Menautkan dengan Google')
         try {
             await axios.post(API + '/akun/bind/google', {
                 ...credential, _id: user._id

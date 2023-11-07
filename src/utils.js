@@ -1,4 +1,5 @@
 import CryptoJS from "crypto-js"
+import moment from "moment-timezone"
 
 export const API = process.env.REACT_APP_API
 
@@ -65,4 +66,8 @@ export function getDecryptObjectLocalStorage(key) {
     } catch (error) {
         localStorage.removeItem(key)
     }
+}
+
+export function formatTime(time) {
+    return moment(time).tz('Asia/Jakarta').format('HH:mm')
 }

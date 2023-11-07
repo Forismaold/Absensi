@@ -85,7 +85,7 @@ function GoogleLoginButton() {
     const navigate = useNavigate()
 
     async function handleSuccess(credential) {
-        const promise = loadingToast()
+        const promise = loadingToast('Mencari akun')
         try {
             axios.post(API + '/akun/login/google', {...credential})
             .then(res => {

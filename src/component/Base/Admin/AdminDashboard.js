@@ -37,11 +37,12 @@ function UsersList() {
         }
     },[dispatch])
     async function bukaAbsensi() {
-        const promise = loadingToast()
+        const promise = loadingToast('Membuka absensi')
         try {
             await axios.get(API + '/absen/bukaAbsensi')
             .then(res => {
                 promise.onSuccess(res.data.message)
+                dispatch(setUsers([]))
             })
         } catch (error) {
             console.log(error);
@@ -49,11 +50,12 @@ function UsersList() {
         }
     }
     async function tutupAbsensi() {
-        const promise = loadingToast()
+        const promise = loadingToast('Menutup absensi')
         try {
             await axios.get(API + '/absen/tutupAbsensi')
             .then(res => {
-                promise.onSuccess(`${res.data.messge}, Tidak absen: ${res.data.tidak}, Belum absen: ${res.data.belum}, Sudah absen: ${res.data.sudah}`)
+                promise.onSuccess(`${res.data.message}, Tidak absen: ${res.data.tidak}, Belum absen: ${res.data.belum}, Sudah absen: ${res.data.sudah}`)
+                dispatch(setUsers(null))
             })
         } catch (error) {
             promise.onError('Internal server error')
