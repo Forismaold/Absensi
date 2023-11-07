@@ -91,10 +91,10 @@ function RegisterForm() {
             <input className='p-2 rounded shadow w-full' type="text" value={nama} onChange={handleChangeName} placeholder='Nama' autoComplete='off' required/>
             <div className='flex gap-2 items-center'>
                 <select value={kelas} onChange={(e) => setKelas(e.target.value)} className='min-h-[40px] shadow p-2 rounded' required>
-                    <option value="X" defaultValue>X</option>
-                    <option value="XI">XI</option>
-                    <option value="XII IPS">XII IPA</option>
-                    <option value="XII IPA">XII IPS</option>
+                    <option value="X.E" defaultValue>X.E</option>
+                    <option value="XI.F">XI.F</option>
+                    <option value="XII MIPA">XII MIPA</option>
+                    <option value="XII IPS">XII IPS</option>
                 </select>
                 <span>-</span>
                 <input className='p-2 rounded shadow w-full' type="number" value={nomorKelas} onChange={(e) => setNomorKelas(e.target.value)} placeholder='Kelas' autoComplete='off' required/>

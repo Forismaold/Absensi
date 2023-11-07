@@ -35,11 +35,11 @@ export default function KirimAbsen() {
         } catch (error) {
             
         }
-    },[account._id, dispatch])
+    },[account, dispatch])
 
     useEffect(() => {
-        if (!status) fetchStatus()
-    },[fetchStatus, status])
+        if (!status && account) fetchStatus()
+    },[account, fetchStatus, status])
     
     if (!account) return null
 
