@@ -1,5 +1,5 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faCheck, faChevronLeft, faXmark } from '@fortawesome/free-solid-svg-icons'
+import { faCheck, faChevronLeft, faRotate, faXmark } from '@fortawesome/free-solid-svg-icons'
 import { useCallback, useEffect, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { blankToast, loadingToast } from "../../utils/myToast"
@@ -29,7 +29,7 @@ export default function KirimAbsen() {
         try {
             axios.get(API + '/absen/status/' + account._id)
             .then(res => {
-                console.log(res.data);
+                console.log(res.data)
                 dispatch(setStatus(res.data))
             })
         } catch (error) {
@@ -92,6 +92,8 @@ export default function KirimAbsen() {
         try {
             await axios.post(API + '/absen/hadir', dataToSend)
             .then(res => {
+                dispatch(setStatus(res.data.status))
+                console.log(res.data.status);
                 promise.onSuccess(res.data.msg)
                 setIsLoading(false)
             }).catch(err => {
@@ -138,26 +140,29 @@ export default function KirimAbsen() {
         </div>
     </div>
 
-    return <div className='bg-indigo-600 text-neutral-100 rounded-xl p-4 flex gap-2 items-center'>
-        {status?.absen === true &&
-        <>
-            <FontAwesomeIcon icon={faCheck}/>
-            <p>Sudah Absen</p>
-        </>
-        }
-        {status?.absen === false &&
-        <div className='flex flex-col w-full'>
-            <div className='flex items-center gap-2'>
-                <FontAwesomeIcon icon={faXmark}/>
-                <p>Tidak Absen</p>
+    return <div className="flex flex-col bg-neutral-300 rounded-md p-2 gap-2">
+        <button className='flex items-center self-end justify-center rounded text-neutral-100 bg-indigo-600 p-2 shadow-lg shadow-indigo-500/50' onClick={() => fetchStatus()}><FontAwesomeIcon icon={faRotate}/></button>
+        <div className='bg-indigo-600 shadow-lg shadow-indigo-500/50 text-neutral-100 rounded-xl p-4 flex gap-2 items-center relative'>
+            {status?.absen === true &&
+            <>
+                <FontAwesomeIcon icon={faCheck}/>
+                <p>Sudah Absen</p>
+            </>
+            }
+            {status?.absen === false &&
+            <div className='flex flex-col w-full'>
+                <div className='flex items-center gap-2'>
+                    <FontAwesomeIcon icon={faXmark}/>
+                    <p>Tidak Absen</p>
+                </div>
+                <div className='flex flex-col'>
+                    <AbsenceCell prop={'Kode'} value={status.kode}/>
+                    <AbsenceCell prop={'Keterangan'} value={status.keterangan}/>
+                    <AbsenceCell prop={'Waktu Absen'} value={formatTime(status.waktuAbsen)}/>
+                </div>
             </div>
-            <div className='flex flex-col'>
-                <AbsenceCell prop={'Kode'} value={status.kode}/>
-                <AbsenceCell prop={'Keterangan'} value={status.keterangan}/>
-                <AbsenceCell prop={'Waktu Absen'} value={formatTime(status.waktuAbsen)}/>
-            </div>
+            }
         </div>
-        }
     </div>
 }
 
