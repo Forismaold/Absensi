@@ -82,8 +82,8 @@ const MyMap = () => {
                 </Marker>
             </MapContainer>
             <div className='flex gap-2 flex-wrap mt-2 flex-col md:flex-row'>
-                <div className='relative flex flex-1 flex-col shadow-md rounded p-2'>
-                    <button className='absolute top-1 right-1 flex items-center justify-center rounded text-neutral-100 bg-indigo-600 p-2 shadow-lg shadow-indigo-500/50' onClick={() => focusOnLocation(firstCoordinate)}><FontAwesomeIcon icon={faLocationCrosshairs}/></button>
+                <div className='relative flex flex-1 flex-col shadow-md rounded-xl bg-neutral-300/50 p-2'>
+                    <button className='absolute top-1 right-1 flex items-center justify-center rounded-lg text-neutral-100 bg-indigo-600 p-2 shadow-lg shadow-indigo-500/50' onClick={() => focusOnLocation(firstCoordinate)}><FontAwesomeIcon icon={faLocationCrosshairs}/></button>
                     <p>Lokasi absen</p>
                     <div onClick={() => setShowCoordinate(prev => !prev)} className='flex-1 cursor-pointer'>
                         {showCoordinate ?
@@ -100,8 +100,8 @@ const MyMap = () => {
                         }
                     </div>
                 </div>
-                <div className='relative flex flex-1 flex-col shadow-md rounded p-2'>
-                    <button className={`absolute top-1 right-1 flex items-center justify-center rounded text-neutral-100 bg-indigo-${userCoordinate ? '600' : '200'} p-2 shadow-lg shadow-indigo-500/50`} onClick={focusUserLocation}><FontAwesomeIcon icon={faLocationCrosshairs}/></button>
+                <div className='relative flex flex-1 flex-col shadow-md bg-neutral-300/50 rounded-xl p-2'>
+                    <button className={`absolute top-1 right-1 flex items-center justify-center rounded-lg text-neutral-100 bg-indigo-${userCoordinate ? '600' : '200'} p-2 shadow-lg shadow-indigo-500/50`} onClick={focusUserLocation}><FontAwesomeIcon icon={faLocationCrosshairs}/></button>
                     <p>Lokasi kamu</p>
                     <span>{userCoordinate ? `${userCoordinate[0]}, ${userCoordinate[1]}` : '0, 0'}</span>
                     <button className='flex shadow-lg shadow-indigo-500/50 items-center justify-center rounded text-neutral-100 px-2 py-1 bg-indigo-600 min-h-[32px] mt-auto' onClick={getCurrentLocation}>

@@ -1,5 +1,5 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faCheck, faChevronLeft, faRotate, faXmark } from '@fortawesome/free-solid-svg-icons'
+import { faCheck, faChevronLeft, faChevronRight, faRotate, faXmark } from '@fortawesome/free-solid-svg-icons'
 import { useCallback, useEffect, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { blankToast, loadingToast } from "../../utils/myToast"
@@ -106,41 +106,47 @@ export default function KirimAbsen() {
         }
     }
 
-    if (status?.absen === null) return <div className='bg-indigo-600 text-neutral-100 rounded-xl p-4 flex flex-col gap-2'>
+    if (status?.absen === null) return <div className='bg-indigo-600 text-neutral-100 rounded-xl p-4 flex flex-col gap-2 shadow-lg shadow-indigo-500/50'>
         <p>Kirim sebagai {account?.panggilan || account?.nama}</p>
-        <div className='flex sm:flex-row flex-col gap-2'>
+        <div className='flex gap-2'>
             {showTidak &&
-                <div className='flex-1 border-2 border-solid border-neutral-200 bg-inherit text-neutral-200 p-2 rounded flex justify-center shadow cursor-pointer' onClick={handleTidakHadir}>
-                    <span>Tidak</span>
+                <div className='border-2 border-solid border-neutral-200 bg-inherit text-neutral-200 px-3 rounded flex justify-center items-center shadow cursor-pointer' onClick={handleTidakHadir}>
+                    <FontAwesomeIcon icon={faChevronRight}/>
                 </div>
             }
             {showFormTidak &&
                 <form className='flex flex-col gap-2 w-full' onSubmit={handleSubmitTidakHadir}>
-                    <div className='flex items-center gap-2 bg-indigo-500 rounded p-2 shadow cursor-pointer' onClick={handleTidakHadir}>
-                        <FontAwesomeIcon icon={faChevronLeft}/>
+                    <div className='flex items-center rounded shadow cursor-pointer pt-2'>
                         <p>Tidak hadir</p>
                     </div>
                     <div className='flex flex-col sm:flex-row gap-2 flex-1'>
-                        <select value={kode} onChange={(e) => setKode(e.target.value)} className='min-h-[40px] shadow px-2 rounded bg-indigo-600 border-2 border-solid border-neutral-200 shadow' placeholder='Kode keterangan'>
+                        <select value={kode} onChange={(e) => setKode(e.target.value)} className='min-h-[40px] shadow px-2 rounded bg-indigo-700 border-2 border-solid border-neutral-200 shadow' placeholder='Kode keterangan'>
                             <option value="-" disable='true'>Kode</option>
                             <option value="I">Izin</option>
                             <option value="S">Sakit</option>
                             <option value="A">Alpa</option>
                         </select>
-                        <textarea value={keterangan} onChange={(e) => setKeterangan(e.target.value)} className='shadow border-2 border-solid border-neutral-200 bg-indigo-600 p-2 flex-[5] rounded placeholder:text-neutral-300 shadow' placeholder='Tambahkan keterangan'></textarea>
+                        <textarea value={keterangan} onChange={(e) => setKeterangan(e.target.value)} className='shadow border-2 border-solid border-neutral-200 bg-indigo-700 p-2 flex-[5] rounded placeholder:text-neutral-300 shadow' placeholder='Tambahkan keterangan'></textarea>
                     </div>
-                    <button type='submit' className='flex justify-center rounded bg-indigo-600 border-2 border-solid border-neutral-200 p-2 hover:text-indigo-700 hover:bg-neutral-200'>{isLoading ? <LoadingIcon/> : 'Kirim'}</button>
+                    <div className='flex gap-2'>
+                        <div className='border-2 border-solid border-neutral-200 bg-inherit text-neutral-200 px-3 rounded flex justify-center items-center shadow cursor-pointer' onClick={handleTidakHadir}>
+                            <FontAwesomeIcon icon={faChevronLeft}/>
+                        </div>
+                        <button className={`flex-1 ${isLoading ? 'bg-neutral-transparent' : 'bg-neutral-200 shadow-lg shadow-neutral-300/10'} text-indigo-600 p-2 rounded flex justify-center shadow cursor-pointer hover:shadow-xl duration-300 hover:-translate-y-1`}>
+                            {isLoading ? <LoadingIcon/> : <span>Kirim</span>}
+                        </button>
+                    </div>
                 </form>
             }
             {showKirim &&
-                <div className={`flex-[4] ${isLoading ? 'bg-neutral-transparent' : 'bg-neutral-200'} text-indigo-600 p-2 rounded flex justify-center shadow cursor-pointer hover:shadow-xl duration-300 hover:-translate-y-1`} onClick={handleHadir}>
+                <div className={`flex-1 ${isLoading ? 'bg-neutral-transparent' : 'bg-neutral-200 shadow-lg shadow-neutral-300/10'} text-indigo-600 p-2 rounded flex justify-center shadow cursor-pointer hover:shadow-xl duration-300 hover:-translate-y-1`} onClick={handleHadir}>
                     {isLoading ? <LoadingIcon/> : <span>Kirim</span>}
                 </div>
             }
         </div>
     </div>
 
-    return <div className="flex flex-col bg-neutral-300 rounded-md p-2 gap-2">
+    return <div className="flex flex-col bg-neutral-300/50 rounded-xl p-2 gap-2">
         <button className='flex items-center self-end justify-center rounded text-neutral-100 bg-indigo-600 p-2 shadow-lg shadow-indigo-500/50' onClick={() => fetchStatus()}><FontAwesomeIcon icon={faRotate}/></button>
         <div className='bg-indigo-600 shadow-lg shadow-indigo-500/50 text-neutral-100 rounded-xl p-4 flex gap-2 items-center relative'>
             {status?.absen === true &&
