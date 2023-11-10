@@ -20,7 +20,7 @@ export default function ButtonSendText({text = 'Hello'}) {
             console.log(error);
         }
     }
-    return <button className={`text-center rounded bg-indigo-600 text-neutral-200 shadow p-2`} onClick={SendSomething}>Send</button>
+    return <button className={`text-center rounded bg-secondary text-neutral-200 shadow p-2`} onClick={SendSomething}>Send</button>
 }
 export function ButtonGet({route}) {
     function SendSomething() {
@@ -39,5 +39,5 @@ export function ButtonGet({route}) {
             console.log(error)
         }
     }
-    return <button className={`text-center rounded bg-indigo-600 text-neutral-200 shadow p-2`} onClick={SendSomething}>Send</button>
+    return <button className={`text-center rounded bg-secondary text-neutral-200 shadow p-2`} onClick={SendSomething}>Send</button>
 }

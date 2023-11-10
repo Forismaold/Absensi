@@ -106,7 +106,7 @@ export default function KirimAbsen() {
         }
     }
 
-    if (status?.absen === null) return <div className='bg-indigo-600 text-neutral-100 rounded-xl p-4 flex flex-col gap-2 shadow-lg shadow-indigo-500/50'>
+    if (status?.absen === null) return <div className='bg-secondary text-neutral-100 rounded-xl p-4 flex flex-col gap-2 shadow-lg shadow-primary/50'>
         <p>Kirim sebagai {account?.panggilan || account?.nama}</p>
         <div className='flex gap-2'>
             {showTidak &&
@@ -120,26 +120,26 @@ export default function KirimAbsen() {
                         <p>Tidak hadir</p>
                     </div>
                     <div className='flex flex-col sm:flex-row gap-2 flex-1'>
-                        <select value={kode} onChange={(e) => setKode(e.target.value)} className='min-h-[40px] shadow px-2 rounded bg-indigo-700 border-2 border-solid border-neutral-200 shadow' placeholder='Kode keterangan'>
+                        <select value={kode} onChange={(e) => setKode(e.target.value)} className='min-h-[40px] shadow px-2 rounded bg-tertiary border-2 border-solid border-neutral-200 shadow' placeholder='Kode keterangan'>
                             <option value="-" disable='true'>Kode</option>
                             <option value="I">Izin</option>
                             <option value="S">Sakit</option>
                             <option value="A">Alpa</option>
                         </select>
-                        <textarea value={keterangan} onChange={(e) => setKeterangan(e.target.value)} className='shadow border-2 border-solid border-neutral-200 bg-indigo-700 p-2 flex-[5] rounded placeholder:text-neutral-300 shadow' placeholder='Tambahkan keterangan'></textarea>
+                        <textarea value={keterangan} onChange={(e) => setKeterangan(e.target.value)} className='shadow border-2 border-solid border-neutral-200 bg-tertiary p-2 flex-[5] rounded placeholder:text-neutral-300 shadow' placeholder='Tambahkan keterangan'></textarea>
                     </div>
                     <div className='flex gap-2'>
                         <div className='border-2 border-solid border-neutral-200 bg-inherit text-neutral-200 px-3 rounded flex justify-center items-center shadow cursor-pointer' onClick={handleTidakHadir}>
                             <FontAwesomeIcon icon={faChevronLeft}/>
                         </div>
-                        <button className={`flex-1 ${isLoading ? 'bg-neutral-transparent' : 'bg-neutral-200 shadow-lg shadow-neutral-300/10'} text-indigo-600 p-2 rounded flex justify-center shadow cursor-pointer hover:shadow-xl duration-300 hover:-translate-y-1`}>
+                        <button className={`flex-1 ${isLoading ? 'bg-neutral-transparent' : 'bg-neutral-200 shadow-lg shadow-neutral-300/10'} text-secondary p-2 rounded flex justify-center shadow cursor-pointer hover:shadow-xl duration-300 hover:-translate-y-1`}>
                             {isLoading ? <LoadingIcon/> : <span>Kirim</span>}
                         </button>
                     </div>
                 </form>
             }
             {showKirim &&
-                <div className={`flex-1 ${isLoading ? 'bg-neutral-transparent' : 'bg-neutral-200 shadow-lg shadow-neutral-300/10'} text-indigo-600 p-2 rounded flex justify-center shadow cursor-pointer hover:shadow-xl duration-300 hover:-translate-y-1`} onClick={handleHadir}>
+                <div className={`flex-1 ${isLoading ? 'bg-neutral-transparent' : 'bg-neutral-200 shadow-lg shadow-neutral-300/10'} text-secondary p-2 rounded flex justify-center shadow cursor-pointer hover:shadow-xl duration-300 hover:-translate-y-1`} onClick={handleHadir}>
                     {isLoading ? <LoadingIcon/> : <span>Kirim</span>}
                 </div>
             }
@@ -147,8 +147,8 @@ export default function KirimAbsen() {
     </div>
 
     return <div className="flex flex-col bg-neutral-300/50 rounded-xl p-2 gap-2">
-        <button className='flex items-center self-end justify-center rounded text-neutral-100 bg-indigo-600 p-2 shadow-lg shadow-indigo-500/50' onClick={() => fetchStatus()}><FontAwesomeIcon icon={faRotate}/></button>
-        <div className='bg-indigo-600 shadow-lg shadow-indigo-500/50 text-neutral-100 rounded-xl p-4 flex gap-2 items-center relative'>
+        <button className='flex items-center self-end justify-center rounded text-neutral-100 bg-secondary p-2 shadow-lg shadow-primary/50' onClick={() => fetchStatus()}><FontAwesomeIcon icon={faRotate}/></button>
+        <div className='bg-secondary shadow-lg shadow-primary/50 text-neutral-100 rounded-xl p-4 flex gap-2 items-center relative'>
             {status?.absen === true &&
             <>
                 <FontAwesomeIcon icon={faCheck}/>

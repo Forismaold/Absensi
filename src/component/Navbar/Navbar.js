@@ -17,12 +17,12 @@ export default function Navbar() {
         <div className="flex justify-between w-full text-neutral-200">
             <div className="flex gap-2">
                 <Link to={'/absen'}>
-                <div className={`${routeName === 'ABSEN' ? 'border-neutral-200': 'border-indigo-700'} h-full flex place-items-center pointer border-b-2 border-solid`}>
+                <div className={`${routeName === 'ABSEN' ? 'border-tertiary' : 'border-transparent'} h-full flex place-items-center pointer border-b-2 border-solid`}>
                     <span>Absen</span>
                 </div>
                 </Link>
                 <Link to={'/admin/dashboard'}>
-                <div className={`${routeName === 'DASHBOARD' ? 'border-neutral-200' : 'border-indigo-700'} h-full flex place-items-center pointer border-b-2 border-solid`}>
+                <div className={`${routeName === 'DASHBOARD' ? 'border-tertiary' : 'border-transparent'} h-full flex place-items-center pointer border-b-2 border-solid`}>
                     <span>Dashboard</span>
                 </div>
                 </Link>

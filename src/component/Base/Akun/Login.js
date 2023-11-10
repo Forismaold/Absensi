@@ -75,7 +75,7 @@ function LoginForm() {
             <div className='max-w-full overflow-auto'>
                 <ReCAPTCHA sitekey={process.env.REACT_APP_RECAPTCHA_SITE} onChange={onChange}/>
             </div>
-            <button type='submit' className={`text-center rounded ${isRecaptchaVerified ? 'bg-indigo-500' : 'bg-indigo-300'} text-neutral-200 shadow p-2`}>Submit</button>
+            <button type='submit' className={`text-center rounded ${isRecaptchaVerified ? 'bg-primary' : 'bg-tertiary'} text-neutral-200 shadow p-2`}>Submit</button>
         </form>
     </div>
 }

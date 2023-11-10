@@ -12,7 +12,7 @@ export default function Auth() {
         </Link>
         <p>atau</p>
         <Link to={'/akun/daftar'}>
-            <div className='flex gap-2 rounded p-2 px-3 items-center bg-indigo-500 text-neutral-200 cursor-pointer shadow'>
+            <div className='flex gap-2 rounded p-2 px-3 items-center bg-primary text-neutral-200 cursor-pointer shadow-md shadow-primary/50'>
                 <span>Daftar</span>
             </div>
         </Link>

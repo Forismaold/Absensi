@@ -66,15 +66,15 @@ function UsersList() {
     },[fetchData])
     return <div className="flex flex-col gap-2">
         <div className="flex justify-end py-2 gap-2 flex-wrap">
-            <div onClick={bukaAbsensi} className='flex gap-2 shadow-lg shadow-indigo-500/50 cursor-pointer bg-indigo-500 items-center p-2 rounded text-neutral-200'>
+            <div onClick={bukaAbsensi} className='flex gap-2 shadow-lg shadow-primary/50 cursor-pointer bg-primary items-center p-2 rounded text-neutral-200'>
                 <FontAwesomeIcon icon={faBoxOpen}/>
                 <p>Buka</p>
             </div>
-            <div onClick={tutupAbsensi} className='flex gap-2 shadow-lg shadow-indigo-500/50 cursor-pointer bg-indigo-500 items-center p-2 rounded text-neutral-200'>
+            <div onClick={tutupAbsensi} className='flex gap-2 shadow-lg shadow-primary/50 cursor-pointer bg-primary items-center p-2 rounded text-neutral-200'>
                 <FontAwesomeIcon icon={faClose}/>
                 <p>Tutup</p>
             </div>
-            <div onClick={fetchData} className='flex gap-2 shadow-lg shadow-indigo-500/50 cursor-pointer bg-indigo-500 items-center p-2 rounded text-neutral-200'>
+            <div onClick={fetchData} className='flex gap-2 shadow-lg shadow-primary/50 cursor-pointer bg-primary items-center p-2 rounded text-neutral-200'>
                 <FontAwesomeIcon icon={faRotate}/>
                 <p>Segarkan</p>
             </div>

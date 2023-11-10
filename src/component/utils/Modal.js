@@ -5,7 +5,7 @@ export default function Modal({isOpen, children, onClose}) {
     
     return createPortal(
         <MyOverlay onClose={onClose}>
-            <div className="bg-neutral-200 text-neutral-500 rounded-md p-2 w-full">
+            <div className="bg-neutral-200 text-neutral rounded-md p-2 w-full">
                 {children}
             </div>
         </MyOverlay>
