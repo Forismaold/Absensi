@@ -41,9 +41,9 @@ function UsersList() {
         try {
             await axios.get(API + '/absen/bukaAbsensi')
             .then(res => {
-                promise.onSuccess(res.data.message)
+                promise.onSuccess(res.data.msg)
                 dispatch(setUsers([]))
-            })
+            }).catch(err => console.log(err))
         } catch (error) {
             console.log(error);
             promise.onError('Internal server error')
@@ -54,7 +54,7 @@ function UsersList() {
         try {
             await axios.get(API + '/absen/tutupAbsensi')
             .then(res => {
-                promise.onSuccess(`${res.data.message}, Tidak absen: ${res.data.tidak}, Belum absen: ${res.data.belum}, Sudah absen: ${res.data.sudah}`)
+                promise.onSuccess(`${res.data.msg}, Tidak absen: ${res.data.tidak}, Belum absen: ${res.data.belum}, Sudah absen: ${res.data.sudah}`)
                 dispatch(setUsers(null))
             })
         } catch (error) {

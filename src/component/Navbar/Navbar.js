@@ -21,7 +21,7 @@ export default function Navbar() {
                     <span>Absen</span>
                 </div>
                 </Link>
-                <Link to={'/admin/dashboard'}>
+                <Link to={'/dashboard'}>
                 <div className={`${routeName === 'DASHBOARD' ? 'border-tertiary' : 'border-transparent'} h-full flex place-items-center pointer border-b-2 border-solid`}>
                     <span>Dashboard</span>
                 </div>

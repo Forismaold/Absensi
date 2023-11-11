@@ -6,6 +6,7 @@ import Akun from "./Akun/Akun"
 import { Routes, Route, useLocation, Link } from 'react-router-dom'
 import Login from "./Akun/Login"
 import Register from "./Akun/Register"
+import Dahsboard from './Dashboard/Dashboard'
 
 export default function Base() {
     const location = useLocation()
@@ -20,6 +21,7 @@ export default function Base() {
                 <h5 className="text-3xl font-bold text-neutral-700 capitalize pt-4">{pathSegments[pathSegments.length - 1] || 'Absen'}</h5>
                 <Routes>
                     <Route path={'*'} element={<Absen/>}></Route>
+                    <Route path={'/dashboard'} element={<Dahsboard/>}></Route>
                     <Route path={'/admin/dashboard'} element={<AdminDashboard/>}></Route>
                     <Route path={'/akun'} element={<Akun/>}></Route>
                     <Route path={'/akun/masuk'} element={<Login/>}></Route>

@@ -6,7 +6,7 @@ import { API, setLocalStorage } from "../../../utils"
 import axios from "axios"
 import { useState } from 'react'
 import { useDispatch } from 'react-redux'
-import { refreshAccount } from '../../../redux/source'
+import { refreshAccount, setStatus } from '../../../redux/source'
 import { loadingToast } from '../../utils/myToast'
 import ReCAPTCHA from "react-google-recaptcha";
 import { toast } from 'react-toastify'
@@ -44,15 +44,16 @@ function LoginForm() {
             .then(res => {
                 setLocalStorage('account', res.data.user)
                 dispatch(refreshAccount())
+                dispatch(setStatus())
                 navigate('/akun')
                 promise.onSuccess('Berhasil masuk ke akun')
             }).catch(err => {
                 setNama('')
                 setPassword('')
-                if (err?.response?.status === 401) promise.onError(err?.response?.data.message)
+                if (err?.response?.status === 401) promise.onError(err?.response?.data.msg)
             })
         } catch (error) {
-            promise.onError(error?.message || 'Server error')
+            promise.onError(error?.msg || 'Server error')
         }
     }
 
@@ -75,7 +76,7 @@ function LoginForm() {
             <div className='max-w-full overflow-auto'>
                 <ReCAPTCHA sitekey={process.env.REACT_APP_RECAPTCHA_SITE} onChange={onChange}/>
             </div>
-            <button type='submit' className={`text-center rounded ${isRecaptchaVerified ? 'bg-primary' : 'bg-tertiary'} text-neutral-200 shadow p-2`}>Submit</button>
+            <button type='submit' className={`text-center rounded ${isRecaptchaVerified ? 'bg-primary' : 'bg-tertiary'} text-neutral-200 shadow-md shadow-primary/50 p-2`}>Submit</button>
         </form>
     </div>
 }
@@ -91,14 +92,15 @@ function GoogleLoginButton() {
             .then(res => {
                 setLocalStorage('account', res.data.user)
                 dispatch(refreshAccount())
+                dispatch(setStatus())
                 navigate('/akun')
                 promise.onSuccess('Berhasil masuk ke akun')
             })
             .catch(err => {
-                if (err?.response?.status === 401) promise.onError(err?.response?.data.message)
+                if (err?.response?.status === 401) promise.onError(err?.response?.data.msg)
             })
         } catch (error) {
-            promise.onError(error?.message || 'Server error')
+            promise.onError(error?.msg || 'Server error')
         }
     }
     return <div className="py-4 flex justify-center">

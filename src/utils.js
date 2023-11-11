@@ -71,3 +71,6 @@ export function getDecryptObjectLocalStorage(key) {
 export function formatTime(time) {
     return moment(time).tz('Asia/Jakarta').format('HH:mm')
 }
+export function formatDate(time) {
+    return moment(time).tz('Asia/Jakarta').format('D/M/YYYY HH:mm')
+}

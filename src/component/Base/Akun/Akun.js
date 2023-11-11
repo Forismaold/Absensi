@@ -1,6 +1,6 @@
 import { faArrowRightFromBracket, faLink } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import Modal from '../../utils/Modal'
 import { GoogleOAuthProvider, GoogleLogin } from '@react-oauth/google'
@@ -20,6 +20,8 @@ export default function Akun() {
         localStorage.removeItem('account')
         dispatch(refreshAccount())
     }
+
+    useEffect(() => console.log(account))
 
     return <div>
         <p>Ini halaman akun</p>
@@ -94,7 +96,7 @@ function TautkanDenganGoogle() {
                 promise.onError('Akun gagal ditautkan')
             })
         } catch (error) {
-            promise.onError(error?.message || 'Server error')
+            promise.onError(error?.msg || 'Server error')
         }
     }
 

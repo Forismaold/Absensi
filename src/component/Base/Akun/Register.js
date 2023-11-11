@@ -1,11 +1,11 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faArrowLeft, faEllipsisH, faUser } from '@fortawesome/free-solid-svg-icons'
-import { Link, useNavigate } from 'react-router-dom'
+import { faEllipsisH, faUser } from '@fortawesome/free-solid-svg-icons'
+import { useNavigate } from 'react-router-dom'
 import { API, setLocalStorage } from "../../../utils"
 import axios from "axios"
 import { useState } from 'react'
 import { useDispatch } from 'react-redux'
-import { refreshAccount } from '../../../redux/source'
+import { refreshAccount, setStatus } from '../../../redux/source'
 import { toast } from 'react-toastify'
 import { loadingToast } from '../../utils/myToast'
 import ReCAPTCHA from "react-google-recaptcha";
@@ -14,14 +14,6 @@ export default function Register() {
     return <div>
         <p>ini halaman daftar</p>
         <RegisterForm/>
-        <div className='flex'>
-            <Link to={'/akun'}>
-            <div className="text-neutral-700 flex gap-2 items-center p-2 px-3 shadow cursor-pointer rounded-full">
-                <FontAwesomeIcon icon={faArrowLeft}/>
-                <p>Kembali</p>
-            </div>
-            </Link>
-        </div>
     </div>
 }
 
@@ -65,13 +57,14 @@ function RegisterForm() {
                 setLocalStorage('account', res.data.user)
                 dispatch(refreshAccount())
                 navigate('/akun')
+                dispatch(setStatus())
                 promise.onSuccess('Berhasil membuat akun')
             })
             .catch(err => {
-                if (err?.response?.status === 409) promise.onError(err?.response?.data.message)
+                if (err?.response?.status === 409) promise.onError(err?.response?.data.msg)
             })
         } catch (error) {
-            promise.onError(error.message)
+            promise.onError(error.msg)
         }
     }
 
@@ -116,7 +109,7 @@ function RegisterForm() {
             <div className='max-w-full overflow-auto'>
                 <ReCAPTCHA sitekey={process.env.REACT_APP_RECAPTCHA_SITE} onChange={onChange}/>
             </div>
-            <button type='submit' className={`text-center rounded ${isRecaptchaVerified ? 'bg-primary' : 'bg-tertiary'} text-neutral-200 shadow p-2`}>Submit</button>
+            <button type='submit' className={`text-center rounded ${isRecaptchaVerified ? 'bg-primary' : 'bg-tertiary'} text-neutral-200 shadow-md shadow-primary/50 p-2`}>Submit</button>
         </form>
     </div>
 }
