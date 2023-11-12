@@ -31,10 +31,10 @@ export default function UsersList() {
     },[dispatch])
     
     useEffect(() => {
-        if (absensi) fetchData()
-    },[absensi, fetchData])
+        fetchData()
+    },[fetchData])
 
-    if (!absensi) return null
+    if (!absensi?.status) return null
 
     return <div className="flex flex-col gap-2">
         <div onClick={fetchData} className='flex gap-2 shadow-lg shadow-primary/50 cursor-pointer bg-primary items-center p-2 rounded text-neutral-200'>

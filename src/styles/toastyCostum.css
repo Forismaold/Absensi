@@ -10,6 +10,7 @@
 .Toastify__toast {
   min-height: 32px;
   margin-bottom: .5rem;
+  font-family: var(--default-font);
 }
 .Toastify__close-button {
   display: none;

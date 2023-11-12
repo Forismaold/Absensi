@@ -1,12 +1,12 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faCheck, faChevronLeft, faChevronRight, faRotate, faXmark } from '@fortawesome/free-solid-svg-icons'
+import { faCheck, faChevronLeft, faChevronRight, faMinus, faRotate, faXmark } from '@fortawesome/free-solid-svg-icons'
 import { useCallback, useEffect, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { blankToast, loadingToast } from "../../utils/myToast"
 import axios from "axios"
 import { API, formatTime } from "../../../utils"
 import LoadingIcon from '../../utils/LoadingIcon'
-import { setStatus } from '../../../redux/source'
+import { setAbsensi, setStatus } from '../../../redux/source'
 
 
 export default function KirimAbsen() {
@@ -15,6 +15,7 @@ export default function KirimAbsen() {
     const userCoordinate = useSelector(state => state.coordinates.user)
     const account = useSelector(state => state.source.account)
     const status = useSelector(state => state.source.status)
+    const absensi = useSelector(state => state.source.absensi)
 
     const [kode, setKode] = useState('-')
     const [keterangan, setKeterangan] = useState('')
@@ -29,7 +30,8 @@ export default function KirimAbsen() {
         try {
             axios.get(API + '/absen/status/' + account._id)
             .then(res => {
-                dispatch(setStatus(res.data))
+                dispatch(setStatus(res.data.status))
+                dispatch(setAbsensi(res.data.absensi))
             })
             .catch(err => console.log(err))
         } catch (error) {
@@ -40,9 +42,8 @@ export default function KirimAbsen() {
     useEffect(() => {
         if (!status && account) fetchStatus()
     },[account, fetchStatus, status])
-    
-    if (!account) return null
 
+    if (!account) return null
 
     function handleTidakHadir() {
         setShowKirim(prev => !prev)
@@ -107,6 +108,12 @@ export default function KirimAbsen() {
             promise.onError('Server error')
         }
     }
+
+    if (!absensi?.status) return <div className='bg-neutral-300 shadow-lg shadow-primary/50 text-neutral-500 rounded-xl p-4 flex gap-2 items-center relative'>
+        <FontAwesomeIcon icon={faMinus}/>
+        <p>Belum ada absensi</p>
+        <button className='flex ml-auto items-center self-end justify-center rounded text-neutral-100 bg-secondary p-2 shadow-lg shadow-primary/50 duration-200 ease-in-out active:scale-95' onClick={() => fetchStatus()}><FontAwesomeIcon icon={faRotate}/></button>
+    </div>
 
     if (status?.absen === null) return <div className='bg-secondary text-neutral-100 rounded-xl p-4 flex flex-col gap-2 shadow-lg shadow-primary/50'>
         <p>Kirim sebagai {account?.panggilan || account?.nama}</p>
