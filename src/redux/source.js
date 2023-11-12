@@ -6,6 +6,7 @@ const source = createSlice({
     initialState: {
         account: getDecryptObjectLocalStorage('account') || null,
         status: null,
+        absensi: null,
         riwayats: null
     },
     reducers: {
@@ -21,7 +22,10 @@ const source = createSlice({
         setRiwayats: (state, action) => {
             state.riwayats = action.payload || null
         },
+        setAbsensi: (state, action) => {
+            state.absensi = action.payload || null
+        },
     }
 })
-export const { setAccount, refreshAccount, setStatus, setRiwayats } = source.actions
+export const { setAccount, refreshAccount, setStatus, setRiwayats, setAbsensi } = source.actions
 export default source.reducer

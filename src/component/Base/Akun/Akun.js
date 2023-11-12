@@ -56,7 +56,7 @@ function Profile() {
             <div className="flex flex-col p-2 justify-center font-medium text-neutral-700 items-center sm:items-start">
                 <p className='break-all text-neutral-200'>{akun.nama_panggilan||akun.nama}<span>#{akun.NIS||akun._id}</span></p>
                 <div>{akun?.peran?.map(x => (
-                    <span key={x} className="px-2 rounded-full bg-primary-200 text-secondary text-sm">{x}</span>
+                    <span key={x} className="px-2 rounded-full bg-tertiary text-neutral-500 text-sm">{x}</span>
                 ))}</div>
             </div>
         </div>

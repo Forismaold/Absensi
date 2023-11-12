@@ -1,8 +1,8 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faCheck, faMinus, faRotate, faXmark } from '@fortawesome/free-solid-svg-icons'
+import { faCheck, faLock, faMinus, faRotate, faUnlock, faXmark } from '@fortawesome/free-solid-svg-icons'
 import axios from "axios"
-import { useCallback, useEffect } from "react"
-import { API, formatDate } from "../../../utils"
+import { useCallback, useEffect, useState } from "react"
+import { API, formatDate, getPermission } from "../../../utils"
 import { useDispatch, useSelector } from "react-redux"
 import { Link } from "react-router-dom"
 import { setRiwayats } from "../../../redux/source"
@@ -11,6 +11,11 @@ import { setRiwayats } from "../../../redux/source"
 export default function Dahsboard() {
     const account = useSelector(state => state.source.account)
     const riwayats = useSelector(state => state.source.riwayats)
+    const [permission, setPermission] = useState(false)
+
+    useEffect(() => {
+        setPermission(getPermission())
+    }, [])
 
     const dispatch = useDispatch()
 
@@ -35,7 +40,7 @@ export default function Dahsboard() {
     </div>
 
     return <div className='flex flex-col'>
-        <p>Ini halaman dashboard</p>
+        <p>Ini halaman dashboard <Link to={'/admin/dashboard'}><FontAwesomeIcon icon={permission ? faUnlock : faLock}/></Link></p>
         <button className='flex items-center self-end justify-center rounded text-neutral-100 bg-secondary p-2 shadow-lg shadow-primary/50 duration-200 ease-in-out active:scale-95' onClick={() => fetchRiwayats()}><FontAwesomeIcon icon={faRotate}/></button>
         <div className="flex flex-col gap-2 pt-2">
             {riwayats?.map(x => <RiwayatRow data={x} key={x._id}/>)}

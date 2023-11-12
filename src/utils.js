@@ -1,5 +1,6 @@
 import CryptoJS from "crypto-js"
 import moment from "moment-timezone"
+import store from "./redux/store"
 
 export const API = process.env.REACT_APP_API
 
@@ -73,4 +74,9 @@ export function formatTime(time) {
 }
 export function formatDate(time) {
     return moment(time).tz('Asia/Jakarta').format('D/M/YYYY HH:mm')
+}
+
+export function getPermission() {
+    const account = store.getState().source?.account || {}
+    return account?.peran?.some(role => ['admin', 'forisma'].includes(role)) || false
 }

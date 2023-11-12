@@ -29,7 +29,6 @@ export default function KirimAbsen() {
         try {
             axios.get(API + '/absen/status/' + account._id)
             .then(res => {
-                console.log(res.data)
                 dispatch(setStatus(res.data))
             })
             .catch(err => console.log(err))
@@ -56,7 +55,8 @@ export default function KirimAbsen() {
         const dataToSend = {
             _id: account._id,
             kode,
-            keterangan
+            keterangan,
+            userCoordinate
         }
         const promise = loadingToast('Mengirim keterangan tidak hadir')
         setIsLoading(true)
@@ -80,6 +80,7 @@ export default function KirimAbsen() {
     async function handleHadir() {
         const dataToSend = {
             _id: account._id,
+            userCoordinate
         }
 
         if (!userCoordinate) return blankToast('Koordinat kamu belum ditetapkan')
@@ -175,7 +176,7 @@ export default function KirimAbsen() {
 }
 
 function AbsenceCell({prop, value}) {
-    return <div className='flex flex-col sm:flex-row border-b-[1px] border-solid border-neutral-400 last:border-transparent py-2'>
+    return <div className='flex flex-col sm:flex-row border-b-[1px] border-solid border-neutral-300 last:border-transparent py-2'>
         <p className='sm:w-2/6 font-medium'>{prop}</p>
         <p>{value}</p>
     </div>
