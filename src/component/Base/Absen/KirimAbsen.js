@@ -4,12 +4,14 @@ import { useCallback, useEffect, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { blankToast, loadingToast } from "../../utils/myToast"
 import axios from "axios"
-import { API, formatDate, formatTime, isUserWithinBounds } from "../../../utils"
+import { API, formatDate, formatTime } from "../../../utils"
 import LoadingIcon from '../../utils/LoadingIcon'
 import { setAbsensi, setStatus } from '../../../redux/source'
 
 
 export default function KirimAbsen() {
+    const firstCoordinate = useSelector(state => state.coordinates.first)
+    const secondCoordinate = useSelector(state => state.coordinates.second)
     const userCoordinate = useSelector(state => state.coordinates.user)
     const account = useSelector(state => state.source.account)
     const status = useSelector(state => state.source.status)
@@ -84,7 +86,7 @@ export default function KirimAbsen() {
 
         if (!userCoordinate) return blankToast('Koordinat kamu belum ditetapkan')
 
-        if (!isUserWithinBounds()) blankToast('Kamu berada diluar area, pengiriman tetap dilanjutkan')
+        if (!(userCoordinate[0] >= firstCoordinate[0] && userCoordinate[0] <= secondCoordinate[0]) &&(userCoordinate[1] >= firstCoordinate[1] && userCoordinate[1] <= secondCoordinate[1])) blankToast('Kamu berada diluar area, pengiriman tetap dilanjutkan')
 
         const promise = loadingToast('Mengirim...')
         setIsLoading(true)

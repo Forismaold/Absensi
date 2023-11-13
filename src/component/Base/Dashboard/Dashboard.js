@@ -1,8 +1,8 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faCheck, faLock, faMinus, faRotate, faUnlock, faXmark } from '@fortawesome/free-solid-svg-icons'
+import { faCheck, faCheckDouble, faLock, faMinus, faRotate, faUnlock, faXmark } from '@fortawesome/free-solid-svg-icons'
 import axios from "axios"
 import { useCallback, useEffect, useState } from "react"
-import { API, formatDate, getPermission } from "../../../utils"
+import { API, formatDate, getPermission, isUserWithinBounds } from "../../../utils"
 import { useDispatch, useSelector } from "react-redux"
 import { Link } from "react-router-dom"
 import { setRiwayats } from "../../../redux/source"
@@ -49,8 +49,12 @@ export default function Dahsboard() {
 }
 
 function RiwayatRow({data}) {
+    const [withinBounds, setWithinBounds] = useState(false)
+    useEffect(() => {
+        setWithinBounds(isUserWithinBounds(data.koordinat))
+    }, [data.koordinat])
     if (data.absen === true) return <div className="flex bg-primary text-neutral-200 items-center p-2 gap-2 rounded">
-        <FontAwesomeIcon icon={faCheck}/>
+        <FontAwesomeIcon icon={withinBounds?faCheckDouble:faCheck}/>
         <p>{data.title}</p>
         <p className='ml-auto'>{formatDate(data.date)}</p>
     </div>
