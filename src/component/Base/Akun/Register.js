@@ -109,7 +109,7 @@ function RegisterForm() {
             <div className='max-w-full overflow-auto'>
                 <ReCAPTCHA sitekey={process.env.REACT_APP_RECAPTCHA_SITE} onChange={onChange}/>
             </div>
-            <button type='submit' className={`text-center rounded ${isRecaptchaVerified ? 'bg-primary' : 'bg-tertiary'} text-neutral-200 shadow-md shadow-primary/50 p-2`}>Submit</button>
+            <button type='submit' className={`text-center rounded ${isRecaptchaVerified ? 'bg-primary' : 'bg-tertiary'} text-neutral-200 shadow-md shadow-primary/50 p-2 duration-200 ease-in-out active:scale-95`}>Submit</button>
         </form>
     </div>
 }

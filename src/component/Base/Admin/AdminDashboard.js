@@ -1,15 +1,25 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faBoxOpen, faClose, faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons'
 import { useDispatch, useSelector } from "react-redux"
-import { API } from "../../../utils"
+import { API, getPermission } from "../../../utils"
 import axios from "axios"
 import { setUsers } from "../../../redux/users"
 import { loadingToast } from '../../utils/myToast'
 import UsersList from './UsersList'
-import { useCallback, useEffect } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { setAbsensi } from '../../../redux/source'
 
 export default function AdminDashboard() {
+    const [permission, setPermission] = useState(false)
+
+    useEffect(() => {
+        setPermission(getPermission())
+    }, [])
+
+    if (!permission) return <div>
+        <p>Anda bukan pengelola!</p>
+    </div>
+
     return <div>
         <p>ini halaman admin</p>
         <DashboardActionButton/>

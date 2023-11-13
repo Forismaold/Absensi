@@ -49,7 +49,7 @@ export default function Dahsboard() {
 }
 
 function RiwayatRow({data}) {
-    if (data.absen === true) <div className="flex bg-primary text-neutral-200 items-center p-2 gap-2 rounded">
+    if (data.absen === true) return <div className="flex bg-primary text-neutral-200 items-center p-2 gap-2 rounded">
         <FontAwesomeIcon icon={faCheck}/>
         <p>{data.title}</p>
         <p className='ml-auto'>{formatDate(data.date)}</p>

@@ -1,17 +1,15 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faCheck, faChevronLeft, faChevronRight, faMinus, faRotate, faXmark } from '@fortawesome/free-solid-svg-icons'
+import { faCheck, faChevronLeft, faChevronRight, faDoorClosed, faDoorOpen, faRotate, faXmark } from '@fortawesome/free-solid-svg-icons'
 import { useCallback, useEffect, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { blankToast, loadingToast } from "../../utils/myToast"
 import axios from "axios"
-import { API, formatTime } from "../../../utils"
+import { API, formatDate, formatTime, isUserWithinBounds } from "../../../utils"
 import LoadingIcon from '../../utils/LoadingIcon'
 import { setAbsensi, setStatus } from '../../../redux/source'
 
 
 export default function KirimAbsen() {
-    const firstCoordinate = useSelector(state => state.coordinates.first)
-    const secondCoordinate = useSelector(state => state.coordinates.second)
     const userCoordinate = useSelector(state => state.coordinates.user)
     const account = useSelector(state => state.source.account)
     const status = useSelector(state => state.source.status)
@@ -86,9 +84,7 @@ export default function KirimAbsen() {
 
         if (!userCoordinate) return blankToast('Koordinat kamu belum ditetapkan')
 
-        const isUserWithinBounds = (userCoordinate[0] >= firstCoordinate[0] && userCoordinate[0] <= secondCoordinate[0]) &&(userCoordinate[1] >= firstCoordinate[1] && userCoordinate[1] <= secondCoordinate[1])
-
-        if (!isUserWithinBounds) blankToast('Kamu berada diluar area, pengiriman tetap dilanjutkan')
+        if (!isUserWithinBounds()) blankToast('Kamu berada diluar area, pengiriman tetap dilanjutkan')
 
         const promise = loadingToast('Mengirim...')
         setIsLoading(true)
@@ -110,48 +106,55 @@ export default function KirimAbsen() {
     }
 
     if (!absensi?.status) return <div className='bg-neutral-300 shadow-lg shadow-primary/50 text-neutral-500 rounded-xl p-4 flex gap-2 items-center relative'>
-        <FontAwesomeIcon icon={faMinus}/>
-        <p>Belum ada absensi</p>
+        <FontAwesomeIcon icon={faDoorClosed}/>
+        <p>Absensi belum dibuka</p>
         <button className='flex ml-auto items-center self-end justify-center rounded text-neutral-100 bg-secondary p-2 shadow-lg shadow-primary/50 duration-200 ease-in-out active:scale-95' onClick={() => fetchStatus()}><FontAwesomeIcon icon={faRotate}/></button>
     </div>
 
-    if (status?.absen === null) return <div className='bg-secondary text-neutral-100 rounded-xl p-4 flex flex-col gap-2 shadow-lg shadow-primary/50'>
-        <p>Kirim sebagai {account?.panggilan || account?.nama}</p>
-        <div className='flex gap-2'>
-            {showTidak &&
-                <div className='border-2 border-solid border-neutral-200 bg-inherit text-neutral-200 px-3 rounded flex justify-center items-center shadow cursor-pointer' onClick={handleTidakHadir}>
-                    <FontAwesomeIcon icon={faChevronRight}/>
-                </div>
-            }
-            {showFormTidak &&
-                <form className='flex flex-col gap-2 w-full' onSubmit={handleSubmitTidakHadir}>
-                    <div className='flex items-center rounded shadow-md cursor-pointer mt-2 p-2'>
-                        <p>Tidak hadir</p>
+    if (status?.absen === null) return <div className='flex flex-col rounded-xl'>
+        <div className='flex items-center gap-2 px-2'>
+            <FontAwesomeIcon icon={faDoorOpen}/>
+            <p>Absensi dibuka sejak</p>
+            <span className='ml-auto'>{formatDate(absensi?.date)}</span>
+        </div>
+        <div className='bg-secondary text-neutral-100 rounded-xl p-4 flex flex-col gap-2 shadow-lg shadow-primary/50'>
+            <p>Kirim sebagai {account?.panggilan || account?.nama}</p>
+            <div className='flex gap-2'>
+                {showTidak &&
+                    <div className='border-2 border-solid border-neutral-200 bg-inherit text-neutral-200 px-3 rounded flex justify-center items-center shadow cursor-pointer' onClick={handleTidakHadir}>
+                        <FontAwesomeIcon icon={faChevronRight}/>
                     </div>
-                    <div className='flex flex-col sm:flex-row gap-2 flex-1'>
-                        <select value={kode} onChange={(e) => setKode(e.target.value)} className='min-h-[40px] shadow px-2 rounded bg-primary border-2 border-solid border-neutral-200 shadow' placeholder='Kode keterangan'>
-                            <option value="-" disable='true'>Kode</option>
-                            <option value="I">Izin</option>
-                            <option value="S">Sakit</option>
-                            <option value="A">Alpa</option>
-                        </select>
-                        <textarea value={keterangan} onChange={(e) => setKeterangan(e.target.value)} className='shadow border-2 border-solid border-neutral-200 bg-primary p-2 flex-[5] rounded placeholder:text-neutral-300 shadow' placeholder='Tambahkan keterangan'></textarea>
-                    </div>
-                    <div className='flex gap-2'>
-                        <div className='border-2 border-solid border-neutral-200 bg-inherit text-neutral-200 px-3 rounded flex justify-center items-center shadow cursor-pointer' onClick={handleTidakHadir}>
-                            <FontAwesomeIcon icon={faChevronLeft}/>
+                }
+                {showFormTidak &&
+                    <form className='flex flex-col gap-2 w-full' onSubmit={handleSubmitTidakHadir}>
+                        <div className='flex items-center rounded shadow-md cursor-pointer mt-2 p-2'>
+                            <p>Tidak hadir</p>
                         </div>
-                        <button className={`flex-1 ${isLoading ? 'bg-neutral-transparent' : 'bg-neutral-200 shadow-lg shadow-neutral-300/10'} duration-200 ease-in-out active:scale-95 text-secondary p-2 rounded flex justify-center shadow cursor-pointer hover:shadow-xl duration-300 hover:-translate-y-1`}>
-                            {isLoading ? <LoadingIcon/> : <span>Kirim tidak absen</span>}
-                        </button>
+                        <div className='flex flex-col sm:flex-row gap-2 flex-1'>
+                            <select value={kode} onChange={(e) => setKode(e.target.value)} className='min-h-[40px] shadow px-2 rounded bg-primary border-2 border-solid border-neutral-200 shadow' placeholder='Kode keterangan'>
+                                <option value="-" disable='true'>Kode</option>
+                                <option value="I">Izin</option>
+                                <option value="S">Sakit</option>
+                                <option value="A">Alpa</option>
+                            </select>
+                            <textarea value={keterangan} onChange={(e) => setKeterangan(e.target.value)} className='shadow border-2 border-solid border-neutral-200 bg-primary p-2 flex-[5] rounded placeholder:text-neutral-300 shadow' placeholder='Tambahkan keterangan'></textarea>
+                        </div>
+                        <div className='flex gap-2'>
+                            <div className='border-2 border-solid border-neutral-200 bg-inherit text-neutral-200 px-3 rounded flex justify-center items-center shadow cursor-pointer' onClick={handleTidakHadir}>
+                                <FontAwesomeIcon icon={faChevronLeft}/>
+                            </div>
+                            <button className={`flex-1 ${isLoading ? 'bg-neutral-transparent' : 'bg-neutral-200 shadow-lg shadow-neutral-300/10'} duration-200 ease-in-out active:scale-95 text-secondary p-2 rounded flex justify-center shadow cursor-pointer hover:shadow-xl duration-300 hover:-translate-y-1`}>
+                                {isLoading ? <LoadingIcon/> : <span>Kirim tidak absen</span>}
+                            </button>
+                        </div>
+                    </form>
+                }
+                {showKirim &&
+                    <div className={`flex-1 ${isLoading ? 'bg-neutral-transparent' : 'bg-neutral-200 shadow-lg shadow-neutral-300/10'} text-secondary p-2 duration-200 ease-in-out active:scale-95 rounded flex justify-center shadow cursor-pointer hover:shadow-xl duration-300 hover:-translate-y-1`} onClick={handleHadir}>
+                        {isLoading ? <LoadingIcon/> : <span>Kirim</span>}
                     </div>
-                </form>
-            }
-            {showKirim &&
-                <div className={`flex-1 ${isLoading ? 'bg-neutral-transparent' : 'bg-neutral-200 shadow-lg shadow-neutral-300/10'} text-secondary p-2 duration-200 ease-in-out active:scale-95 rounded flex justify-center shadow cursor-pointer hover:shadow-xl duration-300 hover:-translate-y-1`} onClick={handleHadir}>
-                    {isLoading ? <LoadingIcon/> : <span>Kirim</span>}
-                </div>
-            }
+                }
+            </div>
         </div>
     </div>
 
