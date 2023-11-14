@@ -228,7 +228,7 @@ function ForceNext({isOpen, onClose, callBack}) {
             <p>Anda diluar lokasi absen</p>
             <div className='flex gap-2 items-center'>
                 <input type="checkbox" id='FNCB' className='checked:bg-primary shadow-lg shadow-primary/50 border-secondary rounded focus:ring-primary' onChange={handleCheckbox}/>
-                <label htmlFor="FNCB" className='flex-1'>Tetap Lanjutkan mengirim diluar area</label>
+                <label htmlFor="FNCB" className='flex-1'>Tetap Lanjutkan mengirim di luar area</label>
             </div>
             <div onClick={handleCallback} className={`flex-1 ${!unlockButton ? 'bg-neutral-transparent' : 'bg-secondary shadow-lg shadow-secondary/50'} text-neutral-200 p-2 duration-200 ease-in-out active:scale-95 rounded flex justify-center shadow cursor-pointer hover:shadow-xl duration-300 hover:-translate-y-1`}>
                 <span>Lanjutkan</span>
