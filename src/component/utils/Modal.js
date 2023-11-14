@@ -1,10 +1,10 @@
 import { createPortal } from "react-dom"
 
-export default function Modal({isOpen, children, onClose}) {
+export default function Modal({isOpen, children, onClose, className}) {
     if (!isOpen) return null
     
     return createPortal(
-        <MyOverlay onClose={onClose}>
+        <MyOverlay onClose={onClose} className={className}>
             <div className="bg-neutral-200 text-neutral rounded-md p-2 w-full">
                 {children}
             </div>
@@ -12,12 +12,12 @@ export default function Modal({isOpen, children, onClose}) {
     , document.getElementById('portal'))
 }
 
-function MyOverlay({onClose, children}) {
+function MyOverlay({onClose, children, className = 'z-[1]'}) {
     function handleOnClose(e) {
         if (e.target.classList.contains('overlay')) onClose()
     }
 
-    return <div onClick={handleOnClose} className="overlay fixed top-0 b-0 r-0 l-0 h-full w-full bg-neutral-900/[.5] z-[1] p-4 flex justify-center items-center">
+    return <div onClick={handleOnClose} className={`${className} overlay fixed top-0 b-0 r-0 l-0 h-full w-full bg-neutral-900/[.5] p-4 flex justify-center items-center`}>
         {children}
     </div>
 }

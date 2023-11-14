@@ -118,7 +118,7 @@ function DashboardActionButton() {
         }
         <div onClick={fetchAbsenceStatus} className='flex gap-2 shadow-lg shadow-primary/50 cursor-pointer bg-primary items-center p-2 rounded text-neutral-200'>
             <FontAwesomeIcon icon={faMagnifyingGlass}/>
-            <p>Cek status</p>
+            <p>Cek status absensi</p>
         </div>
     </div>
 }

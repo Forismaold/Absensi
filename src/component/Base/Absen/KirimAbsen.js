@@ -7,7 +7,7 @@ import axios from "axios"
 import { API, formatDate, formatTime } from "../../../utils"
 import LoadingIcon from '../../utils/LoadingIcon'
 import { setAbsensi, setStatus } from '../../../redux/source'
-// import Modal from '../../utils/Modal'
+import Modal from '../../utils/Modal'
 
 export default function KirimAbsen() {
     const firstCoordinate = useSelector(state => state.coordinates.first)
@@ -23,6 +23,7 @@ export default function KirimAbsen() {
     const [showKirim, setShowKirim] = useState(true)
     const [showFormTidak, setShowFormTidak] = useState(false)
     const [isLoading, setIsLoading] = useState(false)
+    const [showforceNext, setShowForceNext] = useState(false)
 
     const dispatch = useDispatch(status)
 
@@ -81,7 +82,15 @@ export default function KirimAbsen() {
     async function handleButtonHadir() {
         if (!userCoordinate) return blankToast('Koordinat kamu belum ditetapkan')
 
-        if (!(userCoordinate[0] >= firstCoordinate[0] && userCoordinate[0] <= secondCoordinate[0]) &&(userCoordinate[1] >= firstCoordinate[1] && userCoordinate[1] <= secondCoordinate[1])) return blankToast('Kamu berada diluar area, pengiriman tetap dilanjutkan')
+        const inArea = (userCoordinate[0] >= firstCoordinate[0] && userCoordinate[0] <= secondCoordinate[0]) && (userCoordinate[1] >= firstCoordinate[1] && userCoordinate[1] <= secondCoordinate[1])
+
+        
+        // if (!inArea) return blankToast('Kamu berada diluar area, pengiriman tidak dapat dilanjutkan')
+        if (!inArea) {
+            console.log(!inArea);
+            return setShowForceNext(true)
+        }
+
         handleHadir()
     }
     async function handleHadir() {
@@ -100,7 +109,7 @@ export default function KirimAbsen() {
             await axios.post(API + '/absen/hadir', dataToSend)
             .then(res => {
                 dispatch(setStatus(res.data.status))
-                console.log(res.data.status);
+                console.log(res.data.status)
                 promise.onSuccess(res.data.msg)
                 setIsLoading(false)
             }).catch(err => {
@@ -135,7 +144,7 @@ export default function KirimAbsen() {
                 }
                 {showFormTidak &&
                     <form className='flex flex-col gap-2 w-full' onSubmit={handleSubmitTidakHadir}>
-                        <div className='flex items-center rounded shadow-md cursor-pointer mt-2 p-2'>
+                        <div className='flex items-center rounded shadow-md mt-2 p-2'>
                             <p>Tidak hadir</p>
                         </div>
                         <div className='flex flex-col sm:flex-row gap-2 flex-1'>
@@ -162,6 +171,7 @@ export default function KirimAbsen() {
                         {isLoading ? <LoadingIcon/> : <span>Kirim</span>}
                     </div>
                 }
+                {showforceNext && <ForceNext isOpen={showforceNext} onClose={() => setShowForceNext(false)} callBack={handleHadir}/>}
             </div>
         </div>
     </div>
@@ -200,10 +210,29 @@ function AbsenceCell({prop, value}) {
     </div>
 }
 
-// function NotWithinBounds() {
-//     return <Modal>
-//         <div>
-//             <p>Halo kamu berada diluar area</p>
-//         </div>
-//     </Modal>
-// }
+function ForceNext({isOpen, onClose, callBack}) {
+    const [unlockButton, setUnlockButton] = useState(false)
+
+    function handleCheckbox(e) {
+        console.log(e.target.checked)
+        setUnlockButton(e.target.checked)
+    }
+
+    function handleCallback() {
+        if (!unlockButton) return
+        callBack()
+    }
+
+    return <Modal isOpen={isOpen} onClose={onClose} className={'z-[1001]'}>
+        <div className='text-neutral-500 rounded-lg p-4 flex flex-col gap-2 shadow-lg shadow-primary/50'>
+            <p>Anda diluar lokasi absen</p>
+            <div className='flex gap-2 items-center'>
+                <input type="checkbox" id='FNCB' className='checked:bg-primary shadow-lg shadow-primary/50 border-secondary rounded focus:ring-primary' onChange={handleCheckbox}/>
+                <label htmlFor="FNCB" className='flex-1'>Tetap Lanjutkan mengirim diluar area</label>
+            </div>
+            <div onClick={handleCallback} className={`flex-1 ${!unlockButton ? 'bg-neutral-transparent' : 'bg-secondary shadow-lg shadow-secondary/50'} text-neutral-200 p-2 duration-200 ease-in-out active:scale-95 rounded flex justify-center shadow cursor-pointer hover:shadow-xl duration-300 hover:-translate-y-1`}>
+                <span>Lanjutkan</span>
+            </div>
+        </div>
+    </Modal>
+}
