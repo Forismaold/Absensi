@@ -7,7 +7,7 @@ import axios from "axios"
 import { API, formatDate, formatTime } from "../../../utils"
 import LoadingIcon from '../../utils/LoadingIcon'
 import { setAbsensi, setStatus } from '../../../redux/source'
-
+// import Modal from '../../utils/Modal'
 
 export default function KirimAbsen() {
     const firstCoordinate = useSelector(state => state.coordinates.first)
@@ -78,6 +78,12 @@ export default function KirimAbsen() {
         }
     }
 
+    async function handleButtonHadir() {
+        if (!userCoordinate) return blankToast('Koordinat kamu belum ditetapkan')
+
+        if (!(userCoordinate[0] >= firstCoordinate[0] && userCoordinate[0] <= secondCoordinate[0]) &&(userCoordinate[1] >= firstCoordinate[1] && userCoordinate[1] <= secondCoordinate[1])) return blankToast('Kamu berada diluar area, pengiriman tetap dilanjutkan')
+        handleHadir()
+    }
     async function handleHadir() {
         const dataToSend = {
             _id: account._id,
@@ -107,7 +113,7 @@ export default function KirimAbsen() {
         }
     }
 
-    if (!absensi?.status) return <div className='bg-neutral-300 shadow-lg shadow-primary/50 text-neutral-500 rounded-xl p-4 flex gap-2 items-center relative'>
+    if (!absensi?.status && absensi !== null) return <div className='bg-neutral-300 shadow-lg shadow-primary/50 text-neutral-500 rounded-xl p-4 flex gap-2 items-center relative'>
         <FontAwesomeIcon icon={faDoorClosed}/>
         <p>Absensi belum dibuka</p>
         <button className='flex ml-auto items-center self-end justify-center rounded text-neutral-100 bg-secondary p-2 shadow-lg shadow-primary/50 duration-200 ease-in-out active:scale-95' onClick={() => fetchStatus()}><FontAwesomeIcon icon={faRotate}/></button>
@@ -152,7 +158,7 @@ export default function KirimAbsen() {
                     </form>
                 }
                 {showKirim &&
-                    <div className={`flex-1 ${isLoading ? 'bg-neutral-transparent' : 'bg-neutral-200 shadow-lg shadow-neutral-300/10'} text-secondary p-2 duration-200 ease-in-out active:scale-95 rounded flex justify-center shadow cursor-pointer hover:shadow-xl duration-300 hover:-translate-y-1`} onClick={handleHadir}>
+                    <div className={`flex-1 ${isLoading ? 'bg-neutral-transparent' : 'bg-neutral-200 shadow-lg shadow-neutral-300/10'} text-secondary p-2 duration-200 ease-in-out active:scale-95 rounded flex justify-center shadow cursor-pointer hover:shadow-xl duration-300 hover:-translate-y-1`} onClick={handleButtonHadir}>
                         {isLoading ? <LoadingIcon/> : <span>Kirim</span>}
                     </div>
                 }
@@ -193,3 +199,11 @@ function AbsenceCell({prop, value}) {
         <p>{value}</p>
     </div>
 }
+
+// function NotWithinBounds() {
+//     return <Modal>
+//         <div>
+//             <p>Halo kamu berada diluar area</p>
+//         </div>
+//     </Modal>
+// }
