@@ -5,7 +5,6 @@ import { useDispatch, useSelector } from "react-redux"
 import axios from "axios"
 import { API, formatDate, getPermission } from "../../../utils"
 import { setAdminRiwayats } from '../../../redux/source'
-import Modal from '../../utils/Modal'
 import UsersGroup from './UsersGroup'
 
 export default function AdminRiwayats() {
@@ -49,21 +48,15 @@ export default function AdminRiwayats() {
 }
 
 function RiwayatRow({data}) {
-    const [openDetail, setOpenDetail] = useState(false)
-    function handleClick() {
-        setOpenDetail(true)
-    }
-    return <>
-        <div className="flex bg-neutral-300 text-neutral-600 items-center p-2 gap-2 rounded cursor-pointer" onClick={handleClick}>
+    return <div className='flex flex-col text-neutral-600 p-2 gap-2 rounded shadow'>
+        <div className="flex bg-neutral-300 text-neutral-600 items-center p-2 gap-2 rounded">
             <p>{data.title}</p>
             <p className='ml-auto'>{formatDate(data.date)}</p>
         </div>
-        <Modal isOpen={openDetail} onClose={() => setOpenDetail(false)}>
-            <div className='flex gap-2'>
-                <UsersGroup title={'Tidak absen'} data={data.users?.filter(x => x.absen === false) || []}/>
-                <UsersGroup title={'Sudah absen'} data={data.users?.filter(x => x.absen === true) || []}/>
-            </div>
-        </Modal>
-    </>
+        <div className='flex gap-2'>
+            <UsersGroup title={'Tidak absen'} data={data.users?.filter(x => x.absen === false) || []}/>
+            <UsersGroup title={'Sudah absen'} data={data.users?.filter(x => x.absen === true) || []}/>
+        </div>
+    </div>
 }
 
