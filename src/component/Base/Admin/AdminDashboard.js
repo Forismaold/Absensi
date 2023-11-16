@@ -103,7 +103,7 @@ function DashboardActionButton() {
             <>
             <div onClick={tutupAbsensi} className='flex gap-2 shadow-lg shadow-primary/50 cursor-pointer bg-primary items-center p-2 rounded text-neutral-200'>
                 <FontAwesomeIcon icon={faClose}/>
-                <p>Tutup</p>
+                <p>Tutup dan simpan</p>
             </div>
             <div onClick={buangAbsensi} className='flex gap-2 shadow-lg shadow-primary/50 cursor-pointer bg-primary items-center p-2 rounded text-neutral-200'>
                 <FontAwesomeIcon icon={faTrash}/>

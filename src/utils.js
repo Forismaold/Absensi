@@ -1,6 +1,7 @@
 import CryptoJS from "crypto-js"
 import moment from "moment-timezone"
 import store from "./redux/store"
+import 'moment/locale/id'
 
 export const API = process.env.REACT_APP_API
 
@@ -75,6 +76,15 @@ export function formatTime(time) {
 export function formatDate(time) {
     return moment(time).tz('Asia/Jakarta').format('D/M/YYYY HH:mm')
 }
+export function formatBeautyDate(time) {
+    moment.locale('id')
+    const asiaTime = moment(time).tz('Asia/Jakarta')
+    
+    const formattedDate = asiaTime.format('ddd, D MMMM YYYY HH:mm')
+
+    return formattedDate
+}
+
 
 export function getPermission() {
     const account = store.getState().source?.account || {}
@@ -84,6 +94,5 @@ export function getPermission() {
 export function isUserWithinBounds (userCoordinate = [0, 0]) {
     const {first, second} = store.getState().coordinates || {}
     const userWithin = (userCoordinate[0] >= first[0] && userCoordinate[0] <= second[0]) &&(userCoordinate[1] >= first[1] && userCoordinate[1] <= second[1])
-    console.log('userwithin',userWithin);
     return userWithin
 }

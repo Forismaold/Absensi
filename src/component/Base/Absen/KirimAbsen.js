@@ -223,7 +223,7 @@ function ForceNext({isOpen, onClose, callBack}) {
         callBack()
     }
 
-    return <Modal isOpen={isOpen} onClose={onClose} className={'z-[1001]'}>
+    return <Modal isOpen={isOpen} onClose={onClose} zIndex={'z-[1001]'}>
         <div className='text-neutral-500 rounded-lg p-4 flex flex-col gap-2 shadow-lg shadow-primary/50'>
             <p>Anda diluar lokasi absen</p>
             <div className='flex gap-2 items-center'>

@@ -41,6 +41,9 @@ const MyMap = () => {
                 (error) => {
                     console.error('Error getting location:', error)
                     setLoadingUserCoor(false)
+                },
+                {
+                    enableHighAccuracy: true,
                 }
             )
         } else {
