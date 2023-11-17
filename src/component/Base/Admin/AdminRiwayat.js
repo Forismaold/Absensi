@@ -73,7 +73,7 @@ function SearchUser({isOpen, onClose, users = [], title, date}) {
         const usernameRegex = new RegExp(`^${searchKey}`, 'i')
       
         // const result = users.filter((user) => searchKey === '' || usernameRegex.test(user.nama))
-        const result = users.filter((user) => (searchKey === '' || usernameRegex.test(user.nama)) &&  (kelas === '' || user.kelas === kelas) &&  (Number(nomorKelas) === 0 || Number(user.nomorKelas) === Number(nomorKelas) || kelas === ''))
+        const result = users.filter((user) => (searchKey === '' || usernameRegex.test(user.nama)) && (kelas === '' || user.kelas === kelas) &&  (nomorKelas === 0 || user.nomorKelas === nomorKelas || kelas === ''))
         console.log(result, searchKey, kelas, nomorKelas);
       
         setResult(result)
