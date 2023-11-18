@@ -1,5 +1,5 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faCheck, faCheckDouble, faClockRotateLeft, faLock, faMinus, faRotate, faServer, faUnlock, faXmark } from '@fortawesome/free-solid-svg-icons'
+import { faCheck, faCheckDouble, faClockRotateLeft, faMinus, faRotate, faServer, faXmark } from '@fortawesome/free-solid-svg-icons'
 import axios from "axios"
 import { useCallback, useEffect, useState } from "react"
 import { API, formatDate, getPermission, isUserWithinBounds } from "../../../utils"

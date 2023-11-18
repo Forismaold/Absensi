@@ -101,22 +101,22 @@ function DashboardActionButton() {
     return <div className="flex justify-end py-2 gap-2 flex-wrap">
         {absensi?.status ?
             <>
-            <div onClick={tutupAbsensi} className='flex gap-2 shadow-lg shadow-primary/50 cursor-pointer bg-primary items-center p-2 rounded text-neutral-200'>
+            <div onClick={tutupAbsensi} className='flex gap-2 shadow-lg shadow-primary/50 cursor-pointer bg-primary items-center p-2 rounded text-neutral-200 duration-200 ease-in-out active:scale-95'>
                 <FontAwesomeIcon icon={faClose}/>
                 <p>Tutup dan simpan</p>
             </div>
-            <div onClick={buangAbsensi} className='flex gap-2 shadow-lg shadow-primary/50 cursor-pointer bg-primary items-center p-2 rounded text-neutral-200'>
+            <div onClick={buangAbsensi} className='flex gap-2 shadow-lg shadow-primary/50 cursor-pointer bg-primary items-center p-2 rounded text-neutral-200 duration-200 ease-in-out active:scale-95'>
                 <FontAwesomeIcon icon={faTrash}/>
                 <p>Buang</p>
             </div>
             </>
             :
-            <div onClick={bukaAbsensi} className='flex gap-2 shadow-lg shadow-primary/50 cursor-pointer bg-primary items-center p-2 rounded text-neutral-200'>
+            <div onClick={bukaAbsensi} className='flex gap-2 shadow-lg shadow-primary/50 cursor-pointer bg-primary items-center p-2 rounded text-neutral-200 duration-200 ease-in-out active:scale-95'>
                 <FontAwesomeIcon icon={faBoxOpen}/>
                 <p>Buka</p>
             </div>
         }
-        <div onClick={fetchAbsenceStatus} className='flex gap-2 shadow-lg shadow-primary/50 cursor-pointer bg-primary items-center p-2 rounded text-neutral-200'>
+        <div onClick={fetchAbsenceStatus} className='flex gap-2 shadow-lg shadow-primary/50 cursor-pointer bg-primary items-center p-2 rounded text-neutral-200 duration-200 ease-in-out active:scale-95'>
             <FontAwesomeIcon icon={faMagnifyingGlass}/>
             <p>Cek status absensi</p>
         </div>

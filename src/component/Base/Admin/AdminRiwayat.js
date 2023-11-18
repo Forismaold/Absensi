@@ -54,7 +54,7 @@ function RiwayatRow({data}) {
         <div className="flex bg-neutral-300 text-neutral-600 items-center p-2 gap-2 rounded">
             <p>{data.title}</p>
             <p className='ml-auto'>{formatDate(data.date)}</p>
-            <FontAwesomeIcon icon={faFilter} className='shadow p-2 rounded bg-primary text-quaternary cursor-pointer' onClick={() => setShowSearch(true)}/>
+            <FontAwesomeIcon icon={faFilter} className='shadow p-2 rounded bg-primary text-quaternary cursor-pointer duration-200 ease-in-out active:scale-95' onClick={() => setShowSearch(true)}/>
         </div>
         <div className='flex gap-2'>
             <UsersGroup title={'Tidak absen'} data={data.users?.filter(x => x.absen === false) || []}/>
