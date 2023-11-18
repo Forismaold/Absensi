@@ -10,6 +10,7 @@ module.exports = {
         secondary: '#79AC78',
         tertiary: '#B0D9B1',
         quaternary: '#D0E7D2',
+        accent: '#edd000',
       }
     },
   },

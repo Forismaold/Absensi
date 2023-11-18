@@ -1,7 +1,7 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faBoxOpen, faClose, faMagnifyingGlass, faTrash } from '@fortawesome/free-solid-svg-icons'
 import { useDispatch, useSelector } from "react-redux"
-import { API, getPermission } from "../../../utils"
+import { API, formatBeautyDate, getPermission } from "../../../utils"
 import axios from "axios"
 import { setUsers } from "../../../redux/users"
 import { loadingToast } from '../../utils/myToast'
@@ -39,6 +39,8 @@ function DashboardActionButton() {
             axios.get(API + '/absensi/status')
             .then(res => {
                 dispatch(setAbsensi(res.data.absensi))
+                console.log(res.data.absensi)
+
                 promise.onSuccess(res.data.msg)
             })
             .catch(err => {
@@ -98,16 +100,21 @@ function DashboardActionButton() {
         }
     }
 
-    return <div className="flex justify-end py-2 gap-2 flex-wrap">
+    return <div className="flex justify-end py-2 gap-2 flex-wrap flex-col">
         {absensi?.status ?
             <>
-            <div onClick={tutupAbsensi} className='flex gap-2 shadow-lg shadow-primary/50 cursor-pointer bg-primary items-center p-2 rounded text-neutral-200 duration-200 ease-in-out active:scale-95'>
-                <FontAwesomeIcon icon={faClose}/>
-                <p>Tutup dan simpan</p>
+            <div className='flex flex-col'>
+                <p>Dibuka pada {formatBeautyDate(absensi?.date)} oleh {absensi?.openedBy}</p>
             </div>
-            <div onClick={buangAbsensi} className='flex gap-2 shadow-lg shadow-primary/50 cursor-pointer bg-primary items-center p-2 rounded text-neutral-200 duration-200 ease-in-out active:scale-95'>
-                <FontAwesomeIcon icon={faTrash}/>
-                <p>Buang</p>
+            <div className='flex gap-2 justify-end'>
+                <div onClick={tutupAbsensi} className='flex gap-2 shadow-lg shadow-primary/50 cursor-pointer bg-primary items-center p-2 rounded text-neutral-200 duration-200 ease-in-out active:scale-95'>
+                    <FontAwesomeIcon icon={faClose}/>
+                    <p>Tutup dan simpan</p>
+                </div>
+                <div onClick={buangAbsensi} className='flex gap-2 shadow-lg shadow-primary/50 cursor-pointer bg-primary items-center p-2 rounded text-neutral-200 duration-200 ease-in-out active:scale-95'>
+                    <FontAwesomeIcon icon={faTrash}/>
+                    <p>Buang</p>
+                </div>
             </div>
             </>
             :
@@ -116,7 +123,7 @@ function DashboardActionButton() {
                 <p>Buka</p>
             </div>
         }
-        <div onClick={fetchAbsenceStatus} className='flex gap-2 shadow-lg shadow-primary/50 cursor-pointer bg-primary items-center p-2 rounded text-neutral-200 duration-200 ease-in-out active:scale-95'>
+        <div onClick={fetchAbsenceStatus} className='flex gap-2 shadow-lg shadow-primary/50 cursor-pointer bg-primary items-center self-end p-2 rounded text-neutral-200 duration-200 ease-in-out active:scale-95'>
             <FontAwesomeIcon icon={faMagnifyingGlass}/>
             <p>Cek status absensi</p>
         </div>

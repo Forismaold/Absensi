@@ -69,14 +69,16 @@ function SearchUser({isOpen, onClose, users = [], title, date}) {
     const [kelas, setKelas] = useState('')
     const [nomorKelas, setNomorKelas] = useState(0)
     const [result, setResult] = useState([])
-    const handleSearch = () => {
+    const handleSearch = useCallback(() => {
         const usernameRegex = new RegExp(`^${searchKey}`, 'i')
       
         const result = users.filter((user) => (searchKey === '' || usernameRegex.test(user.nama)) && (kelas === '' || user.kelas === kelas) &&  (nomorKelas === 0 || user.nomorKelas === nomorKelas || kelas === ''))
-        console.log(result, searchKey, kelas, nomorKelas);
       
         setResult(result)
-    }
+    },[kelas, nomorKelas, searchKey, users])
+    useEffect(() => {
+        handleSearch()
+    },[handleSearch])
 
     return <Modal isOpen={isOpen} onClose={onClose}>
         <div className='flex flex-col gap-2'>

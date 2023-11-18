@@ -1,5 +1,5 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faEllipsisH, faUser } from '@fortawesome/free-solid-svg-icons'
+import { faChevronDown, faChevronRight, faEllipsisH, faUser } from '@fortawesome/free-solid-svg-icons'
 import { useNavigate } from 'react-router-dom'
 import { API, setLocalStorage } from "../../../utils"
 import axios from "axios"
@@ -27,6 +27,7 @@ function RegisterForm() {
 
     const [password, setPassword] = useState('')
     const [confirmPassword, setConfirmPassword] = useState('')
+    const [showOptionalInput, setShowOptionalInput] = useState(false)
 
     const [isRecaptchaVerified, setRecaptchaVerified] = useState(false);
     function onChange(value) {
@@ -96,16 +97,23 @@ function RegisterForm() {
             <p>Kata sandi</p>
             <input className='p-2 rounded shadow w-full' type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder='Kata sandi' autoComplete='off' required/>
             <input className='p-2 rounded shadow w-full' type="password" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} placeholder='Konfirmasi kata sandi' autoComplete='off' required/>
-            <div className='flex gap-2 text-neutral-700 items-center font-mediumm'>
-                <FontAwesomeIcon icon={faEllipsisH}/>
-                <p>Opsional</p>
+            <div className='flex gap-2 text-neutral-700 items-center font-mediumm justify-between duration-200 ease-in-out active:scale-95 cursor-pointer' onClick={() => setShowOptionalInput(prev => !prev)}>
+                <div className='flex gap-2 items-center'>
+                    <FontAwesomeIcon icon={faEllipsisH}/>
+                    <p>Opsional</p>
+                </div>
+                <FontAwesomeIcon icon={showOptionalInput ? faChevronDown : faChevronRight}/>
             </div>
-            <input className='p-2 rounded shadow w-full' type="text" value={panggilan} onChange={handleChangeNickname} placeholder='Nama panggilan' autoComplete='off' maxLength={20}/>
-            <select value={jenisKelamin} onChange={(e) => setJenisKelamin(e.target.value)} className='min-h-[40px] shadow p-2 rounded' placeholder='Jenis kelamin'>
-                <option value="-" disabled>Jenis kelamin</option>
-                <option value="L">Laki-laki</option>
-                <option value="P">Perempuan</option>
-            </select>
+            {showOptionalInput &&
+                <>
+                <input className='p-2 rounded shadow w-full' type="text" value={panggilan} onChange={handleChangeNickname} placeholder='Nama panggilan' autoComplete='off' maxLength={20}/>
+                <select value={jenisKelamin} onChange={(e) => setJenisKelamin(e.target.value)} className='min-h-[40px] shadow p-2 rounded' placeholder='Jenis kelamin'>
+                    <option value="-" disabled>Jenis kelamin</option>
+                    <option value="L">Laki-laki</option>
+                    <option value="P">Perempuan</option>
+                </select>
+                </>
+            }
             <div className='max-w-full overflow-auto'>
                 <ReCAPTCHA sitekey={process.env.REACT_APP_RECAPTCHA_SITE} onChange={onChange}/>
             </div>

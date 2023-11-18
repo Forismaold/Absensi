@@ -1,11 +1,12 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faLocationCrosshairs } from '@fortawesome/free-solid-svg-icons'
+import { faBolt, faLocationCrosshairs } from '@fortawesome/free-solid-svg-icons'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { MapContainer, Marker, Rectangle, TileLayer, Tooltip } from 'react-leaflet'
 import LoadingIcon from '../../utils/LoadingIcon'
 import { useDispatch, useSelector } from 'react-redux'
 import { setUserCoordinate } from '../../../redux/coordinates'
 import KirimAbsen from './KirimAbsen'
+import { blankToast } from '../../utils/myToast'
 
 export default function Absen() {
     return <div>
@@ -27,8 +28,9 @@ const MyMap = () => {
 
     const dispatch = useDispatch()
 
-    const getCurrentLocation = useCallback(() => {
+    const getCurrentLocation = useCallback((HighAccuracy = false) => {
         if (navigator.geolocation) {
+            if (HighAccuracy === true) blankToast('Mencari lokasi dengan akurasi tinggi')
             setLoadingUserCoor(true)
             navigator.geolocation.getCurrentPosition(
                 (position) => {
@@ -43,7 +45,7 @@ const MyMap = () => {
                     setLoadingUserCoor(false)
                 },
                 {
-                    enableHighAccuracy: true,
+                    enableHighAccuracy: HighAccuracy,
                 }
             )
         } else {
@@ -51,6 +53,7 @@ const MyMap = () => {
             setLoadingUserCoor(false)
         }
     },[dispatch])
+
 
     const focusOnLocation = (location) => {
         const map = mapRef.current
@@ -109,9 +112,14 @@ const MyMap = () => {
                     <button className={`absolute top-1 right-1 flex items-center justify-center rounded-lg text-neutral-100 ${userCoordinate ? ' bg-secondary' : ' bg-primary-quarternary'} p-2 shadow-lg shadow-primary/50 duration-200 ease-in-out active:scale-95`} onClick={focusUserLocation}><FontAwesomeIcon icon={faLocationCrosshairs}/></button>
                     <p>Lokasi kamu</p>
                     <span>{userCoordinate ? `${userCoordinate[0]}, ${userCoordinate[1]}` : '0, 0'}</span>
-                    <button className='flex shadow-lg shadow-primary/50 items-center justify-center rounded text-neutral-100 px-2 py-1 duration-200 ease-in-out active:scale-95 bg-secondary min-h-[32px] mt-auto' onClick={getCurrentLocation}>
-                        {loadingUserCoor ? <LoadingIcon /> : <span>Segarkan</span>}
-                    </button>
+                    <div className='flex gap-2 py-1'>
+                        <button className={`flex shadow-lg px-2 shadow-accent/50 justify-center items-center rounded text-neutral-100 duration-200 ease-in-out active:scale-95 bg-accent min-h-[32px] mt-auto`} onClick={() => getCurrentLocation(true)}>
+                            {loadingUserCoor ? <LoadingIcon /> : <FontAwesomeIcon icon={faBolt}/>}
+                        </button>
+                        <button className={`flex flex-1 shadow-lg shadow-primary/50 items-center justify-center rounded text-neutral-100 px-2 duration-200 ease-in-out active:scale-95 bg-secondary min-h-[32px] mt-auto`} onClick={getCurrentLocation}>
+                            {loadingUserCoor ? <LoadingIcon /> : <span>Segarkan</span>}
+                        </button>
+                    </div>
                 </div>
             </div>
             <KirimAbsen/>

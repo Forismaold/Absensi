@@ -76,7 +76,7 @@ export function formatTime(time) {
 export function formatDate(time) {
     return moment(time).tz('Asia/Jakarta').format('D/M/YYYY HH:mm')
 }
-export function formatBeautyDate(time) {
+export function formatBeautyDate(time = Date.now()) {
     moment.locale('id')
     const asiaTime = moment(time).tz('Asia/Jakarta')
     
