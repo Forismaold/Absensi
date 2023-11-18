@@ -125,7 +125,7 @@ export default function KirimAbsen() {
     if (!absensi?.status && absensi !== null) return <div className='bg-neutral-300 shadow-lg shadow-primary/50 text-neutral-500 rounded-xl p-4 flex gap-2 items-center relative'>
         <FontAwesomeIcon icon={faDoorClosed}/>
         <p>Absensi belum dibuka</p>
-        <button className='flex ml-auto items-center self-end justify-center rounded text-neutral-100 bg-secondary p-2 shadow-lg shadow-primary/50 duration-200 ease-in-out active:scale-95' onClick={() => fetchStatus()}><FontAwesomeIcon icon={faRotate}/></button>
+        <button className='flex ml-auto items-center justify-center rounded text-neutral-100 bg-secondary p-2 shadow-lg shadow-primary/50 duration-200 ease-in-out active:scale-95' onClick={() => fetchStatus()}><FontAwesomeIcon icon={faRotate}/></button>
     </div>
 
     if (status?.absen === null) return <div className='flex flex-col rounded-xl'>

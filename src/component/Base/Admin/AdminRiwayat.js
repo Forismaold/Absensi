@@ -72,7 +72,6 @@ function SearchUser({isOpen, onClose, users = [], title, date}) {
     const handleSearch = () => {
         const usernameRegex = new RegExp(`^${searchKey}`, 'i')
       
-        // const result = users.filter((user) => searchKey === '' || usernameRegex.test(user.nama))
         const result = users.filter((user) => (searchKey === '' || usernameRegex.test(user.nama)) &&  (kelas === '' || user.kelas === kelas) &&  (nomorKelas === 0 || Number(user.nomorKelas) === nomorKelas || kelas !== ''))
         console.log(result, searchKey, kelas, nomorKelas);
       
@@ -86,7 +85,7 @@ function SearchUser({isOpen, onClose, users = [], title, date}) {
                 <p>{date}</p>
             </div>
             <div className='flex gap-2 items-center flex-wrap'>
-                <input type="text" value={searchKey} onChange={e => setSearchKey(e.target.value)} className='flex-[2] rounded-xl' placeholder='Cari nama'/>
+                <input type="text" value={searchKey} onChange={e => setSearchKey(e.target.value)} className='flex-[2] rounded-xl max-w-full' placeholder='Cari nama'/>
                 <select value={kelas} onChange={(e) => setKelas(e.target.value)} className='min-h-[40px] shadow p-2 rounded-xl w-auto flex-1'>
                     <option value="" defaultValue>Semua Kelas</option>
                     <option value="X.E" defaultValue>X.E</option>
