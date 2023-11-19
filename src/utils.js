@@ -1,6 +1,6 @@
 import CryptoJS from "crypto-js"
-import moment from "moment-timezone"
 import store from "./redux/store"
+import moment from "moment-timezone"
 import 'moment/locale/id'
 
 export const API = process.env.REACT_APP_API

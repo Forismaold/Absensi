@@ -6,8 +6,9 @@ import axios from "axios"
 import { setUsers } from "../../../redux/users"
 import { loadingToast } from '../../utils/myToast'
 import UsersList from './UsersList'
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { setAbsensi } from '../../../redux/source'
+import Modal from '../../utils/Modal'
 
 export default function AdminDashboard() {
     const [permission, setPermission] = useState(false)
@@ -30,6 +31,8 @@ export default function AdminDashboard() {
 function DashboardActionButton() {
     const absensi = useSelector(state => state.source.absensi)
     const account = useSelector(state => state.source.account)
+
+    const [openAbsensiTitle, setOpenAbsensiTitle] = useState(false)
 
     const dispatch = useDispatch()
 
@@ -56,10 +59,10 @@ function DashboardActionButton() {
         if (!absensi) fetchAbsenceStatus()
     }, [absensi, fetchAbsenceStatus])
 
-    async function bukaAbsensi() {
+    async function bukaAbsensi(title = 'Dzuhur') {
         const promise = loadingToast('Membuka absensi')
         try {
-            await axios.post(API + '/absensi/buka', {openedBy: account.nama})
+            await axios.post(API + '/absensi/buka', {openedBy: account.nama, title})
             .then(res => {
                 promise.onSuccess(res.data.msg)
                 dispatch(setAbsensi(res.data.absensi))
@@ -118,14 +121,51 @@ function DashboardActionButton() {
             </div>
             </>
             :
-            <div onClick={bukaAbsensi} className='flex gap-2 shadow-lg shadow-primary/50 cursor-pointer bg-primary items-center p-2 rounded text-neutral-200 duration-200 ease-in-out active:scale-95'>
+            <>
+            <div onClick={() => setOpenAbsensiTitle(true)} className='flex gap-2 shadow-lg shadow-primary/50 cursor-pointer bg-primary items-center p-2 rounded text-neutral-200 duration-200 ease-in-out active:scale-95'>
                 <FontAwesomeIcon icon={faBoxOpen}/>
                 <p>Buka</p>
             </div>
+            <AbsensiTitle isOpen={openAbsensiTitle} onClose={() => setOpenAbsensiTitle(false)} callBack={bukaAbsensi}/>
+            </>
         }
         <div onClick={fetchAbsenceStatus} className='flex gap-2 shadow-lg shadow-primary/50 cursor-pointer bg-primary items-center self-end p-2 rounded text-neutral-200 duration-200 ease-in-out active:scale-95'>
             <FontAwesomeIcon icon={faMagnifyingGlass}/>
             <p>Cek status absensi</p>
         </div>
     </div>
+}
+
+function AbsensiTitle({isOpen, onClose, callBack}) {
+    const [inputTitle, setInputTitle] = useState('Dzhuhur')
+    const inputRef = useRef(null);
+
+    function handleInput(e) {
+        setInputTitle(e.target.value)
+    }
+
+    useEffect(() => {
+        if (isOpen) {
+            if (!inputTitle) setInputTitle('Dzhuhur')
+            inputRef.current.focus();
+            inputRef.current.select()
+        }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [isOpen])
+
+    function handleCallback() {
+        callBack(inputTitle)
+    }
+
+    return <Modal isOpen={isOpen} onClose={onClose} zIndex={'z-[1001]'}>
+        <div className='text-neutral-500 rounded-lg p-4 flex flex-col gap-2 shadow-lg shadow-primary/50'>
+            <div className='flex flex-col'>
+                <label htmlFor="FNCB" className='flex-1'>Ketik judul absensi</label>
+                <input ref={inputRef} type="text" id='FNCB' placeholder='Bawaan: Dzuhur' className='checked:bg-primary shadow-lg shadow-primary/50 border-secondary rounded focus:ring-primary' onChange={handleInput} value={inputTitle} maxLength={20}/>
+            </div>
+            <div onClick={handleCallback} className={`flex-1 bg-secondary shadow-lg shadow-secondary/50 text-neutral-200 p-2 duration-200 ease-in-out active:scale-95 rounded flex justify-center shadow cursor-pointer hover:shadow-xl duration-300 hover:-translate-y-1`}>
+                <span>Buka absensi</span>
+            </div>
+        </div>
+    </Modal>
 }

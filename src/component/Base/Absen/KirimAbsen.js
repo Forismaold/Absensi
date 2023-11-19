@@ -24,17 +24,24 @@ export default function KirimAbsen() {
     const [showFormTidak, setShowFormTidak] = useState(false)
     const [isLoading, setIsLoading] = useState(false)
     const [showforceNext, setShowForceNext] = useState(false)
+    const [fetchLoading, setIsFetchLoading] = useState(false)
+
 
     const dispatch = useDispatch(status)
 
     const fetchStatus = useCallback(() => {
+        setIsFetchLoading(true)
         try {
             axios.get(API + '/absen/status/' + account._id)
             .then(res => {
                 dispatch(setStatus(res.data.status))
                 dispatch(setAbsensi(res.data.absensi))
+                setIsFetchLoading(false)
             })
-            .catch(err => console.log(err))
+            .catch(err => {
+                setIsFetchLoading(false)
+                console.log(err)
+            })
         } catch (error) {
             
         }
@@ -85,7 +92,6 @@ export default function KirimAbsen() {
         const inArea = (userCoordinate[0] >= firstCoordinate[0] && userCoordinate[0] <= secondCoordinate[0]) && (userCoordinate[1] >= firstCoordinate[1] && userCoordinate[1] <= secondCoordinate[1])
 
         
-        // if (!inArea) return blankToast('Kamu berada diluar area, pengiriman tidak dapat dilanjutkan')
         if (!inArea) {
             console.log(!inArea);
             return setShowForceNext(true)
@@ -131,7 +137,7 @@ export default function KirimAbsen() {
     if (status?.absen === null) return <div className='flex flex-col rounded-xl'>
         <div className='flex items-center gap-2 px-2'>
             <FontAwesomeIcon icon={faDoorOpen}/>
-            <p>Absensi dibuka sejak</p>
+            <p>{absensi?.title} dibuka sejak</p>
             <span className='ml-auto'>{formatDate(absensi?.date)}</span>
         </div>
         <div className='bg-secondary text-neutral-100 rounded-xl p-4 flex flex-col gap-2 shadow-lg shadow-primary/50'>
@@ -199,6 +205,7 @@ export default function KirimAbsen() {
                 </div>
             </div>
             }
+            {fetchLoading && <LoadingIcon/> }
         </div>
     </div>
 }
@@ -214,7 +221,6 @@ function ForceNext({isOpen, onClose, callBack}) {
     const [unlockButton, setUnlockButton] = useState(false)
 
     function handleCheckbox(e) {
-        console.log(e.target.checked)
         setUnlockButton(e.target.checked)
     }
 
