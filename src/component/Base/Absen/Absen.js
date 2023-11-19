@@ -138,7 +138,18 @@ const MyMap = () => {
 function ShowModalInfoUserCoordinate({isOpen, onClose}) {
     return <Modal isOpen={isOpen} onClose={onClose} zIndex={'z-[1001]'}>
         <div className='text-neutral-500'>
-            <p>Klik <FontAwesomeIcon icon={faBolt}/> untuk menggunakan geolokasi dengan akurasi tinggi</p>
+            <h3 className='font-semibold'>Masalah umum</h3>
+            <ol className='pl-3'>
+                <li><span className='font-medium'>Kondisi cuaca atau atmosfer:</span> Cuaca buruk atau kondisi atmosfer tertentu dapat memengaruhi sinyal GPS dan mengurangi akurasi.</li>
+                <li><span className='font-medium'>Penggunaan VPN:</span> Jika pengguna menggunakan VPN, lokasi yang dilaporkan mungkin mencerminkan lokasi server VPN, bukan lokasi fisik pengguna.</li>
+                <li><span className='font-medium'>Pembaruan lokasi yang tertunda:</span> Beberapa perangkat mungkin menyimpan data lokasi yang lebih lama sebelum memperbarui lokasi yang akurat. Hal ini dapat mengakibatkan hasil yang tidak selalu mencerminkan lokasi terkini.</li>
+            </ol>
+            <h3 className='font-semibold mt-2'>Solusi</h3>
+            <ol className='pl-3'>
+                <li>Klik <FontAwesomeIcon icon={faBolt}/> untuk menggunakan geolokasi dengan akurasi tinggi</li>
+                <li><span className='font-medium'>Pergi ke ruang terbuka:</span></li>
+                <li><span className='font-medium'>Gunakan akses internet lain:</span> Beberapa provider internet mungkin memberikan lokasi yang tidak akurat</li>
+            </ol>
         </div>
     </Modal>
 }
