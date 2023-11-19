@@ -1,5 +1,5 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faBoxOpen, faClose, faMagnifyingGlass, faTrash } from '@fortawesome/free-solid-svg-icons'
+import { faBoxOpen, faChevronDown, faChevronRight, faClose, faMagnifyingGlass, faTrash } from '@fortawesome/free-solid-svg-icons'
 import { useDispatch, useSelector } from "react-redux"
 import { API, formatBeautyDate, getPermission } from "../../../utils"
 import axios from "axios"
@@ -32,7 +32,7 @@ function DashboardActionButton() {
     const absensi = useSelector(state => state.source.absensi)
     const account = useSelector(state => state.source.account)
 
-    const [openAbsensiTitle, setOpenAbsensiTitle] = useState(false)
+    const [openAbsensiOption, setOpenAbsensiOption] = useState(false)
 
     const dispatch = useDispatch()
 
@@ -59,14 +59,15 @@ function DashboardActionButton() {
         if (!absensi) fetchAbsenceStatus()
     }, [absensi, fetchAbsenceStatus])
 
-    async function bukaAbsensi(title = 'Dzuhur') {
+    async function bukaAbsensi(title = 'Dzuhur', note) {
         const promise = loadingToast('Membuka absensi')
         try {
-            await axios.post(API + '/absensi/buka', {openedBy: account.nama, title})
+            await axios.post(API + '/absensi/buka', {openedBy: account.nama, title, note})
             .then(res => {
                 promise.onSuccess(res.data.msg)
                 dispatch(setAbsensi(res.data.absensi))
                 dispatch(setUsers([]))
+                setOpenAbsensiOption(false)
             }).catch(err => {
                 console.log(err)
                 promise.onError(err.response.data.msg)
@@ -106,15 +107,16 @@ function DashboardActionButton() {
     return <div className="flex justify-end py-2 gap-2 flex-wrap flex-col">
         {absensi?.status ?
             <>
-            <div className='flex flex-col'>
+            <div className='flex flex-col text-neutral-600 p-2 text-sm bg-neutral-300 gap-2 rounded shadow-lg shadow-primary/50'>
                 <p>Dibuka pada {formatBeautyDate(absensi?.date)} oleh {absensi?.openedBy}</p>
+                {absensi?.note && <p>{absensi?.note}</p>}
             </div>
             <div className='flex gap-2 justify-end'>
-                <div onClick={tutupAbsensi} className='flex gap-2 shadow-lg shadow-primary/50 cursor-pointer bg-primary items-center p-2 rounded text-neutral-200 duration-200 ease-in-out active:scale-95'>
+                <div onClick={() => tutupAbsensi()} className='flex gap-2 shadow-lg shadow-primary/50 cursor-pointer bg-primary items-center p-2 rounded text-neutral-200 duration-200 ease-in-out active:scale-95'>
                     <FontAwesomeIcon icon={faClose}/>
                     <p>Tutup dan simpan</p>
                 </div>
-                <div onClick={buangAbsensi} className='flex gap-2 shadow-lg shadow-primary/50 cursor-pointer bg-primary items-center p-2 rounded text-neutral-200 duration-200 ease-in-out active:scale-95'>
+                <div onClick={() => buangAbsensi()} className='flex gap-2 shadow-lg shadow-primary/50 cursor-pointer bg-primary items-center p-2 rounded text-neutral-200 duration-200 ease-in-out active:scale-95'>
                     <FontAwesomeIcon icon={faTrash}/>
                     <p>Buang</p>
                 </div>
@@ -122,11 +124,11 @@ function DashboardActionButton() {
             </>
             :
             <>
-            <div onClick={() => setOpenAbsensiTitle(true)} className='flex gap-2 shadow-lg shadow-primary/50 cursor-pointer bg-primary items-center p-2 rounded text-neutral-200 duration-200 ease-in-out active:scale-95'>
+            <div onClick={() => setOpenAbsensiOption(true)} className='flex gap-2 shadow-lg shadow-primary/50 cursor-pointer bg-primary items-center p-2 rounded text-neutral-200 duration-200 ease-in-out active:scale-95'>
                 <FontAwesomeIcon icon={faBoxOpen}/>
                 <p>Buka</p>
             </div>
-            <AbsensiTitle isOpen={openAbsensiTitle} onClose={() => setOpenAbsensiTitle(false)} callBack={bukaAbsensi}/>
+            <AbsensiTitle isOpen={openAbsensiOption} onClose={() => setOpenAbsensiOption(false)} callBack={bukaAbsensi}/>
             </>
         }
         <div onClick={fetchAbsenceStatus} className='flex gap-2 shadow-lg shadow-primary/50 cursor-pointer bg-primary items-center self-end p-2 rounded text-neutral-200 duration-200 ease-in-out active:scale-95'>
@@ -139,6 +141,8 @@ function DashboardActionButton() {
 function AbsensiTitle({isOpen, onClose, callBack}) {
     const [inputTitle, setInputTitle] = useState('Dzhuhur')
     const inputRef = useRef(null);
+    const [showNote, setShowNote] = useState(false)
+    const [inputNote, setInputNote] = useState('')
 
     function handleInput(e) {
         setInputTitle(e.target.value)
@@ -154,14 +158,16 @@ function AbsensiTitle({isOpen, onClose, callBack}) {
     }, [isOpen])
 
     function handleCallback() {
-        callBack(inputTitle)
+        callBack(inputTitle, inputNote)
     }
 
-    return <Modal isOpen={isOpen} onClose={onClose} zIndex={'z-[1001]'}>
-        <div className='text-neutral-500 rounded-lg p-4 flex flex-col gap-2 shadow-lg shadow-primary/50'>
+    return <Modal isOpen={isOpen} onClose={onClose}>
+        <div className='text-neutral-500 flex flex-col gap-2 p-2'>
             <div className='flex flex-col'>
-                <label htmlFor="FNCB" className='flex-1'>Ketik judul absensi</label>
-                <input ref={inputRef} type="text" id='FNCB' placeholder='Bawaan: Dzuhur' className='checked:bg-primary shadow-lg shadow-primary/50 border-secondary rounded focus:ring-primary' onChange={handleInput} value={inputTitle} maxLength={20}/>
+                <p className='flex-1'>Ketik judul absensi</p>
+                <input ref={inputRef} type="text" placeholder='Bawaan: Dzuhur' className='shadow-lg shadow-primary/50 border-secondary rounded focus:ring-primary' onChange={handleInput} value={inputTitle} maxLength={20}/>
+                <p className='flex-1 mt-2 duration-200 ease-in-out active:scale-95 cursor-pointer' onClick={() => setShowNote(prev => !prev)}>Tambahkan catatan <FontAwesomeIcon icon={showNote ? faChevronDown : faChevronRight}/></p>
+                {showNote && <textarea className='shadow-lg shadow-primary/50 border-secondary rounded focus:ring-primary' placeholder='Ketik catatan' onChange={e => setInputNote(e.target.value)}/>}
             </div>
             <div onClick={handleCallback} className={`flex-1 bg-secondary shadow-lg shadow-secondary/50 text-neutral-200 p-2 duration-200 ease-in-out active:scale-95 rounded flex justify-center shadow cursor-pointer hover:shadow-xl duration-300 hover:-translate-y-1`}>
                 <span>Buka absensi</span>

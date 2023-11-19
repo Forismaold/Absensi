@@ -72,7 +72,7 @@ function LoginForm() {
                 <FontAwesomeIcon icon={faKey}/>
                 <p>Kata sandi</p>
             </div>
-            <input className='p-2 rounded shadow w-full' type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder='Kata sandi' autoComplete='off' required/>
+            <input className='p-2 rounded shadow w-full' type="password" value={password} onChange={e => setPassword(e.target.value)} placeholder='Kata sandi' autoComplete='off' required/>
             <div className='max-w-full overflow-auto'>
                 <ReCAPTCHA sitekey={process.env.REACT_APP_RECAPTCHA_SITE} onChange={onChange}/>
             </div>

@@ -93,7 +93,6 @@ export default function KirimAbsen() {
 
         
         if (!inArea) {
-            console.log(!inArea);
             return setShowForceNext(true)
         }
 

@@ -1,5 +1,5 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faBolt, faLocationCrosshairs } from '@fortawesome/free-solid-svg-icons'
+import { faBolt, faInfo, faLocationCrosshairs } from '@fortawesome/free-solid-svg-icons'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { MapContainer, Marker, Rectangle, TileLayer, Tooltip } from 'react-leaflet'
 import LoadingIcon from '../../utils/LoadingIcon'
@@ -7,6 +7,8 @@ import { useDispatch, useSelector } from 'react-redux'
 import { setUserCoordinate } from '../../../redux/coordinates'
 import KirimAbsen from './KirimAbsen'
 import { blankToast } from '../../utils/myToast'
+import Note from './Note'
+import Modal from '../../utils/Modal'
 
 export default function Absen() {
     return <div>
@@ -23,6 +25,7 @@ const MyMap = () => {
 
     const [loadingUserCoor, setLoadingUserCoor] = useState(false)
     const [showCoordinate, setShowCoordinate] = useState(false)
+    const [showUserCoordinateTutorial, setShowUserCoordinateTutorial] = useState(false)
 
     const mapRef = useRef(null)
 
@@ -109,20 +112,33 @@ const MyMap = () => {
                     </div>
                 </div>
                 <div className='relative flex flex-1 flex-col shadow-md bg-neutral-300/50 rounded-xl p-2'>
-                    <button className={`absolute top-1 right-1 flex items-center justify-center rounded-lg text-neutral-100 ${userCoordinate ? ' bg-secondary' : ' bg-primary-quarternary'} p-2 shadow-lg shadow-primary/50 duration-200 ease-in-out active:scale-95`} onClick={focusUserLocation}><FontAwesomeIcon icon={faLocationCrosshairs}/></button>
+                    <div className='absolute top-1 right-1 flex gap-1'>
+                        <button className='flex items-center justify-center px-3 text-neutral-500 p-2 duration-200 ease-in-out active:scale-95' onClick={() => setShowUserCoordinateTutorial(true)}><FontAwesomeIcon icon={faInfo}/></button>
+                        <button className={`flex items-center justify-center rounded-lg text-neutral-100 ${userCoordinate ? ' bg-secondary' : ' bg-primary-quarternary'} p-2 shadow-lg shadow-primary/50 duration-200 ease-in-out active:scale-95`} onClick={focusUserLocation}><FontAwesomeIcon icon={faLocationCrosshairs}/></button>
+                    </div>
                     <p>Lokasi kamu</p>
                     <span>{userCoordinate ? `${userCoordinate[0]}, ${userCoordinate[1]}` : '0, 0'}</span>
                     <div className='flex gap-2 py-1'>
-                        <button className={`flex shadow-lg px-2 shadow-accent/50 justify-center items-center rounded text-neutral-100 duration-200 ease-in-out active:scale-95 bg-accent min-h-[32px] mt-auto`} onClick={() => getCurrentLocation(true)}>
+                        <button className={`flex shadow-lg px-2 shadow-accent/50 justify-center items-center rounded text-neutral-100 duration-200 ease-in-out active:scale-95 bg-accent min-h-[32px] mt-auto`} onClick={() => getCurrentLocation(true)} title='Akurasi tinggi'>
                             {loadingUserCoor ? <LoadingIcon /> : <FontAwesomeIcon icon={faBolt}/>}
                         </button>
-                        <button className={`flex flex-1 shadow-lg shadow-primary/50 items-center justify-center rounded text-neutral-100 px-2 duration-200 ease-in-out active:scale-95 bg-secondary min-h-[32px] mt-auto`} onClick={getCurrentLocation}>
+                        <button className={`flex flex-1 shadow-lg shadow-primary/50 items-center justify-center rounded text-neutral-100 px-2 duration-200 ease-in-out active:scale-95 bg-secondary min-h-[32px] mt-auto`} onClick={getCurrentLocation} title='Akurasi sedang'>
                             {loadingUserCoor ? <LoadingIcon /> : <span>Segarkan</span>}
                         </button>
                     </div>
                 </div>
             </div>
             <KirimAbsen/>
+            <Note/>
+            <ShowModalInfoUserCoordinate isOpen={showUserCoordinateTutorial} onClose={() => setShowUserCoordinateTutorial(false)}/>
         </div>
     )
+}
+
+function ShowModalInfoUserCoordinate({isOpen, onClose}) {
+    return <Modal isOpen={isOpen} onClose={onClose} zIndex={'z-[1001]'}>
+        <div className='text-neutral-500'>
+            <p>Klik <FontAwesomeIcon icon={faBolt}/> untuk menggunakan geolokasi dengan akurasi tinggi</p>
+        </div>
+    </Modal>
 }

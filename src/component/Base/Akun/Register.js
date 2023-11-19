@@ -23,6 +23,7 @@ function RegisterForm() {
     const [nomorKelas, setNomorKelas] = useState('')
     const [kelas, setKelas] = useState('X')
     const [nomorAbsen, setNomorAbsen] = useState('')
+    const [NIS, setNIS] = useState('')
     const [jenisKelamin, setJenisKelamin] = useState('-')
 
     const [password, setPassword] = useState('')
@@ -48,7 +49,8 @@ function RegisterForm() {
             nomorKelas,
             nomorAbsen,
             jenisKelamin,
-            password
+            password,
+            NIS
         }
 
         const promise = loadingToast('Membuat akun')
@@ -91,12 +93,12 @@ function RegisterForm() {
                     <option value="XII IPS">XII IPS</option>
                 </select>
                 <span>-</span>
-                <input className='p-2 rounded shadow w-full' type="number" value={nomorKelas} onChange={(e) => setNomorKelas(e.target.value)} placeholder='Kelas' autoComplete='off' required/>
+                <input className='p-2 rounded shadow w-full' type="number" value={nomorKelas} onChange={e => setNomorKelas(e.target.value)} placeholder='Kelas' autoComplete='off' required/>
             </div>
-            <input className='p-2 rounded shadow w-full' type="number" value={nomorAbsen} onChange={(e) => setNomorAbsen(e.target.value)} placeholder='Nomor absen' autoComplete='off'/>
+            <input className='p-2 rounded shadow w-full' type="number" value={nomorAbsen} onChange={e => setNomorAbsen(e.target.value)} placeholder='Nomor absen' autoComplete='off' max={40}/>
             <p>Kata sandi</p>
-            <input className='p-2 rounded shadow w-full' type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder='Kata sandi' autoComplete='off' required/>
-            <input className='p-2 rounded shadow w-full' type="password" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} placeholder='Konfirmasi kata sandi' autoComplete='off' required/>
+            <input className='p-2 rounded shadow w-full' type="password" value={password} onChange={e => setPassword(e.target.value)} placeholder='Kata sandi' autoComplete='off' required/>
+            <input className='p-2 rounded shadow w-full' type="password" value={confirmPassword} onChange={e => setConfirmPassword(e.target.value)} placeholder='Konfirmasi kata sandi' autoComplete='off' required/>
             <div className='flex gap-2 text-neutral-700 items-center font-mediumm justify-between duration-200 ease-in-out active:scale-95 cursor-pointer' onClick={() => setShowOptionalInput(prev => !prev)}>
                 <div className='flex gap-2 items-center'>
                     <FontAwesomeIcon icon={faEllipsisH}/>
@@ -106,8 +108,9 @@ function RegisterForm() {
             </div>
             {showOptionalInput &&
                 <>
+                <input className='p-2 rounded shadow w-full' type="number" value={NIS} onChange={e => setNIS(e.target.value)} placeholder='NIS' autoComplete='off' maxLength={4}/>
                 <input className='p-2 rounded shadow w-full' type="text" value={panggilan} onChange={handleChangeNickname} placeholder='Nama panggilan' autoComplete='off' maxLength={20}/>
-                <select value={jenisKelamin} onChange={(e) => setJenisKelamin(e.target.value)} className='min-h-[40px] shadow p-2 rounded' placeholder='Jenis kelamin'>
+                <select value={jenisKelamin} onChange={e => setJenisKelamin(e.target.value)} className='min-h-[40px] shadow p-2 rounded' placeholder='Jenis kelamin'>
                     <option value="-" disabled>Jenis kelamin</option>
                     <option value="L">Laki-laki</option>
                     <option value="P">Perempuan</option>
