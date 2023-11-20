@@ -5,10 +5,10 @@ import { MapContainer, Marker, Rectangle, TileLayer, Tooltip } from 'react-leafl
 import LoadingIcon from '../../utils/LoadingIcon'
 import { useDispatch, useSelector } from 'react-redux'
 import { setUserCoordinate } from '../../../redux/coordinates'
-import KirimAbsen from './KirimAbsen'
 import { blankToast } from '../../utils/myToast'
 import Note from './Note'
 import Modal from '../../utils/Modal'
+import UserAbsenceStatus from './UserAbsenceStatus'
 
 export default function Absen() {
     return <div>
@@ -128,7 +128,7 @@ const MyMap = () => {
                     </div>
                 </div>
             </div>
-            <KirimAbsen/>
+            <UserAbsenceStatus/>
             <Note/>
             <ShowModalInfoUserCoordinate isOpen={showUserCoordinateTutorial} onClose={() => setShowUserCoordinateTutorial(false)}/>
         </div>

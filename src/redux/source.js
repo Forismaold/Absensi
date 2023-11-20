@@ -8,7 +8,8 @@ const source = createSlice({
         status: null,
         absensi: null,
         adminRiwayats: null,
-        riwayats: null
+        riwayats: null,
+        showAbsenceForm: false
     },
     reducers: {
         setAccount: (state, action) => {
@@ -29,7 +30,10 @@ const source = createSlice({
         setAbsensi: (state, action) => {
             state.absensi = action.payload || null
         },
+        toggleShowAbsenceForm: (state, action) => {
+            state.showAbsenceForm = !state.showAbsenceForm
+        },
     }
 })
-export const { setAccount, refreshAccount, setStatus, setRiwayats, setAbsensi, setAdminRiwayats } = source.actions
+export const { setAccount, refreshAccount, setStatus, setRiwayats, setAbsensi, setAdminRiwayats, toggleShowAbsenceForm } = source.actions
 export default source.reducer

@@ -30,7 +30,7 @@ export default function Navbar() {
             <div className="flex gap-2">
                 <Link to={'/akun'}>
                     <div className="h-full flex place-items-center pointer">
-                        {akun ? <img src={akun?.avatar} alt={akun?.nickname || akun?.nama} className="w-[32px] h-[32px] rounded-full shadow duration-200 ease-in-out active:scale-95"/>: <span className="duration-200 ease-in-out active:scale-95">Akun</span>}
+                        {akun ? <img src={akun?.avatar} alt={akun?.nickname || akun?.nama} referrerPolicy="no-referrer" className="w-[32px] h-[32px] rounded-full shadow duration-200 ease-in-out active:scale-95"/>: <span className="duration-200 ease-in-out active:scale-95">Akun</span>}
                     </div>
                 </Link>
             </div>

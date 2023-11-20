@@ -1,33 +1,80 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faCheck, faChevronLeft, faChevronRight, faDoorClosed, faDoorOpen, faRotate, faXmark } from '@fortawesome/free-solid-svg-icons'
+import { faCheck, faCheckDouble, faChevronLeft, faChevronRight, faDoorClosed, faDoorOpen, faRotate, faXmark } from '@fortawesome/free-solid-svg-icons'
 import { useCallback, useEffect, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { blankToast, loadingToast } from "../../utils/myToast"
 import axios from "axios"
-import { API, formatDate, formatTime } from "../../../utils"
+import { API, formatBeautyDate, formatTime, isUserWithinBounds } from "../../../utils"
 import LoadingIcon from '../../utils/LoadingIcon'
-import { setAbsensi, setStatus } from '../../../redux/source'
+import { setAbsensi, setStatus, toggleShowAbsenceForm } from '../../../redux/source'
 import Modal from '../../utils/Modal'
 
-export default function KirimAbsen() {
-    const firstCoordinate = useSelector(state => state.coordinates.first)
-    const secondCoordinate = useSelector(state => state.coordinates.second)
-    const userCoordinate = useSelector(state => state.coordinates.user)
-    const account = useSelector(state => state.source.account)
-    const status = useSelector(state => state.source.status)
+export default function UserAbsenceStatus() {
+
+    return <>
+        <StatusDate/>
+        <StatusUser/>
+        <StatusServer/>
+        <SubmitAbsenceForm/>
+    </>
+}
+
+function StatusDate() {
     const absensi = useSelector(state => state.source.absensi)
 
-    const [kode, setKode] = useState('-')
-    const [keterangan, setKeterangan] = useState('')
-    const [showTidak, setShowTidak] = useState(true)
-    const [showKirim, setShowKirim] = useState(true)
-    const [showFormTidak, setShowFormTidak] = useState(false)
-    const [isLoading, setIsLoading] = useState(false)
-    const [showforceNext, setShowForceNext] = useState(false)
+    return <div className='flex items-center gap-2 px-2'>
+        <FontAwesomeIcon icon={absensi?.status ? faDoorOpen : faDoorClosed}/>
+        {absensi?.status ?
+            <p>{absensi?.title} dibuka sejak</p>
+            :
+            <p>Terakhir ditutup</p>
+        }
+        <span className='ml-auto'>{formatBeautyDate(absensi?.date)}</span>
+    </div>
+}
+
+function StatusUser() {
+    const status = useSelector(state => state.source.status)
+    const showAbsenceForm = useSelector(state => state.source.showAbsenceForm)
+
+    const dispatch = useDispatch()
+
+    if (status?.absen === null) return null
+
+    return <>    
+    <div className='bg-secondary shadow-lg shadow-primary/50 text-neutral-100 rounded-xl p-4 flex gap-2 items-center relative'>
+        {status?.absen === true &&
+        <>
+            <FontAwesomeIcon icon={isUserWithinBounds() ? faCheckDouble : faCheck}/>
+            <p>{isUserWithinBounds() ? 'Di area' : 'Diluar area'}</p>
+            <span className='ml-auto'>{formatTime(status.waktuAbsen)}</span>
+        </>
+        }
+        {status?.absen === false &&
+        <div className='flex flex-col w-full'>
+            <div className='flex items-center gap-2'>
+                <FontAwesomeIcon icon={faXmark}/>
+                <p>Tidak Absen</p>
+            </div>
+            <div className='flex flex-col'>
+                <AbsenceCell prop={'Kode'} value={status.kode}/>
+                <AbsenceCell prop={'Keterangan'} value={status.keterangan}/>
+                <AbsenceCell prop={'Waktu Absen'} value={formatTime(status.waktuAbsen)}/>
+            </div>
+        </div>
+        }
+    </div>
+    {status?.absen !== null && <span onClick={() => dispatch(toggleShowAbsenceForm())} className='duration-200 ease-in-out active:scale-95 text-primary text-right underline cursor-pointer text-secondary'>{!showAbsenceForm ? 'Batal perbarui' : 'Perbarui absensi'}</span>}
+    </>
+}
+
+function StatusServer() {
+    const absensi = useSelector(state => state.source.absensi)
+    const account = useSelector(state => state.source.account)
+    const status = useSelector(state => state.source.status)
+
+    const dispatch = useDispatch()
     const [fetchLoading, setIsFetchLoading] = useState(false)
-
-
-    const dispatch = useDispatch(status)
 
     const fetchStatus = useCallback(() => {
         setIsFetchLoading(true)
@@ -51,7 +98,33 @@ export default function KirimAbsen() {
         if (!status && account) fetchStatus()
     },[account, fetchStatus, status])
 
-    if (!account) return null
+    if (absensi?.status === true) return
+
+    return <div className='bg-neutral-300 shadow-lg shadow-primary/50 text-neutral-500 rounded-xl p-4 flex gap-2 items-center relative'>
+        <p>Absensi belum dibuka</p>
+        <button className='flex ml-auto items-center justify-center rounded text-neutral-100 bg-secondary p-2 shadow-lg shadow-primary/50 duration-200 ease-in-out active:scale-95' onClick={() => fetchStatus()}>{fetchLoading ? <LoadingIcon/> :<FontAwesomeIcon icon={faRotate} className='p-0.5'/>}</button>
+    </div>
+}
+
+function SubmitAbsenceForm() {
+    const firstCoordinate = useSelector(state => state.coordinates.first)
+    const secondCoordinate = useSelector(state => state.coordinates.second)
+    const userCoordinate = useSelector(state => state.coordinates.user)
+
+    const absensi = useSelector(state => state.source.absensi)
+    const account = useSelector(state => state.source.account)
+    const showAbsenceForm = useSelector(state => state.source.showAbsenceForm)
+
+    const [showTidak, setShowTidak] = useState(true)
+    const [showKirim, setShowKirim] = useState(true)
+    const [showFormTidak, setShowFormTidak] = useState(false)
+
+    const [kode, setKode] = useState('-')
+    const [keterangan, setKeterangan] = useState('')
+    const [isLoading, setIsLoading] = useState(false)
+    const [showforceNext, setShowForceNext] = useState(false)
+
+    const dispatch = useDispatch()
 
     function handleTidakHadir() {
         setShowKirim(prev => !prev)
@@ -76,6 +149,9 @@ export default function KirimAbsen() {
                 handleTidakHadir()
                 setIsLoading(false)
                 dispatch(setStatus(res.data.status))
+                setShowForceNext(false)
+                dispatch(toggleShowAbsenceForm())
+                
             }).catch(err => {
                 setIsLoading(false)
                 promise.onError(err.response.data.msg)
@@ -114,9 +190,10 @@ export default function KirimAbsen() {
             await axios.post(API + '/absen/hadir', dataToSend)
             .then(res => {
                 dispatch(setStatus(res.data.status))
-                console.log(res.data.status)
                 promise.onSuccess(res.data.msg)
                 setIsLoading(false)
+                setShowForceNext(false)
+                dispatch(toggleShowAbsenceForm())
             }).catch(err => {
                 promise.onError(err.response.data.msg)
                 throw new Error(err)
@@ -127,18 +204,9 @@ export default function KirimAbsen() {
         }
     }
 
-    if (!absensi?.status && absensi !== null) return <div className='bg-neutral-300 shadow-lg shadow-primary/50 text-neutral-500 rounded-xl p-4 flex gap-2 items-center relative'>
-        <FontAwesomeIcon icon={faDoorClosed}/>
-        <p>Absensi belum dibuka</p>
-        <button className='flex ml-auto items-center justify-center rounded text-neutral-100 bg-secondary p-2 shadow-lg shadow-primary/50 duration-200 ease-in-out active:scale-95' onClick={() => fetchStatus()}><FontAwesomeIcon icon={faRotate}/></button>
-    </div>
+    if (absensi?.status === false || showAbsenceForm) return null
 
-    if (status?.absen === null) return <div className='flex flex-col rounded-xl'>
-        <div className='flex items-center gap-2 px-2'>
-            <FontAwesomeIcon icon={faDoorOpen}/>
-            <p>{absensi?.title} dibuka sejak</p>
-            <span className='ml-auto'>{formatDate(absensi?.date)}</span>
-        </div>
+    return <div className='flex flex-col rounded-xl'>
         <div className='bg-secondary text-neutral-100 rounded-xl p-4 flex flex-col gap-2 shadow-lg shadow-primary/50'>
             <p>Kirim sebagai {account?.panggilan || account?.nama}</p>
             <div className='flex gap-2'>
@@ -178,33 +246,6 @@ export default function KirimAbsen() {
                 }
                 {showforceNext && <ForceNext isOpen={showforceNext} onClose={() => setShowForceNext(false)} callBack={handleHadir}/>}
             </div>
-        </div>
-    </div>
-
-    return <div className="flex flex-col bg-neutral-300/50 rounded-xl p-2 gap-2">
-        <button className='flex items-center self-end justify-center rounded text-neutral-100 bg-secondary p-2 shadow-lg shadow-primary/50 duration-200 ease-in-out active:scale-95' onClick={() => fetchStatus()}><FontAwesomeIcon icon={faRotate}/></button>
-        <div className='bg-secondary shadow-lg shadow-primary/50 text-neutral-100 rounded-xl p-4 flex gap-2 items-center relative'>
-            {status?.absen === true &&
-            <>
-                <FontAwesomeIcon icon={faCheck}/>
-                <p>Sudah Absen</p>
-                <span className='ml-auto'>{formatTime(status.waktuAbsen)}</span>
-            </>
-            }
-            {status?.absen === false &&
-            <div className='flex flex-col w-full'>
-                <div className='flex items-center gap-2'>
-                    <FontAwesomeIcon icon={faXmark}/>
-                    <p>Tidak Absen</p>
-                </div>
-                <div className='flex flex-col'>
-                    <AbsenceCell prop={'Kode'} value={status.kode}/>
-                    <AbsenceCell prop={'Keterangan'} value={status.keterangan}/>
-                    <AbsenceCell prop={'Waktu Absen'} value={formatTime(status.waktuAbsen)}/>
-                </div>
-            </div>
-            }
-            {fetchLoading && <LoadingIcon/> }
         </div>
     </div>
 }

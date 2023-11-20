@@ -38,9 +38,9 @@ export default function UsersList() {
     if (!absensi?.status) return null
 
     return <div className="flex flex-col gap-2">
-        <div onClick={fetchData} className='flex gap-2 shadow-lg shadow-primary/50 cursor-pointer bg-primary items-center p-2 rounded text-neutral-200'>
+        <div onClick={fetchData} className='flex gap-2 shadow-lg shadow-primary/50 cursor-pointer bg-primary items-center p-2 rounded text-neutral-200 duration-200 ease-in-out active:scale-95 w-fit self-end'>
             <FontAwesomeIcon icon={faRotate}/>
-            <p>Segarkan</p>
+            <p>Segarkan data</p>
         </div>
         {isLoading && <div className="flex gap-2"><LoadingSkeleton/><LoadingSkeleton/></div>}
         {users && <div className="flex flex-col gap-2">

@@ -1,5 +1,5 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faBoxOpen, faChevronDown, faChevronRight, faClose, faMagnifyingGlass, faTrash } from '@fortawesome/free-solid-svg-icons'
+import { faBoxOpen, faChevronDown, faChevronRight, faClose, faTrash } from '@fortawesome/free-solid-svg-icons'
 import { useDispatch, useSelector } from "react-redux"
 import { API, formatBeautyDate, getPermission } from "../../../utils"
 import axios from "axios"
@@ -7,7 +7,7 @@ import { setUsers } from "../../../redux/users"
 import { loadingToast } from '../../utils/myToast'
 import UsersList from './UsersList'
 import { useCallback, useEffect, useRef, useState } from 'react'
-import { setAbsensi } from '../../../redux/source'
+import { setAbsensi, setStatus } from '../../../redux/source'
 import Modal from '../../utils/Modal'
 
 export default function AdminDashboard() {
@@ -67,6 +67,7 @@ function DashboardActionButton() {
                 promise.onSuccess(res.data.msg)
                 dispatch(setAbsensi(res.data.absensi))
                 dispatch(setUsers([]))
+                dispatch(setStatus())
                 setOpenAbsensiOption(false)
             }).catch(err => {
                 console.log(err)
@@ -85,6 +86,7 @@ function DashboardActionButton() {
                 promise.onSuccess(`${res.data.msg}, Tidak absen: ${res.data.tidak}, Belum absen: ${res.data.belum}, Sudah absen: ${res.data.sudah}`)
                 dispatch(setAbsensi({status: false}))
                 dispatch(setUsers(null))
+                dispatch(setStatus())
             })
         } catch (error) {
             promise.onError('Internal server error')
@@ -98,27 +100,46 @@ function DashboardActionButton() {
                 promise.onSuccess(`${res.data.msg}, Tidak absen: ${res.data.tidak}, Belum absen: ${res.data.belum}, Sudah absen: ${res.data.sudah}`)
                 dispatch(setAbsensi({status: false}))
                 dispatch(setUsers(null))
+                dispatch(setStatus())
             })
         } catch (error) {
             promise.onError('Internal server error')
         }
     }
 
-    return <div className="flex justify-end py-2 gap-2 flex-wrap flex-col">
+    useEffect(() => {
+        console.log(absensi);
+    },[absensi])
+
+    return <div className="flex py-2 gap-2 flex-col shadow-lg p-2 rounded my-2 bg-neutral-200">
+        {absensi && <div className='flex flex-col'>
+            <div className='flex flex-wrap flex-col sm:flex-row'>
+                <p className='sm:w-2/6 font-semibold'>Status</p>
+                <p>{absensi?.status ? "Buka" : "Tutup"}</p>
+            </div>
+            <div className='flex flex-wrap flex-col sm:flex-row'>
+                <p className='sm:w-2/6 font-semibold'>Dibuka oleh</p>
+                <p>{absensi?.openedBy || 'Anon'}</p>
+            </div>
+            <div className='flex flex-wrap flex-col sm:flex-row'>
+                <p className='sm:w-2/6 font-semibold'>Pada</p>
+                <p>{formatBeautyDate(absensi?.date)}</p>
+            </div>
+            <div className='flex flex-wrap flex-col sm:flex-row'>
+                <p className='sm:w-2/6 font-semibold'>Catatan</p>
+                <p>{absensi?.note || '-'}</p>
+            </div>
+        </div>}
         {absensi?.status ?
             <>
-            <div className='flex flex-col text-neutral-600 p-2 text-sm bg-neutral-300 gap-2 rounded shadow-lg shadow-primary/50'>
-                <p>Dibuka pada {formatBeautyDate(absensi?.date)} oleh {absensi?.openedBy}</p>
-                {absensi?.note && <p>{absensi?.note}</p>}
-            </div>
-            <div className='flex gap-2 justify-end'>
+            <div className='flex gap-2 justify-end flex-wrap'>
                 <div onClick={() => tutupAbsensi()} className='flex gap-2 shadow-lg shadow-primary/50 cursor-pointer bg-primary items-center p-2 rounded text-neutral-200 duration-200 ease-in-out active:scale-95'>
                     <FontAwesomeIcon icon={faClose}/>
                     <p>Tutup dan simpan</p>
                 </div>
-                <div onClick={() => buangAbsensi()} className='flex gap-2 shadow-lg shadow-primary/50 cursor-pointer bg-primary items-center p-2 rounded text-neutral-200 duration-200 ease-in-out active:scale-95'>
+                <div onClick={() => buangAbsensi()} className='flex gap-2 border-2 border-primary shadow-lg shadow-primary/50 cursor-pointer bg-transparent items-center p-2 rounded text-primary duration-200 ease-in-out active:scale-95'>
                     <FontAwesomeIcon icon={faTrash}/>
-                    <p>Buang</p>
+                    <p>Tutup dan Buang</p>
                 </div>
             </div>
             </>
@@ -131,10 +152,6 @@ function DashboardActionButton() {
             <AbsensiTitle isOpen={openAbsensiOption} onClose={() => setOpenAbsensiOption(false)} callBack={bukaAbsensi}/>
             </>
         }
-        <div onClick={fetchAbsenceStatus} className='flex gap-2 shadow-lg shadow-primary/50 cursor-pointer bg-primary items-center self-end p-2 rounded text-neutral-200 duration-200 ease-in-out active:scale-95'>
-            <FontAwesomeIcon icon={faMagnifyingGlass}/>
-            <p>Cek status absensi</p>
-        </div>
     </div>
 }
 
