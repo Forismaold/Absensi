@@ -25,7 +25,6 @@ export default function UserAbsenceStatus() {
                 dispatch(setStatus(res.data.status))
                 dispatch(setAbsensi(res.data.absensi))
                 setIsFetchLoading(false)
-                console.log('parent');
             })
             .catch(err => {
                 setIsFetchLoading(false)
@@ -41,9 +40,7 @@ export default function UserAbsenceStatus() {
     },[account, fetchStatus, status])
 
     const absensi = useSelector(state => state.source.absensi)
-    useEffect(() => {
-        console.log('absensi', absensi);
-    },[absensi])
+
     if (absensi === null) return <div>
         <button className='flex ml-auto items-center justify-center rounded text-neutral-100 bg-secondary p-2 shadow-lg shadow-primary/50 duration-200 ease-in-out active:scale-95' onClick={() => fetchStatus()}>{isFetchLoading ? <LoadingIcon/> : <><FontAwesomeIcon icon={faRotate} className='p-0.5 pr-2'/> Segarkan status absensi</>}</button>
     </div>
@@ -75,10 +72,6 @@ function StatusUser() {
     const showAbsenceForm = useSelector(state => state.source.showAbsenceForm)
 
     const dispatch = useDispatch()
-
-    useEffect(() => {
-        console.log('status', status);
-    },[status])
 
     if (status?.absen === null) return null
 
@@ -125,7 +118,6 @@ function StatusServer() {
                 dispatch(setStatus(res.data.status))
                 dispatch(setAbsensi(res.data.absensi))
                 setIsFetchLoading(false)
-                console.log('child');
             })
             .catch(err => {
                 setIsFetchLoading(false)

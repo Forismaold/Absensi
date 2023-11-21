@@ -1,5 +1,5 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faBolt, faInfo, faLocationCrosshairs } from '@fortawesome/free-solid-svg-icons'
+import { faBinoculars, faBolt, faInfo, faLocationCrosshairs } from '@fortawesome/free-solid-svg-icons'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { MapContainer, Marker, Rectangle, TileLayer, Tooltip } from 'react-leaflet'
 import LoadingIcon from '../../utils/LoadingIcon'
@@ -26,14 +26,17 @@ const MyMap = () => {
     const [loadingUserCoor, setLoadingUserCoor] = useState(false)
     const [showCoordinate, setShowCoordinate] = useState(false)
     const [showUserCoordinateTutorial, setShowUserCoordinateTutorial] = useState(false)
+    const [toggleHighAccuracy, setToggleHighAccuracy] = useState(false)
+    const [isWatchPosition, setIsWatchPosition] = useState(false)
 
     const mapRef = useRef(null)
 
     const dispatch = useDispatch()
 
-    const getCurrentLocation = useCallback((HighAccuracy = false) => {
+    const getCurrentLocation = useCallback(() => {
+        if (isWatchPosition) return null
         if (navigator.geolocation) {
-            if (HighAccuracy === true) blankToast('Mencari lokasi dengan akurasi tinggi')
+            if (toggleHighAccuracy === true) blankToast('Mencari lokasi dengan akurasi tinggi')
             setLoadingUserCoor(true)
             navigator.geolocation.getCurrentPosition(
                 (position) => {
@@ -48,15 +51,15 @@ const MyMap = () => {
                     setLoadingUserCoor(false)
                 },
                 {
-                    enableHighAccuracy: HighAccuracy,
+                    enableHighAccuracy: toggleHighAccuracy,
+                    maximumAge: 0,
                 }
             )
         } else {
             alert('Geolocation tidak didukung browsermu.')
             setLoadingUserCoor(false)
         }
-    },[dispatch])
-
+    },[dispatch, isWatchPosition, toggleHighAccuracy])
 
     const focusOnLocation = (location) => {
         const map = mapRef.current
@@ -119,11 +122,16 @@ const MyMap = () => {
                     <p>Lokasi kamu</p>
                     <span>{userCoordinate ? `${userCoordinate[0]}, ${userCoordinate[1]}` : '0, 0'}</span>
                     <div className='flex gap-2 py-1'>
-                        <button className={`flex shadow-lg px-2 shadow-accent/50 justify-center items-center rounded text-neutral-100 duration-200 ease-in-out active:scale-95 bg-accent min-h-[32px] mt-auto`} onClick={() => getCurrentLocation(true)} title='Akurasi tinggi'>
+                        {isWatchPosition ? <WatchPosition onClose={() => setIsWatchPosition(false)} toggleHighAccuracy={toggleHighAccuracy} focusOnLocation={focusOnLocation}/> : 
+                            <button className={`flex shadow-lg px-2 shadow-primary/50 justify-center items-center rounded text-neutral-500 duration-200 ease-in-out active:scale-95 bg-neutral-200 min-h-[32px] mt-auto`} onClick={() => setIsWatchPosition(true)} title='Akurasi tinggi'>
+                                <FontAwesomeIcon icon={faBinoculars}/>
+                            </button>
+                        }
+                        <button className={`flex shadow-lg px-2 shadow-accent/50 justify-center items-center rounded ${toggleHighAccuracy ? 'text-neutral-200 bg-accent' : 'text-neutral-500 bg-neutral-200'} duration-200 ease-in-out active:scale-95 min-h-[32px] mt-auto`} onClick={() => setToggleHighAccuracy(prev => !prev)} title='Akurasi tinggi'>
                             {loadingUserCoor ? <LoadingIcon /> : <FontAwesomeIcon icon={faBolt}/>}
                         </button>
                         <button className={`flex flex-1 shadow-lg shadow-primary/50 items-center justify-center rounded text-neutral-100 px-2 duration-200 ease-in-out active:scale-95 bg-secondary min-h-[32px] mt-auto`} onClick={getCurrentLocation} title='Akurasi sedang'>
-                            {loadingUserCoor ? <LoadingIcon /> : <span>Segarkan</span>}
+                            {loadingUserCoor ? <LoadingIcon /> : <span>{isWatchPosition ? 'Posisi menonton' : 'Segarkan'}</span>}
                         </button>
                     </div>
                 </div>
@@ -137,19 +145,63 @@ const MyMap = () => {
 
 function ShowModalInfoUserCoordinate({isOpen, onClose}) {
     return <Modal isOpen={isOpen} onClose={onClose} zIndex={'z-[1001]'}>
-        <div className='text-neutral-500'>
+        <div className='text-neutral-500 p-2'>
             <h3 className='font-semibold'>Masalah umum</h3>
-            <ol className='pl-3'>
+            <ol className='pl-4'>
                 <li><span className='font-medium'>Kondisi cuaca atau atmosfer:</span> Cuaca buruk atau kondisi atmosfer tertentu dapat memengaruhi sinyal GPS dan mengurangi akurasi.</li>
                 <li><span className='font-medium'>Penggunaan VPN:</span> Jika pengguna menggunakan VPN, lokasi yang dilaporkan mungkin mencerminkan lokasi server VPN, bukan lokasi fisik pengguna.</li>
                 <li><span className='font-medium'>Pembaruan lokasi yang tertunda:</span> Beberapa perangkat mungkin menyimpan data lokasi yang lebih lama sebelum memperbarui lokasi yang akurat. Hal ini dapat mengakibatkan hasil yang tidak selalu mencerminkan lokasi terkini.</li>
             </ol>
             <h3 className='font-semibold mt-2'>Solusi</h3>
-            <ol className='pl-3'>
+            <ol className='pl-4'>
+                <li>Klik <FontAwesomeIcon icon={faBinoculars}/> untuk menunjukkan geolokasi dengan waktu sebenarnya</li>
                 <li>Klik <FontAwesomeIcon icon={faBolt}/> untuk menggunakan geolokasi dengan akurasi tinggi</li>
                 <li><span className='font-medium'>Pergi ke ruang terbuka:</span></li>
                 <li><span className='font-medium'>Gunakan akses internet lain:</span> Beberapa provider internet mungkin memberikan lokasi yang tidak akurat</li>
             </ol>
         </div>
     </Modal>
+}
+
+function WatchPosition({onClose, toggleHighAccuracy, focusOnLocation}) {
+    const userCoordinate = useSelector(state => state.coordinates.user)
+
+    const dispatch = useDispatch()
+
+    useEffect(() => {
+        if ('geolocation' in navigator) {
+          const successCallback = (position) => {
+            const { latitude, longitude } = position.coords
+            dispatch(setUserCoordinate([latitude,longitude]))
+            console.log(`Current position: ${latitude}, ${longitude}`)
+            if (userCoordinate) focusOnLocation(userCoordinate)
+          }
+    
+          const errorCallback = (error) => {
+            console.error(`Error getting geolocation: ${error.message}`)
+          }
+    
+          const options = {
+            enableHighAccuracy: toggleHighAccuracy,
+            maximumAge: 0,
+          }
+    
+        
+          const watchId = navigator.geolocation.watchPosition(
+            successCallback,
+            errorCallback,
+            options
+          )
+    
+        
+          return () => navigator.geolocation.clearWatch(watchId)
+        } else {
+          console.error('Geolocation is not supported by your browser')
+        }
+    }, [dispatch, focusOnLocation, toggleHighAccuracy, userCoordinate])
+    
+      return <button className={`flex shadow-lg px-2 shadow-primary/50 justify-center items-center rounded text-neutral-200 duration-200 ease-in-out active:scale-95 bg-secondary min-h-[32px] mt-auto`} onClick={onClose} title='Lacak'>
+        <FontAwesomeIcon icon={faBinoculars} className='animate-pulse animate-spin'/>
+    </button>
+    
 }

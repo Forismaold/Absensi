@@ -106,11 +106,7 @@ function DashboardActionButton() {
             promise.onError('Internal server error')
         }
     }
-
-    useEffect(() => {
-        console.log(absensi);
-    },[absensi])
-
+    
     return <div className="flex py-2 gap-2 flex-col shadow-lg p-2 rounded my-2 bg-neutral-200">
         {absensi && <div className='flex flex-col'>
             <div className='flex flex-wrap flex-col sm:flex-row'>
