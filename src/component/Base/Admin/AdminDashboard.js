@@ -84,8 +84,8 @@ function DashboardActionButton() {
             await axios.post(API + '/absensi/tutup')
             .then(res => {
                 promise.onSuccess(`${res.data.msg}, Tidak absen: ${res.data.tidak}, Belum absen: ${res.data.belum}, Sudah absen: ${res.data.sudah}`)
-                dispatch(setAbsensi({status: false}))
-                dispatch(setUsers(null))
+                dispatch(setAbsensi())
+                dispatch(setUsers())
                 dispatch(setStatus())
             })
         } catch (error) {
@@ -98,8 +98,8 @@ function DashboardActionButton() {
             await axios.post(API + '/absensi/buang')
             .then(res => {
                 promise.onSuccess(`${res.data.msg}, Tidak absen: ${res.data.tidak}, Belum absen: ${res.data.belum}, Sudah absen: ${res.data.sudah}`)
-                dispatch(setAbsensi({status: false}))
-                dispatch(setUsers(null))
+                dispatch(setAbsensi())
+                dispatch(setUsers())
                 dispatch(setStatus())
             })
         } catch (error) {

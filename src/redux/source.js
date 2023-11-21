@@ -31,7 +31,7 @@ const source = createSlice({
             state.absensi = action.payload || null
         },
         toggleShowAbsenceForm: (state, action) => {
-            state.showAbsenceForm = !state.showAbsenceForm
+            state.showAbsenceForm = action.payload || !state.showAbsenceForm
         },
     }
 })

@@ -10,6 +10,43 @@ import { setAbsensi, setStatus, toggleShowAbsenceForm } from '../../../redux/sou
 import Modal from '../../utils/Modal'
 
 export default function UserAbsenceStatus() {
+    const account = useSelector(state => state.source.account)
+    const status = useSelector(state => state.source.status)
+
+    const [isFetchLoading, setIsFetchLoading] = useState(false)
+
+    const dispatch = useDispatch()
+
+    const fetchStatus = useCallback(() => {
+        setIsFetchLoading(true)
+        try {
+            axios.get(API + '/absen/status/' + account._id)
+            .then(res => {
+                dispatch(setStatus(res.data.status))
+                dispatch(setAbsensi(res.data.absensi))
+                setIsFetchLoading(false)
+                console.log('parent');
+            })
+            .catch(err => {
+                setIsFetchLoading(false)
+                console.log(err)
+            })
+        } catch (error) {
+            console.log(error);
+        }
+    },[account, dispatch])
+
+    useEffect(() => {
+        if (!status && account) fetchStatus()
+    },[account, fetchStatus, status])
+
+    const absensi = useSelector(state => state.source.absensi)
+    useEffect(() => {
+        console.log('absensi', absensi);
+    },[absensi])
+    if (absensi === null) return <div>
+        <button className='flex ml-auto items-center justify-center rounded text-neutral-100 bg-secondary p-2 shadow-lg shadow-primary/50 duration-200 ease-in-out active:scale-95' onClick={() => fetchStatus()}>{isFetchLoading ? <LoadingIcon/> : <><FontAwesomeIcon icon={faRotate} className='p-0.5 pr-2'/> Segarkan status absensi</>}</button>
+    </div>
 
     return <>
         <StatusDate/>
@@ -39,14 +76,18 @@ function StatusUser() {
 
     const dispatch = useDispatch()
 
+    useEffect(() => {
+        console.log('status', status);
+    },[status])
+
     if (status?.absen === null) return null
 
     return <>    
     <div className='bg-secondary shadow-lg shadow-primary/50 text-neutral-100 rounded-xl p-4 flex gap-2 items-center relative'>
         {status?.absen === true &&
         <>
-            <FontAwesomeIcon icon={isUserWithinBounds() ? faCheckDouble : faCheck}/>
-            <p>{isUserWithinBounds() ? 'Di area' : 'Diluar area'}</p>
+            <FontAwesomeIcon icon={isUserWithinBounds(status?.koordinat) ? faCheckDouble : faCheck}/>
+            <p>{isUserWithinBounds(status?.koordinat) ? 'Absen di area' : 'Absen diluar area'}</p>
             <span className='ml-auto'>{formatTime(status.waktuAbsen)}</span>
         </>
         }
@@ -64,7 +105,7 @@ function StatusUser() {
         </div>
         }
     </div>
-    {status?.absen !== null && <span onClick={() => dispatch(toggleShowAbsenceForm())} className='duration-200 ease-in-out active:scale-95 text-primary text-right underline cursor-pointer text-secondary'>{!showAbsenceForm ? 'Batal perbarui' : 'Perbarui absensi'}</span>}
+    {status?.absen !== null && <span onClick={() => dispatch(toggleShowAbsenceForm())} className='duration-200 ease-in-out active:scale-95 text-primary text-right underline cursor-pointer text-secondary'>{showAbsenceForm ? 'Batal perbarui' : 'Perbarui absensi'}</span>}
     </>
 }
 
@@ -84,13 +125,14 @@ function StatusServer() {
                 dispatch(setStatus(res.data.status))
                 dispatch(setAbsensi(res.data.absensi))
                 setIsFetchLoading(false)
+                console.log('child');
             })
             .catch(err => {
                 setIsFetchLoading(false)
                 console.log(err)
             })
         } catch (error) {
-            
+            console.log(error);
         }
     },[account, dispatch])
 
@@ -111,6 +153,7 @@ function SubmitAbsenceForm() {
     const secondCoordinate = useSelector(state => state.coordinates.second)
     const userCoordinate = useSelector(state => state.coordinates.user)
 
+    const status = useSelector(state => state.source.status)
     const absensi = useSelector(state => state.source.absensi)
     const account = useSelector(state => state.source.account)
     const showAbsenceForm = useSelector(state => state.source.showAbsenceForm)
@@ -204,9 +247,7 @@ function SubmitAbsenceForm() {
         }
     }
 
-    if (absensi?.status === false || showAbsenceForm) return null
-
-    return <div className='flex flex-col rounded-xl'>
+    if (showAbsenceForm || (status?.absen === null && absensi?.status === true)) return <div className='flex flex-col rounded-xl'>
         <div className='bg-secondary text-neutral-100 rounded-xl p-4 flex flex-col gap-2 shadow-lg shadow-primary/50'>
             <p>Kirim sebagai {account?.panggilan || account?.nama}</p>
             <div className='flex gap-2'>
@@ -248,6 +289,8 @@ function SubmitAbsenceForm() {
             </div>
         </div>
     </div>
+
+    return null
 }
 
 function AbsenceCell({prop, value}) {
