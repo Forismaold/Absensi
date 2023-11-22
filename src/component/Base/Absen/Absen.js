@@ -127,11 +127,14 @@ const MyMap = () => {
                                 <FontAwesomeIcon icon={faBinoculars}/>
                             </button>
                         }
-                        <button className={`flex shadow-lg px-2 shadow-accent/50 justify-center items-center rounded ${toggleHighAccuracy ? 'text-neutral-200 bg-accent' : 'text-neutral-500 bg-neutral-200'} duration-200 ease-in-out active:scale-95 min-h-[32px] mt-auto`} onClick={() => setToggleHighAccuracy(prev => !prev)} title='Akurasi tinggi'>
-                            {loadingUserCoor ? <LoadingIcon /> : <FontAwesomeIcon icon={faBolt}/>}
-                        </button>
                         <button className={`flex flex-1 shadow-lg shadow-primary/50 items-center justify-center rounded text-neutral-100 px-2 duration-200 ease-in-out active:scale-95 bg-secondary min-h-[32px] mt-auto`} onClick={getCurrentLocation} title='Akurasi sedang'>
                             {loadingUserCoor ? <LoadingIcon /> : <span>{isWatchPosition ? 'Posisi menonton' : 'Segarkan'}</span>}
+                        </button>
+                        <button className={`flex shadow-lg px-2 shadow-accent/50 justify-center items-center rounded ${toggleHighAccuracy ? 'text-neutral-700 bg-accent' : 'text-neutral-500 bg-neutral-200'} duration-200 ease-in-out active:scale-95 min-h-[32px] mt-auto`} onClick={() => {
+                            toggleHighAccuracy ? blankToast('Akurasi tinggi dimatikan') : blankToast('Akurasi tinggi dinyalakan')
+                            setToggleHighAccuracy(prev => !prev)
+                            }} title='Akurasi tinggi'>
+                            {loadingUserCoor ? <LoadingIcon /> : <FontAwesomeIcon icon={faBolt}/>}
                         </button>
                     </div>
                 </div>
@@ -198,7 +201,8 @@ function WatchPosition({onClose, toggleHighAccuracy, focusOnLocation}) {
         } else {
           console.error('Geolocation is not supported by your browser')
         }
-    }, [dispatch, focusOnLocation, toggleHighAccuracy, userCoordinate])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [dispatch])
     
       return <button className={`flex shadow-lg px-2 shadow-primary/50 justify-center items-center rounded text-neutral-200 duration-200 ease-in-out active:scale-95 bg-secondary min-h-[32px] mt-auto`} onClick={onClose} title='Lacak'>
         <FontAwesomeIcon icon={faBinoculars} className='animate-pulse animate-spin'/>
