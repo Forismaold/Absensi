@@ -199,7 +199,7 @@ function WatchPosition({onClose, toggleHighAccuracy, focusOnLocation}) {
           console.error('Geolocation is not supported by your browser')
         }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [dispatch])
+    }, [dispatch, toggleHighAccuracy])
     
       return <button className={`flex shadow-lg px-2 shadow-primary/50 justify-center items-center rounded text-neutral-200 duration-200 ease-in-out active:scale-95 bg-secondary min-h-[32px] mt-auto`} onClick={onClose} title='Lacak'>
         <FontAwesomeIcon icon={faBinoculars} className='animate-pulse animate-spin'/>
