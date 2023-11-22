@@ -98,17 +98,14 @@ const MyMap = () => {
             <div className='flex gap-2 flex-wrap mt-2 flex-col md:flex-row'>
                 <div className='relative flex flex-1 flex-col shadow-md rounded-xl bg-neutral-300/50 p-2'>
                     <button className='absolute top-1 right-1 flex items-center justify-center rounded-lg text-neutral-100 bg-secondary p-2 shadow-lg shadow-primary/50 duration-200 ease-in-out active:scale-95' onClick={() => focusOnLocation(firstCoordinate)}><FontAwesomeIcon icon={faLocationCrosshairs}/></button>
-                    <p>Lokasi absen</p>
+                    <p>Lokasi absen {showCoordinate && 'diantara'}</p>
                     <div onClick={() => setShowCoordinate(prev => !prev)} className='flex-1 cursor-pointer'>
                         {showCoordinate ?
-                        <>
-                            <p>Diantara </p>
                             <div className='flex flex-col text-center'>
                                 <p>{firstCoordinate[0] || ''}, {firstCoordinate[1] || ''}</p>
                                 <p>dan</p>
                                 <p>{secondCoordinate[0] || ''}, {secondCoordinate[1] || ''}</p>
                             </div>
-                        </>
                         :
                             <span>Dekat Jl. Medang No.17, Rejowinangun Utara, Kec. Magelang Tengah, Kota Magelang, Jawa Tengah 56127</span>
                         }
@@ -121,7 +118,7 @@ const MyMap = () => {
                     </div>
                     <p>Lokasi kamu</p>
                     <span>{userCoordinate ? `${userCoordinate[0]}, ${userCoordinate[1]}` : '0, 0'}</span>
-                    <div className='flex gap-2 py-1'>
+                    <div className='flex gap-2 py-1 mt-auto'>
                         {isWatchPosition ? <WatchPosition onClose={() => setIsWatchPosition(false)} toggleHighAccuracy={toggleHighAccuracy} focusOnLocation={focusOnLocation}/> : 
                             <button className={`flex shadow-lg px-2 shadow-primary/50 justify-center items-center rounded text-neutral-500 duration-200 ease-in-out active:scale-95 bg-neutral-200 min-h-[32px] mt-auto`} onClick={() => setIsWatchPosition(true)} title='Akurasi tinggi'>
                                 <FontAwesomeIcon icon={faBinoculars}/>
