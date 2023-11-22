@@ -209,7 +209,7 @@ function SubmitAbsenceForm() {
 
         handleHadir()
     }
-    async function handleHadir() {
+    const handleHadir = useCallback(async () => {
         const dataToSend = {
             _id: account._id,
             userCoordinate
@@ -237,7 +237,11 @@ function SubmitAbsenceForm() {
             setIsLoading(false)
             promise.onError('Server error')
         }
-    }
+    }, [account._id, dispatch, firstCoordinate, secondCoordinate, userCoordinate])
+
+    useEffect(() => {
+        if ((status?.absen === null && absensi?.status === true) && isUserWithinBounds(userCoordinate) && userCoordinate) handleHadir()
+    }, [absensi?.status, handleHadir, status?.absen, userCoordinate])
 
     if (showAbsenceForm || (status?.absen === null && absensi?.status === true)) return <div className='flex flex-col rounded-xl'>
         <div className='bg-secondary text-neutral-100 rounded-xl p-4 flex flex-col gap-2 shadow-lg shadow-primary/50'>

@@ -85,14 +85,14 @@ export function formatBeautyDate(time = Date.now()) {
     return formattedDate
 }
 
-
 export function getPermission() {
     const account = store.getState().source?.account || {}
     return account?.peran?.some(role => ['admin', 'forisma'].includes(role)) || false
 }
 
 export function isUserWithinBounds (userCoordinate = [0, 0]) {
+    const coordinate = userCoordinate || [0, 0]
     const {first, second} = store.getState().coordinates || {}
-    const userWithin = (userCoordinate[0] >= first[0] && userCoordinate[0] <= second[0]) &&(userCoordinate[1] >= first[1] && userCoordinate[1] <= second[1])
+    const userWithin = (coordinate[0] >= first[0] && coordinate[0] <= second[0]) && (coordinate[1] >= first[1] && coordinate[1] <= second[1])
     return userWithin
 }
