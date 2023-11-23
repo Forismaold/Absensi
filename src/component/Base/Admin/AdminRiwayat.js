@@ -1,5 +1,5 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faFilter, faRotate, faSearch } from '@fortawesome/free-solid-svg-icons'
+import { faEllipsis, faFilter, faRotate, faSearch } from '@fortawesome/free-solid-svg-icons'
 import { useCallback, useEffect, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import axios from "axios"
@@ -50,17 +50,26 @@ export default function AdminRiwayats() {
 
 function RiwayatRow({data}) {
     const [showSearch, setShowSearch] = useState(false)
+    const [showOption, setShowOption] = useState(false)
     return <div className='flex flex-col text-neutral-600 p-2 gap-2 rounded shadow'>
-        <div className="flex bg-neutral-300 text-neutral-600 items-center p-2 gap-2 rounded">
-            <p>{data.title}</p>
-            <p className='ml-auto'>{formatDate(data.date)}</p>
-            <FontAwesomeIcon icon={faFilter} className='shadow p-2 rounded bg-primary text-quaternary cursor-pointer duration-200 ease-in-out active:scale-95' onClick={() => setShowSearch(true)}/>
+        <div className="flex bg-neutral-300 text-neutral-600 items-center p-2 gap-2 rounded flex-wrap justify-between flex-col sm:flex-row">
+            <div className='flex gap-2 justify-between'>
+                <p>{data.title}</p>
+                <p className='ml-auto'>{formatDate(data.date)}</p>
+            </div>
+            <div className='flex gap-2'>
+                <FontAwesomeIcon icon={faFilter} className='shadow p-2 rounded bg-primary text-quaternary cursor-pointer duration-200 ease-in-out active:scale-95' onClick={() => setShowSearch(true)}/>
+                <FontAwesomeIcon icon={faEllipsis} className='shadow p-2 rounded bg-primary text-quaternary cursor-pointer duration-200 ease-in-out active:scale-95' onClick={() => setShowOption(true)}/>
+            </div>
         </div>
         <div className='flex gap-2'>
             <UsersGroup title={'Tidak absen'} data={data.users?.filter(x => x.absen === false) || []}/>
             <UsersGroup title={'Sudah absen'} data={data.users?.filter(x => x.absen === true) || []}/>
         </div>
         <SearchUser isOpen={showSearch} onClose={() => setShowSearch(false)} users={data.users} title={data.title} date={formatBeautyDate(data.date)}/>
+        <Modal isOpen={showOption} onClose={() => setShowOption(false)}>
+            <p>Coming soon (delete riwayat, download as excel)</p>
+        </Modal>
     </div>
 }
 

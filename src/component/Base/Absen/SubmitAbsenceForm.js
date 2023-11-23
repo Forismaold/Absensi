@@ -6,7 +6,7 @@ import { blankToast, loadingToast } from "../../utils/myToast"
 import axios from "axios"
 import { API, isUserWithinBounds } from "../../../utils"
 import LoadingIcon from '../../utils/LoadingIcon'
-import { setStatus, toggleShowAbsenceForm } from '../../../redux/source'
+import { setIsWatchPosition, setStatus, toggleShowAbsenceForm } from '../../../redux/source'
 import Modal from '../../utils/Modal'
 
 export default function SubmitAbsenceForm() {
@@ -109,8 +109,12 @@ export default function SubmitAbsenceForm() {
     }, [account._id, dispatch, firstCoordinate, secondCoordinate, userCoordinate])
 
     useEffect(() => {
-        if ((status?.absen === null && absensi?.status === true) && isUserWithinBounds(userCoordinate) && userCoordinate) handleHadir()
-    }, [absensi?.status, handleHadir, status?.absen, userCoordinate])
+        if ((status?.absen === null && absensi?.status === true) && isUserWithinBounds(userCoordinate) && userCoordinate) {
+            blankToast('Lokasi tercapai!')
+            handleHadir()
+            dispatch(setIsWatchPosition(false))
+        }
+    }, [absensi?.status, dispatch, handleHadir, status?.absen, userCoordinate])
 
     if (showAbsenceForm || (status?.absen === null && absensi?.status === true)) return <div className='flex flex-col rounded-xl'>
         <div className='bg-secondary text-neutral-100 rounded-xl p-4 flex flex-col gap-2 shadow-lg shadow-primary/50'>

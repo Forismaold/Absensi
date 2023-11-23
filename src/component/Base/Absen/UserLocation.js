@@ -6,13 +6,14 @@ import { useDispatch, useSelector } from 'react-redux'
 import { setUserCoordinate } from '../../../redux/coordinates'
 import InfoAboutUserCoordinate from './InfoAboutUserCoordinate'
 import WatchPosition from './WatchPosition'
+import { setIsWatchPosition } from '../../../redux/source'
 
 export default function UserLocation({focusUserLocation, focusOnLocation}) {
+    const isWatchPosition = useSelector(state => state.source.isWatchPosition)
     const userCoordinate = useSelector(state => state.coordinates.user)
 
     const [loadingUserCoor, setLoadingUserCoor] = useState(false)
     const [toggleHighAccuracy, setToggleHighAccuracy] = useState(false)
-    const [isWatchPosition, setIsWatchPosition] = useState(false)
     const [showUserCoordinateTutorial, setShowUserCoordinateTutorial] = useState(false)
 
     const dispatch = useDispatch()
@@ -56,7 +57,7 @@ export default function UserLocation({focusUserLocation, focusOnLocation}) {
         <p>Lokasi kamu</p>
         <span>{userCoordinate ? `${userCoordinate[0]}, ${userCoordinate[1]}` : '0, 0'}</span>
         <div className='flex gap-2 py-1 mt-auto'>
-            {isWatchPosition ? <WatchPosition onClose={() => setIsWatchPosition(false)} toggleHighAccuracy={toggleHighAccuracy} focusOnLocation={focusOnLocation}/> : 
+            {isWatchPosition ? <WatchPosition onClose={() => dispatch(setIsWatchPosition(false))} toggleHighAccuracy={toggleHighAccuracy} focusOnLocation={focusOnLocation}/> : 
                 <>
                 <button className={`flex shadow-lg px-2 shadow-primary/50 justify-center items-center rounded text-neutral-500 duration-200 ease-in-out active:scale-95 bg-neutral-200 min-h-[32px] mt-auto`} onClick={() => setIsWatchPosition(true)} title='Akurasi tinggi'>
                     <FontAwesomeIcon icon={faBinoculars}/>

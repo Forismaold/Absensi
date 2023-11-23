@@ -6,8 +6,25 @@ export default function Modal({isOpen, children, onClose, zIndex}) {
     
     return createPortal(
         <MyOverlay onClose={onClose} zIndex={zIndex}>
-            <div className="bg-neutral-200 text-neutral rounded-md p-2 w-full max-h-full overflow-auto">
+            <div className="bg-neutral-200 text-neutral-600 rounded-md p-2 w-full max-h-full overflow-auto">
                 {children}
+            </div>
+        </MyOverlay>
+    , document.getElementById('portal'))
+}
+
+export function Confirm({isOpen = false, title = 'Lanjutkan operasi', subTitle = 'Kamu yakin?', textCancel = 'Batal', textConfirm = 'Ya', onClose, zIndex, callBack}) {
+    if (!isOpen || !onClose) return null
+    
+    return createPortal(
+        <MyOverlay onClose={onClose} zIndex={zIndex}>
+            <div className="bg-neutral-200 text-neutral-600 rounded-md p-2 w-full max-h-full overflow-auto p-4 flex flex-col gap-2">
+                <p className="font-medium">{title}</p>
+                <p>{subTitle}</p>
+                <div className="flex gap-2 justify-end">
+                    <p className="p-3 cursor-pointer px-12 sm:px-16 bg-neutral-300 rounded shadow-lg shadow-neutral-500/50 duration-200 ease-in-out active:scale-95" onClick={onClose}>{textCancel}</p>
+                    <p className="p-3 cursor-pointer px-12 sm:px-16 bg-primary text-neutral-200 rounded shadow-lg shadow-primary/50 duration-200 ease-in-out active:scale-95" onClick={callBack}>{textConfirm}</p>
+                </div>
             </div>
         </MyOverlay>
     , document.getElementById('portal'))

@@ -8,7 +8,7 @@ import { loadingToast } from '../../utils/myToast'
 import UsersList from './UsersList'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { setAbsensi, setStatus } from '../../../redux/source'
-import Modal from '../../utils/Modal'
+import Modal, { Confirm } from '../../utils/Modal'
 
 export default function AdminDashboard() {
     const [permission, setPermission] = useState(false)
@@ -33,6 +33,8 @@ function DashboardActionButton() {
     const account = useSelector(state => state.source.account)
 
     const [openAbsensiOption, setOpenAbsensiOption] = useState(false)
+    const [showTutupConfirm, setShowTutupConfirm] = useState(false)
+    const [showBuangConfirm, setShowBuangConfirm] = useState(false)
 
     const dispatch = useDispatch()
 
@@ -81,7 +83,7 @@ function DashboardActionButton() {
     async function tutupAbsensi() {
         const promise = loadingToast('Menutup absensi')
         try {
-            await axios.post(API + '/absensi/tutup')
+            await axios.post(API + '/absensi/tutup', { closedBy: account?.nama })
             .then(res => {
                 promise.onSuccess(`${res.data.msg}, Tidak absen: ${res.data.tidak}, Belum absen: ${res.data.belum}, Sudah absen: ${res.data.sudah}`)
                 dispatch(setAbsensi())
@@ -95,7 +97,7 @@ function DashboardActionButton() {
     async function buangAbsensi() {
         const promise = loadingToast('Membuang absensi')
         try {
-            await axios.post(API + '/absensi/buang')
+            await axios.post(API + '/absensi/buang', { closedBy: account?.nama })
             .then(res => {
                 promise.onSuccess(`${res.data.msg}, Tidak absen: ${res.data.tidak}, Belum absen: ${res.data.belum}, Sudah absen: ${res.data.sudah}`)
                 dispatch(setAbsensi())
@@ -114,7 +116,7 @@ function DashboardActionButton() {
                 <p>{absensi?.status ? "Buka" : "Tutup"}</p>
             </div>
             <div className='flex flex-wrap flex-col sm:flex-row'>
-                <p className='sm:w-2/6 font-semibold'>Dibuka oleh</p>
+                <p className='sm:w-2/6 font-semibold'>{absensi?.status ? 'Dibuka oleh': 'Ditutup oleh'}</p>
                 <p>{absensi?.openedBy || 'Anon'}</p>
             </div>
             <div className='flex flex-wrap flex-col sm:flex-row'>
@@ -129,11 +131,11 @@ function DashboardActionButton() {
         {absensi?.status ?
             <>
             <div className='flex gap-2 justify-end flex-wrap'>
-                <div onClick={() => tutupAbsensi()} className='flex gap-2 shadow-lg shadow-primary/50 cursor-pointer bg-primary items-center p-2 rounded text-neutral-200 duration-200 ease-in-out active:scale-95'>
+                <div onClick={() => setShowTutupConfirm(true)} className='flex gap-2 shadow-lg shadow-primary/50 cursor-pointer bg-primary items-center p-2 rounded text-neutral-200 duration-200 ease-in-out active:scale-95'>
                     <FontAwesomeIcon icon={faClose}/>
                     <p>Tutup dan simpan</p>
                 </div>
-                <div onClick={() => buangAbsensi()} className='flex gap-2 border-2 border-primary shadow-lg shadow-primary/50 cursor-pointer bg-transparent items-center p-2 rounded text-primary duration-200 ease-in-out active:scale-95'>
+                <div onClick={() => setShowBuangConfirm(true)} className='flex gap-2 border-2 border-primary shadow-lg shadow-primary/50 cursor-pointer bg-transparent items-center p-2 rounded text-primary duration-200 ease-in-out active:scale-95'>
                     <FontAwesomeIcon icon={faTrash}/>
                     <p>Tutup dan Buang</p>
                 </div>
@@ -148,6 +150,8 @@ function DashboardActionButton() {
             <AbsensiTitle isOpen={openAbsensiOption} onClose={() => setOpenAbsensiOption(false)} callBack={bukaAbsensi}/>
             </>
         }
+        <Confirm isOpen={showTutupConfirm} title='Tutup dan simpan' subTitle='Menutup absensi dan menyimpannya sekarang?' onClose={() => setShowTutupConfirm(false)} callBack={tutupAbsensi} textConfirm='Simpan'/>
+        <Confirm isOpen={showBuangConfirm} title='Tutup dan Buang' subTitle='Menutup absensi dan membuang perubahan absensi setiap pengguna?' onClose={() => setShowBuangConfirm(false)} callBack={buangAbsensi} textConfirm='Buang'/>
     </div>
 }
 
