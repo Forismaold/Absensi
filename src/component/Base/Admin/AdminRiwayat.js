@@ -102,7 +102,7 @@ function SearchUser({isOpen, onClose, users = [], title, date}) {
                 <FontAwesomeIcon onClick={handleSearch} icon={faSearch} className='rounded text-neutral-100 bg-secondary p-3 shadow-lg shadow-primary/50 duration-200 ease-in-out active:scale-95 cursor-pointer'/>
             </div>
             <div className='flex flex-wrap gap-2'>
-                {result.map(user => <span key={user._id} className={`p-2 rounded-xl ${user.absen ? 'bg-secondary text-neutral-200' : 'bg-neutral-300 text-neutral-700'}`}>{user.nama}</span>)}
+                {result.map(user => <span key={user._id} className={`p-2 rounded-xl ${user.absen ? 'bg-secondary text-neutral-200' : 'bg-neutral-300 text-neutral-700'}`}>{user.kelas}-{user.nomorKelas} {user.nama}</span>)}
             </div>
         </div>
     </Modal>

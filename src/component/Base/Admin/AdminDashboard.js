@@ -66,7 +66,7 @@ function DashboardActionButton() {
             .then(res => {
                 promise.onSuccess(res.data.msg)
                 dispatch(setAbsensi(res.data.absensi))
-                dispatch(setUsers([]))
+                dispatch(setUsers())
                 dispatch(setStatus())
                 setOpenAbsensiOption(false)
             }).catch(err => {

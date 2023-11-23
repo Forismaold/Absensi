@@ -9,6 +9,7 @@ const source = createSlice({
         absensi: null,
         adminRiwayats: null,
         riwayats: null,
+        isWatchPosition: false,
         showAbsenceForm: false
     },
     reducers: {
@@ -30,10 +31,13 @@ const source = createSlice({
         setAbsensi: (state, action) => {
             state.absensi = action.payload || null
         },
+        setIsWatchPosition: (state, action) => {
+            state.isWatchPosition = action.payload || !state.isWatchPosition
+        },
         toggleShowAbsenceForm: (state, action) => {
             state.showAbsenceForm = action.payload || !state.showAbsenceForm
         },
     }
 })
-export const { setAccount, refreshAccount, setStatus, setRiwayats, setAbsensi, setAdminRiwayats, toggleShowAbsenceForm } = source.actions
+export const { setAccount, refreshAccount, setStatus, setRiwayats, setAbsensi, setAdminRiwayats, toggleShowAbsenceForm, setIsWatchPosition } = source.actions
 export default source.reducer

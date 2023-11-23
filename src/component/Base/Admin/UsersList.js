@@ -45,7 +45,7 @@ export default function UsersList() {
         {isLoading && <div className="flex gap-2"><LoadingSkeleton/><LoadingSkeleton/></div>}
         {users && <div className="flex flex-col gap-2">
             <div className='flex gap-2 flex-col items-center sm:flex-row'>
-                <div>Belum absen: {users?.filter(x => x.absen === null).length}</div>
+                {users && <div>Belum absen: {users?.filter(x => x.absen === null).length}</div>}
             </div>
             <div className='flex gap-2'>
                 <UsersGroup title={'Tidak absen'} data={users?.filter(x => x.absen === false) || []}/>
