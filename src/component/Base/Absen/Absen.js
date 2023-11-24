@@ -1,11 +1,10 @@
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faLocationCrosshairs } from '@fortawesome/free-solid-svg-icons'
-import { useRef, useState } from 'react'
+import { useRef } from 'react'
 import { MapContainer, Marker, Rectangle, TileLayer, Tooltip } from 'react-leaflet'
 import { useSelector } from 'react-redux'
 import Note from './Note'
 import UserAbsenceStatus from './UserAbsenceStatus'
 import UserLocation from './UserLocation'
+import AreaLocation from './AreaLocation'
 
 export default function Absen() {
     return <div className={'flex flex-col gap-2'}>
@@ -21,8 +20,6 @@ const MyMap = () => {
     const secondCoordinate = useSelector(state => state.coordinates.second)
     const centerCoordinate = useSelector(state => state.coordinates.center)
     const userCoordinate = useSelector(state => state.coordinates.user)
-
-    const [showCoordinate, setShowCoordinate] = useState(false)
 
     const mapRef = useRef(null)
 
@@ -57,21 +54,7 @@ const MyMap = () => {
                 </MapContainer>
             </div>
             <div className='flex gap-2 flex-wrap mt-2 flex-col md:flex-row'>
-                <div className='relative flex flex-1 flex-col shadow-md rounded-xl bg-neutral-300/50 p-2'>
-                    <button className='absolute top-1 right-1 flex items-center justify-center rounded-lg text-neutral-100 bg-secondary p-2 shadow-lg shadow-primary/50 duration-200 ease-in-out active:scale-95' onClick={() => focusOnLocation(firstCoordinate)}><FontAwesomeIcon icon={faLocationCrosshairs}/></button>
-                    <p>Lokasi absen {showCoordinate && 'diantara'}</p>
-                    <div onClick={() => setShowCoordinate(prev => !prev)} className='flex-1 cursor-pointer'>
-                        {showCoordinate ?
-                            <div className='flex flex-col text-center'>
-                                <p>{firstCoordinate[0] || ''}, {firstCoordinate[1] || ''}</p>
-                                <p>dan</p>
-                                <p>{secondCoordinate[0] || ''}, {secondCoordinate[1] || ''}</p>
-                            </div>
-                        :
-                            <span>Dekat Jl. Medang No.17, Rejowinangun Utara, Kec. Magelang Tengah, Kota Magelang, Jawa Tengah 56127</span>
-                        }
-                    </div>
-                </div>
+                <AreaLocation focusOnLocation={() => focusOnLocation(firstCoordinate)}/>
                 <UserLocation focusOnLocation={focusOnLocation} focusUserLocation={focusUserLocation}/>
             </div>
         </div>

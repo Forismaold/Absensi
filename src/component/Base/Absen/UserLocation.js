@@ -50,11 +50,11 @@ export default function UserLocation({focusUserLocation, focusOnLocation}) {
     },[getCurrentLocation, userCoordinate])
 
     return <div className='relative flex flex-1 flex-col shadow-md bg-neutral-300/50 rounded-xl p-2'>
-        <div className='absolute top-1 right-1 flex gap-1'>
+        <div className='flex gap-2 items-center'>
+            <p className='flex flex-1'>Lokasi kamu</p>
             <button className='flex items-center justify-center px-3 text-neutral-500 p-2 duration-200 ease-in-out active:scale-95' onClick={() => setShowUserCoordinateTutorial(true)}><FontAwesomeIcon icon={faInfo}/></button>
             <button className={`flex items-center justify-center rounded-lg text-neutral-100 ${userCoordinate ? ' bg-secondary' : ' bg-primary-quarternary'} p-2 shadow-lg shadow-primary/50 duration-200 ease-in-out active:scale-95`} onClick={focusUserLocation}><FontAwesomeIcon icon={faLocationCrosshairs}/></button>
         </div>
-        <p>Lokasi kamu</p>
         <span>{userCoordinate ? `${userCoordinate[0]}, ${userCoordinate[1]}` : '0, 0'}</span>
         <div className='flex gap-2 py-1 mt-auto'>
             {isWatchPosition ? <WatchPosition onClose={() => dispatch(setIsWatchPosition(false))} toggleHighAccuracy={toggleHighAccuracy} focusOnLocation={focusOnLocation}/> : 

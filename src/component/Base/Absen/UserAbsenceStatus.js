@@ -75,7 +75,7 @@ function StatusUser() {
     if (status?.absen === null) return null
 
     return <>    
-    <div className='bg-secondary shadow-lg shadow-primary/50 text-neutral-100 rounded-xl p-4 flex gap-2 items-center relative'>
+    <div className='bg-secondary shadow-lg shadow-primary/50 text-neutral-100 rounded p-4 flex gap-2 items-center relative'>
         {status?.absen === true &&
         <>
             <FontAwesomeIcon icon={isUserWithinBounds(status?.koordinat) ? faCheckDouble : faCheck}/>

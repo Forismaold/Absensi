@@ -80,9 +80,9 @@ function SearchUser({isOpen, onClose, users = [], title, date}) {
     const [result, setResult] = useState([])
     const handleSearch = useCallback(() => {
         const usernameRegex = new RegExp(`^${searchKey}`, 'i')
-      
+
         const result = users.filter((user) => (searchKey === '' || usernameRegex.test(user.nama)) && (kelas === '' || user.kelas === kelas) &&  (nomorKelas === 0 || user.nomorKelas === nomorKelas || kelas === ''))
-      
+        
         setResult(result)
     },[kelas, nomorKelas, searchKey, users])
     useEffect(() => {

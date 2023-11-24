@@ -6,7 +6,7 @@ export default function Note() {
     const absensi = useSelector(state => state.source.absensi)
 
     if (!absensi?.note) return null
-    return <div className="bg-secondary p-2 shadow-lg shadow-primary/50 text-neutral-200">
+    return <div className="bg-neutral-300 p-2 shadow-lg shadow-neutral-300/50 text-neutral-500">
         <FontAwesomeIcon icon={faNoteSticky} className="pr-2"/>
         <span>{absensi.note}</span>
     </div>
