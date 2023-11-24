@@ -59,7 +59,7 @@ export default function UserLocation({focusUserLocation, focusOnLocation}) {
         <div className='flex gap-2 py-1 mt-auto'>
             {isWatchPosition ? <WatchPosition onClose={() => dispatch(setIsWatchPosition(false))} toggleHighAccuracy={toggleHighAccuracy} focusOnLocation={focusOnLocation}/> : 
                 <>
-                <button className={`flex shadow-lg px-2 shadow-primary/50 justify-center items-center rounded text-neutral-500 duration-200 ease-in-out active:scale-95 bg-neutral-200 min-h-[32px] mt-auto`} onClick={() => setIsWatchPosition(true)} title='Akurasi tinggi'>
+                <button className={`flex shadow-lg px-2 shadow-primary/50 justify-center items-center rounded text-neutral-500 duration-200 ease-in-out active:scale-95 bg-neutral-200 min-h-[32px] mt-auto`} onClick={() => dispatch(setIsWatchPosition(true))} title='Akurasi tinggi'>
                     <FontAwesomeIcon icon={faBinoculars}/>
                 </button>
                 <button className={`flex flex-1 shadow-lg shadow-primary/50 items-center justify-center rounded text-neutral-100 px-2 duration-200 ease-in-out active:scale-95 bg-secondary min-h-[32px] mt-auto`} onClick={getCurrentLocation} title='Akurasi sedang'>
