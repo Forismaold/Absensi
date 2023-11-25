@@ -89,6 +89,7 @@ function DashboardActionButton() {
                 dispatch(setAbsensi())
                 dispatch(setUsers())
                 dispatch(setStatus())
+                setOpenAbsensiOption(false)
             })
         } catch (error) {
             promise.onError('Internal server error')
