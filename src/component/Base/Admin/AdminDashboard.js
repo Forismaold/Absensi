@@ -1,5 +1,5 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faBoxOpen, faChevronDown, faChevronRight, faClose, faTrash } from '@fortawesome/free-solid-svg-icons'
+import { faBoxOpen, faChevronDown, faChevronRight, faClockRotateLeft, faClose, faServer, faTrash } from '@fortawesome/free-solid-svg-icons'
 import { useDispatch, useSelector } from "react-redux"
 import { API, formatBeautyDate, getPermission } from "../../../utils"
 import axios from "axios"
@@ -9,6 +9,7 @@ import UsersList from './UsersList'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { setAbsensi, setStatus } from '../../../redux/source'
 import Modal, { Confirm } from '../../utils/Modal'
+import { Link } from 'react-router-dom'
 
 export default function AdminDashboard() {
     const [permission, setPermission] = useState(false)
@@ -23,6 +24,10 @@ export default function AdminDashboard() {
 
     return <div>
         <p>ini halaman admin</p>
+        <div className='flex gap-2 items-center justify-end'>
+            <Link to={'/admin/dashboard'}><FontAwesomeIcon icon={faServer} className='rounded text-neutral-100 bg-secondary p-2 shadow-lg shadow-primary/50 duration-200 ease-in-out active:scale-95'/></Link>
+            <Link to={'/admin/riwayat'}><FontAwesomeIcon icon={faClockRotateLeft} className='rounded text-neutral-100 bg-secondary p-2 shadow-lg shadow-primary/50 duration-200 ease-in-out active:scale-95'/></Link>
+        </div>
         <DashboardActionButton/>
         <UsersList/>
     </div>

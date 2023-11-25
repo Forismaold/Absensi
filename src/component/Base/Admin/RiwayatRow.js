@@ -45,9 +45,9 @@ export default function RiwayatRow({data}) {
                 <p>{data.title}</p>
                 <p className='ml-auto'>{formatDate(data.date)}</p>
             </div>
-            <div className='flex gap-2'>
+            <div className='flex gap-2 self-end'>
                 <FontAwesomeIcon icon={faFilter} className='shadow p-2 rounded bg-primary text-quaternary cursor-pointer duration-200 ease-in-out active:scale-95' onClick={() => setShowSearch(true)}/>
-                <FontAwesomeIcon icon={faEllipsis} className='shadow p-2 rounded bg-primary text-quaternary cursor-pointer duration-200 ease-in-out active:scale-95' onClick={() => setShowOption(true)}/>
+                <FontAwesomeIcon icon={faEllipsis} className='shadow p-2 rounded text-neutral-600 cursor-pointer duration-200 ease-in-out active:scale-95 self-end' onClick={() => setShowOption(true)}/>
             </div>
         </div>
         <div className='flex gap-2'>
@@ -122,10 +122,6 @@ function DownloadCSVButton({onClose, data}) {
 
         xlsx(dataToXLSX, settings)
     }
-
-    useEffect(() => {
-        console.log(data)
-    })
 
     return <p className='hover:bg-neutral-300 rounded p-2 cursor-pointer' onClick={() => {
         handleDownload()

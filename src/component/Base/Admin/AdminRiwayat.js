@@ -1,5 +1,5 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faRotate } from '@fortawesome/free-solid-svg-icons'
+import { faClockRotateLeft, faRotate, faServer } from '@fortawesome/free-solid-svg-icons'
 import { useCallback, useEffect, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import axios from "axios"
@@ -7,6 +7,7 @@ import { API, getPermission } from "../../../utils"
 import { setAdminRiwayats } from '../../../redux/source'
 import LoadingIcon from '../../utils/LoadingIcon'
 import RiwayatRow from './RiwayatRow'
+import { Link } from 'react-router-dom'
 
 export default function AdminRiwayats() {
     const adminRiwayats = useSelector(state => state.source.adminRiwayats)
@@ -46,6 +47,10 @@ export default function AdminRiwayats() {
     </div>
 
     return <div className='flex flex-col'>
+        <div className='flex gap-2 items-center justify-end'>
+            <Link to={'/admin/dashboard'}><FontAwesomeIcon icon={faServer} className='rounded text-neutral-100 bg-secondary p-2 shadow-lg shadow-primary/50 duration-200 ease-in-out active:scale-95'/></Link>
+            <Link to={'/admin/riwayat'}><FontAwesomeIcon icon={faClockRotateLeft} className='rounded text-neutral-100 bg-secondary p-2 shadow-lg shadow-primary/50 duration-200 ease-in-out active:scale-95'/></Link>
+        </div>
         <button className='flex items-center self-end justify-center rounded text-neutral-100 bg-secondary p-2 shadow-lg shadow-primary/50 duration-200 ease-in-out active:scale-95' onClick={() => fetchRiwayats()}>{isLoading?<LoadingIcon/>:<FontAwesomeIcon icon={faRotate} className='p-0.5'/>}</button>
         <div className="flex flex-col gap-2 pt-2">
             {adminRiwayats?.map(x => <RiwayatRow data={x} key={x._id}/>)}
