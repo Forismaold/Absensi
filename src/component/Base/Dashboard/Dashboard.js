@@ -21,7 +21,7 @@ export default function Dahsboard() {
 
     const fetchRiwayats = useCallback(async () => {
         try {
-            axios.get(API+'/riwayats/' + account?._id)
+            await axios.get(API+'/riwayats/' + account?._id)
             .then(res => {
                 dispatch(setRiwayats(res.data.riwayats))
             })

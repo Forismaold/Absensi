@@ -18,7 +18,7 @@ export default function UsersList() {
         setIsLoading(true)
         dispatch(setUsers(null))
         try {
-            axios.get(API + '/users/all')
+            await axios.get(API + '/users/all')
             .then(res => {
                 dispatch(setUsers(res.data))
                 setIsLoading(false)

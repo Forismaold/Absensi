@@ -17,7 +17,7 @@ export function Confirm({isOpen = false, title = 'Lanjutkan operasi', subTitle =
     if (!isOpen || !onClose) return null
     
     return createPortal(
-        <MyOverlay onClose={onClose} zIndex={zIndex}>
+        <MyOverlay onClose={onClose} zIndex={zIndex = 'z-[2]'}>
             <div className="bg-neutral-200 text-neutral-600 rounded-md p-2 w-full max-h-full overflow-auto p-4 flex flex-col gap-2">
                 <p className="font-medium">{title}</p>
                 <p>{subTitle}</p>
@@ -27,7 +27,7 @@ export function Confirm({isOpen = false, title = 'Lanjutkan operasi', subTitle =
                 </div>
             </div>
         </MyOverlay>
-    , document.getElementById('portal'))
+    , document.getElementById('confirm'))
 }
 
 function MyOverlay({onClose, children, zIndex = 'z-[1]'}) {

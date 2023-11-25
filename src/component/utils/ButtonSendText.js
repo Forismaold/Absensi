@@ -4,10 +4,10 @@ import { API } from "../../utils";
 
 
 export default function ButtonSendText({text = 'Hello'}) {
-    function SendSomething() {
+    async function SendSomething() {
         const promise = loadingToast()
         try {
-            axios.post(API + '/test', {text: text})
+            await axios.post(API + '/test', {text: text})
             .then(res => {
                 console.log(res.data);
                 promise.onSuccess()
@@ -23,10 +23,10 @@ export default function ButtonSendText({text = 'Hello'}) {
     return <button className={`text-center rounded bg-secondary text-neutral-200 shadow p-2`} onClick={SendSomething}>Send</button>
 }
 export function ButtonGet({route}) {
-    function SendSomething() {
+    async function SendSomething() {
         const promise = loadingToast()
         try {
-            axios.get(API + route)
+            await axios.get(API + route)
             .then(res => {
                 console.log(res.data)
                 promise.onSuccess()

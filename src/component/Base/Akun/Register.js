@@ -38,7 +38,7 @@ function RegisterForm() {
     const navigate = useNavigate()
     const dispatch = useDispatch()
 
-    function handleSubmit(e) {
+    async function handleSubmit(e) {
         e.preventDefault()
         if (password !== confirmPassword) return toast.error('Kata sandi dan Konfirmasi kata sandi tidak cocok!')
         if (!isRecaptchaVerified) return toast.error('Silakan lengkapi reCAPTCHA')
@@ -55,7 +55,7 @@ function RegisterForm() {
 
         const promise = loadingToast('Membuat akun')
         try {
-            axios.post(API + '/akun/daftar', dataToSend)
+            await axios.post(API + '/akun/daftar', dataToSend)
             .then(res => {
                 setLocalStorage('account', res.data.user)
                 dispatch(refreshAccount())

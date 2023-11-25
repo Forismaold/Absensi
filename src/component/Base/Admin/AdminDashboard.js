@@ -41,7 +41,7 @@ function DashboardActionButton() {
     const fetchAbsenceStatus = useCallback(async() => {
         const promise = loadingToast('Mengecek status')
         try {
-            axios.get(API + '/absensi/status')
+            await axios.get(API + '/absensi/status')
             .then(res => {
                 dispatch(setAbsensi(res.data.absensi))
                 console.log(res.data.absensi)

@@ -1,16 +1,19 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faEllipsis, faFilter, faRotate, faSearch } from '@fortawesome/free-solid-svg-icons'
+import { faEllipsis, faFilter, faRotate, faSearch, faTable, faTrash } from '@fortawesome/free-solid-svg-icons'
 import { useCallback, useEffect, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import axios from "axios"
 import { API, formatBeautyDate, formatDate, getPermission } from "../../../utils"
 import { setAdminRiwayats } from '../../../redux/source'
 import UsersGroup from './UsersGroup'
-import Modal from '../../utils/Modal'
+import Modal, { Confirm } from '../../utils/Modal'
+import { loadingToast } from '../../utils/myToast'
+import LoadingIcon from '../../utils/LoadingIcon'
 
 export default function AdminRiwayats() {
     const adminRiwayats = useSelector(state => state.source.adminRiwayats)
     const [permission, setPermission] = useState(false)
+    const [isLoading, setIsLoading] = useState(false)
 
     useEffect(() => {
         setPermission(getPermission())
@@ -19,16 +22,20 @@ export default function AdminRiwayats() {
     const dispatch = useDispatch()
 
     const fetchRiwayats = useCallback(async () => {
+        setIsLoading(true)
         try {
-            axios.get(API+'/riwayats/all')
+            await axios.get(API+'/riwayats/all')
             .then(res => {
                 dispatch(setAdminRiwayats(res.data.riwayats))
+                setIsLoading(false)
             })
             .catch(err => {
                 console.log(err)
+                setIsLoading(false)
             })
         } catch (error) {
             console.log(error)
+            setIsLoading(false)
         }
     },[dispatch])
     
@@ -41,7 +48,7 @@ export default function AdminRiwayats() {
     </div>
 
     return <div className='flex flex-col'>
-        <button className='flex items-center self-end justify-center rounded text-neutral-100 bg-secondary p-2 shadow-lg shadow-primary/50 duration-200 ease-in-out active:scale-95' onClick={() => fetchRiwayats()}><FontAwesomeIcon icon={faRotate}/></button>
+        <button className='flex items-center self-end justify-center rounded text-neutral-100 bg-secondary p-2 shadow-lg shadow-primary/50 duration-200 ease-in-out active:scale-95' onClick={() => fetchRiwayats()}>{isLoading?<LoadingIcon/>:<FontAwesomeIcon icon={faRotate} className='p-0.5'/>}</button>
         <div className="flex flex-col gap-2 pt-2">
             {adminRiwayats?.map(x => <RiwayatRow data={x} key={x._id}/>)}
         </div>
@@ -49,8 +56,34 @@ export default function AdminRiwayats() {
 }
 
 function RiwayatRow({data}) {
+    const adminRiwayats = useSelector(state => state.source.adminRiwayats)
+
     const [showSearch, setShowSearch] = useState(false)
     const [showOption, setShowOption] = useState(false)
+    const [showDeleteConfirm, setShowDeleteConfirm] = useState(false)
+
+    const dispatch = useDispatch()
+
+    async function deleteRiwayat() {
+        const promise = loadingToast('Menghapus Riwayat')
+        try {
+            await axios.delete(API+'/riwayats/'+data._id)
+            .then(res => {
+                setShowDeleteConfirm(false)
+                setShowOption(false)
+                dispatch(setAdminRiwayats(adminRiwayats.filter(x => x._id !== data._id)))
+                console.log(res.data);
+                promise.onSuccess(res.data.msg)
+            })
+            .catch(res => {
+                promise.onError(res.response.data.msg)
+            })
+        } catch (error) {
+            console.log(error)
+            promise.onError('Internal server error')
+        }
+    }
+
     return <div className='flex flex-col text-neutral-600 p-2 gap-2 rounded shadow'>
         <div className="flex bg-neutral-300 text-neutral-600 items-center p-2 gap-2 rounded flex-wrap justify-between flex-col sm:flex-row">
             <div className='flex gap-2 justify-between'>
@@ -68,8 +101,18 @@ function RiwayatRow({data}) {
         </div>
         <SearchUser isOpen={showSearch} onClose={() => setShowSearch(false)} users={data.users} title={data.title} date={formatBeautyDate(data.date)}/>
         <Modal isOpen={showOption} onClose={() => setShowOption(false)}>
-            <p>Coming soon (delete riwayat, download as excel)</p>
+            <div className='flex flex-col gap-2'>
+                <p className='hover:bg-neutral-300 rounded p-2 cursor-pointer'><FontAwesomeIcon icon={faTable}/> Download sebagai excel</p>
+                <p className='hover:bg-neutral-300 rounded p-2 cursor-pointer'><FontAwesomeIcon icon={faFilter} onClick={() => {
+                    setShowSearch(true)
+                    setShowOption(false)
+                }}/> Filter Riwayat</p>
+                <p className='hover:bg-neutral-300 rounded p-2 cursor-pointer' onClick={() => {
+                    setShowDeleteConfirm(true)
+                }}><FontAwesomeIcon icon={faTrash}/> Hapus Riwayat</p>
+            </div>
         </Modal>
+        <Confirm isOpen={showDeleteConfirm} title='Hapus riwayat' subTitle={`Hapus riwayat ${data.title} pada ${formatBeautyDate(data.date)}`} textConfirm='Hapus' callBack={deleteRiwayat} onClose={() => setShowDeleteConfirm(false)}/>
     </div>
 }
 
@@ -82,7 +125,7 @@ function SearchUser({isOpen, onClose, users = [], title, date}) {
         const usernameRegex = new RegExp(`^${searchKey}`, 'i')
 
         const result = users.filter((user) => (searchKey === '' || usernameRegex.test(user.nama)) && (kelas === '' || user.kelas === kelas) &&  (nomorKelas === 0 || user.nomorKelas === nomorKelas || kelas === ''))
-        
+
         setResult(result)
     },[kelas, nomorKelas, searchKey, users])
     useEffect(() => {

@@ -35,12 +35,12 @@ function LoginForm() {
 
     const [isRecaptchaVerified, setRecaptchaVerified] = useState(false);
 
-    function handleSubmit(e) {
+    async function handleSubmit(e) {
         e.preventDefault()
         if (!isRecaptchaVerified) return toast.error('Silakan lengkapi reCAPTCHA')
         const promise = loadingToast('Mencari akun')
         try {
-            axios.post(API + '/akun/login/form', {nama, password})
+            await axios.post(API + '/akun/login/form', {nama, password})
             .then(res => {
                 setLocalStorage('account', res.data.user)
                 dispatch(refreshAccount())
@@ -88,7 +88,7 @@ function GoogleLoginButton() {
     async function handleSuccess(credential) {
         const promise = loadingToast('Mencari akun')
         try {
-            axios.post(API + '/akun/login/google', {...credential})
+            await axios.post(API + '/akun/login/google', {...credential})
             .then(res => {
                 setLocalStorage('account', res.data.user)
                 dispatch(refreshAccount())

@@ -16,10 +16,10 @@ export default function UserAbsenceStatus() {
 
     const dispatch = useDispatch()
 
-    const fetchStatus = useCallback(() => {
+    const fetchStatus = useCallback(async () => {
         setIsFetchLoading(true)
         try {
-            axios.get(API + '/absen/status/' + account._id)
+            await axios.get(API + '/absen/status/' + account._id)
             .then(res => {
                 dispatch(setStatus(res.data.status))
                 dispatch(setAbsensi(res.data.absensi))
@@ -109,10 +109,10 @@ function StatusServer() {
     const dispatch = useDispatch()
     const [fetchLoading, setIsFetchLoading] = useState(false)
 
-    const fetchStatus = useCallback(() => {
+    const fetchStatus = useCallback(async () => {
         setIsFetchLoading(true)
         try {
-            axios.get(API + '/absen/status/' + account._id)
+            await axios.get(API + '/absen/status/' + account._id)
             .then(res => {
                 dispatch(setStatus(res.data.status))
                 dispatch(setAbsensi(res.data.absensi))
