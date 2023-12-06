@@ -6,7 +6,7 @@ import { blankToast, loadingToast } from "../../utils/myToast"
 import axios from "axios"
 import { API, isUserWithinBounds } from "../../../utils"
 import LoadingIcon from '../../utils/LoadingIcon'
-import { setIsWatchPosition, setStatus, toggleShowAbsenceForm } from '../../../redux/source'
+import { setIsWatchPosition, setShowAbsenceForm, setStatus } from '../../../redux/source'
 import Modal from '../../utils/Modal'
 
 export default function SubmitAbsenceForm() {
@@ -54,8 +54,7 @@ export default function SubmitAbsenceForm() {
                 setIsLoading(false)
                 dispatch(setStatus(res.data.status))
                 setShowForceNext(false)
-                dispatch(toggleShowAbsenceForm(false))
-                
+                dispatch(setShowAbsenceForm(false))
             }).catch(err => {
                 setIsLoading(false)
                 promise.onError(err.response.data.msg)
@@ -97,7 +96,7 @@ export default function SubmitAbsenceForm() {
                 promise.onSuccess(res.data.msg)
                 setIsLoading(false)
                 setShowForceNext(false)
-                dispatch(toggleShowAbsenceForm(false))
+                dispatch(setShowAbsenceForm(false))
             }).catch(err => {
                 promise.onError(err.response.data.msg)
                 throw new Error(err)
@@ -106,18 +105,22 @@ export default function SubmitAbsenceForm() {
             setIsLoading(false)
             promise.onError('Server error')
         }
-    }, [account._id, dispatch, firstCoordinate, secondCoordinate, userCoordinate])
+    }, [account, dispatch, firstCoordinate, secondCoordinate, userCoordinate])
 
     useEffect(() => {
         if ((status?.absen === null && absensi?.status === true) && isUserWithinBounds(userCoordinate) && userCoordinate) {
+            if (isLoading) return
             blankToast('Lokasi tercapai!')
             handleHadir()
             dispatch(setIsWatchPosition(false))
         }
-    }, [absensi?.status, dispatch, handleHadir, status?.absen, userCoordinate])
+    }, [absensi?.status, dispatch, handleHadir, isLoading, showAbsenceForm, status?.absen, userCoordinate])
+
+    if (!account) return
 
     if (showAbsenceForm || (status?.absen === null && absensi?.status === true)) return <div className='flex flex-col rounded-xl'>
         <div className='bg-secondary text-neutral-100 rounded-xl p-4 flex flex-col gap-2 shadow-lg shadow-primary/50'>
+            <p>showAbsenceForm {showAbsenceForm ? 'show' : 'hide'}</p>
             <p>Kirim sebagai {account?.panggilan || account?.nama}</p>
             <div className='flex gap-2'>
                 {showTidak &&

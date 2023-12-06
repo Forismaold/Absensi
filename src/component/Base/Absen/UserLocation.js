@@ -10,10 +10,11 @@ import { setIsWatchPosition } from '../../../redux/source'
 
 export default function UserLocation({focusUserLocation, focusOnLocation}) {
     const isWatchPosition = useSelector(state => state.source.isWatchPosition)
+    const showMap = useSelector(state => state.source.showMap)
     const userCoordinate = useSelector(state => state.coordinates.user)
 
     const [loadingUserCoor, setLoadingUserCoor] = useState(false)
-    const [toggleHighAccuracy, setToggleHighAccuracy] = useState(false)
+    const [toggleHighAccuracy, setToggleHighAccuracy] = useState(true)
     const [showUserCoordinateTutorial, setShowUserCoordinateTutorial] = useState(false)
 
     const dispatch = useDispatch()
@@ -53,7 +54,7 @@ export default function UserLocation({focusUserLocation, focusOnLocation}) {
         <div className='flex gap-2 items-center'>
             <p className='flex flex-1'>Lokasi kamu</p>
             <button className='flex items-center justify-center px-3 text-neutral-500 p-2 duration-200 ease-in-out active:scale-95' onClick={() => setShowUserCoordinateTutorial(true)}><FontAwesomeIcon icon={faInfo}/></button>
-            <button className={`flex items-center justify-center rounded-lg text-neutral-100 ${userCoordinate ? ' bg-secondary' : ' bg-primary-quarternary'} p-2 shadow-lg shadow-primary/50 duration-200 ease-in-out active:scale-95`} onClick={focusUserLocation}><FontAwesomeIcon icon={faLocationCrosshairs}/></button>
+            {showMap && <button className={`flex items-center justify-center rounded-lg text-neutral-100 ${userCoordinate ? ' bg-secondary' : ' bg-primary-quarternary'} p-2 shadow-lg shadow-primary/50 duration-200 ease-in-out active:scale-95`} onClick={focusUserLocation}><FontAwesomeIcon icon={faLocationCrosshairs}/></button>}
         </div>
         <span>{userCoordinate ? `${userCoordinate[0]}, ${userCoordinate[1]}` : '0, 0'}</span>
         <div className='flex gap-2 py-1 mt-auto'>

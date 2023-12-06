@@ -19,7 +19,7 @@ export default function UserAbsenceStatus() {
     const fetchStatus = useCallback(async () => {
         setIsFetchLoading(true)
         try {
-            await axios.get(API + '/absen/status/' + account._id)
+            await axios.get(API + '/absen/status/' + account?._id)
             .then(res => {
                 dispatch(setStatus(res.data.status))
                 dispatch(setAbsensi(res.data.absensi))
@@ -30,12 +30,13 @@ export default function UserAbsenceStatus() {
                 console.log(err)
             })
         } catch (error) {
+            setIsFetchLoading(false)
             console.log(error);
         }
     },[account, dispatch])
 
     useEffect(() => {
-        if (!status && account) fetchStatus()
+        if (!status) fetchStatus()
     },[account, fetchStatus, status])
 
     const absensi = useSelector(state => state.source.absensi)
@@ -46,7 +47,7 @@ export default function UserAbsenceStatus() {
 
     return <>
         <StatusDate/>
-        <StatusUser/>
+        <StatusUser/> 
         <StatusServer/>
         <SubmitAbsenceForm/>
     </>
@@ -54,6 +55,8 @@ export default function UserAbsenceStatus() {
 
 function StatusDate() {
     const absensi = useSelector(state => state.source.absensi)
+
+    if (!absensi) return null
 
     return <div className='flex items-center gap-2 px-2'>
         <FontAwesomeIcon icon={absensi?.status ? faDoorOpen : faDoorClosed}/>
@@ -67,12 +70,13 @@ function StatusDate() {
 }
 
 function StatusUser() {
+    const account = useSelector(state => state.source.account)
     const status = useSelector(state => state.source.status)
     const showAbsenceForm = useSelector(state => state.source.showAbsenceForm)
 
     const dispatch = useDispatch()
 
-    if (status?.absen === null) return null
+    if (status?.absen === null || !account) return null
 
     return <>    
     <div className='bg-secondary shadow-lg shadow-primary/50 text-neutral-100 rounded p-4 flex gap-2 items-center relative'>
@@ -97,7 +101,7 @@ function StatusUser() {
         </div>
         }
     </div>
-    {status?.absen !== null && <span onClick={() => dispatch(toggleShowAbsenceForm())} className='duration-200 ease-in-out active:scale-95 text-primary text-right underline cursor-pointer text-secondary'>{showAbsenceForm ? 'Batal perbarui' : 'Perbarui absensi'}</span>}
+    {status?.absen !== null && account && <span onClick={() => dispatch(toggleShowAbsenceForm())} className='duration-200 ease-in-out active:scale-95 text-primary text-right underline cursor-pointer text-secondary'>{showAbsenceForm ? 'Batal perbarui' : 'Perbarui absensi'}</span>}
     </>
 }
 
@@ -123,6 +127,7 @@ function StatusServer() {
                 console.log(err)
             })
         } catch (error) {
+            setIsFetchLoading(false)
             console.log(error);
         }
     },[account, dispatch])
@@ -134,7 +139,7 @@ function StatusServer() {
     if (absensi?.status === true) return
 
     return <div className='bg-neutral-300 shadow-lg shadow-primary/50 text-neutral-500 rounded-xl p-4 flex gap-2 items-center relative'>
-        <p>Absensi belum dibuka</p>
+        {!absensi ? <p>Periksa internet kamu</p> : <p>Absensi belum dibuka</p>}
         <button className='flex ml-auto items-center justify-center rounded text-neutral-100 bg-secondary p-2 shadow-lg shadow-primary/50 duration-200 ease-in-out active:scale-95' onClick={() => fetchStatus()}>{fetchLoading ? <LoadingIcon/> :<FontAwesomeIcon icon={faRotate} className='p-0.5'/>}</button>
     </div>
 }

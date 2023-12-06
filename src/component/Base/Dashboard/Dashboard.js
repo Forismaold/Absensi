@@ -43,8 +43,8 @@ export default function Dahsboard() {
         <p>Ini halaman dashboard</p>
         {permission && 
             <div className='flex gap-2 items-center justify-end'>
-                <Link to={'/admin/dashboard'}><FontAwesomeIcon icon={faServer} className='rounded text-neutral-100 bg-secondary p-2 shadow-lg shadow-primary/50 duration-200 ease-in-out active:scale-95'/></Link>
-                <Link to={'/admin/riwayat'}><FontAwesomeIcon icon={faClockRotateLeft} className='rounded text-neutral-100 bg-secondary p-2 shadow-lg shadow-primary/50 duration-200 ease-in-out active:scale-95'/></Link>
+                <Link to={'/admin/dashboard'}><FontAwesomeIcon icon={faServer} className='rounded text-neutral-500 bg-neutral-300 p-2 shadow-lg shadow-primary/50 duration-200 ease-in-out active:scale-95'/></Link>
+                <Link to={'/admin/riwayat'}><FontAwesomeIcon icon={faClockRotateLeft} className='rounded text-neutral-500 bg-neutral-300 p-2 shadow-lg shadow-primary/50 duration-200 ease-in-out active:scale-95'/></Link>
             </div>
         }
         <button className='flex gap-2 items-center self-end justify-center rounded text-neutral-100 bg-secondary p-2 shadow-lg shadow-primary/50 duration-200 ease-in-out active:scale-95' onClick={() => fetchRiwayats()}><FontAwesomeIcon icon={faRotate}/> <span>Segarkan</span></button>

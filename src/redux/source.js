@@ -10,7 +10,8 @@ const source = createSlice({
         adminRiwayats: null,
         riwayats: null,
         isWatchPosition: false,
-        showAbsenceForm: false
+        showAbsenceForm: false,
+        showMap: true
     },
     reducers: {
         setAccount: (state, action) => {
@@ -34,10 +35,16 @@ const source = createSlice({
         setIsWatchPosition: (state, action) => {
             state.isWatchPosition = action.payload || !state.isWatchPosition
         },
-        toggleShowAbsenceForm: (state, action) => {
-            state.showAbsenceForm = action.payload || !state.showAbsenceForm
+        setShowAbsenceForm: (state, action) => {
+            state.showAbsenceForm = action.payload
         },
+        toggleShowAbsenceForm: (state, action) => {
+            state.showAbsenceForm = !state.showAbsenceForm
+        },
+        toggleShowMap: (state, action) => {
+            state.showMap = action.payload || !state.showMap
+        }
     }
 })
-export const { setAccount, refreshAccount, setStatus, setRiwayats, setAbsensi, setAdminRiwayats, toggleShowAbsenceForm, setIsWatchPosition } = source.actions
+export const { setAccount, refreshAccount, setStatus, setRiwayats, setAbsensi, setAdminRiwayats, toggleShowAbsenceForm, setIsWatchPosition, toggleShowMap, setShowAbsenceForm } = source.actions
 export default source.reducer

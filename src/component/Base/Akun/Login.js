@@ -50,7 +50,8 @@ function LoginForm() {
             }).catch(err => {
                 setNama('')
                 setPassword('')
-                if (err?.response?.status === 401) promise.onError(err?.response?.data.msg)
+                if (err?.response?.status === 401) return promise.onError(err?.response?.data.msg)
+                throw new Error(err)
             })
         } catch (error) {
             promise.onError(error?.msg || 'Server error')
@@ -97,7 +98,8 @@ function GoogleLoginButton() {
                 promise.onSuccess('Berhasil masuk ke akun')
             })
             .catch(err => {
-                if (err?.response?.status === 401) promise.onError(err?.response?.data.msg)
+                if (err?.response?.status === 401) return promise.onError(err?.response?.data.msg)
+                throw new Error(err)
             })
         } catch (error) {
             promise.onError(error?.msg || 'Server error')
