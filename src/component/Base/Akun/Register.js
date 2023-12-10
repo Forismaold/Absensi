@@ -5,7 +5,7 @@ import { API, setLocalStorage } from "../../../utils"
 import axios from "axios"
 import { useState } from 'react'
 import { useDispatch } from 'react-redux'
-import { refreshAccount, setStatus } from '../../../redux/source'
+import { refreshAccount, setAbsensi, setStatus } from '../../../redux/source'
 import { toast } from 'react-toastify'
 import { loadingToast } from '../../utils/myToast'
 import ReCAPTCHA from "react-google-recaptcha";
@@ -61,6 +61,7 @@ function RegisterForm() {
                 dispatch(refreshAccount())
                 navigate('/akun')
                 dispatch(setStatus())
+                dispatch(setAbsensi())
                 promise.onSuccess('Berhasil membuat akun')
             })
             .catch(err => {

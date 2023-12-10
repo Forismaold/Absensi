@@ -1,8 +1,8 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faCheck, faCheckDouble, faClockRotateLeft, faMinus, faRotate, faServer, faXmark } from '@fortawesome/free-solid-svg-icons'
+import { faCheck, faCheckDouble, faMinus, faRotate, faXmark } from '@fortawesome/free-solid-svg-icons'
 import axios from "axios"
 import { useCallback, useEffect, useState } from "react"
-import { API, formatDate, getPermission, isUserWithinBounds } from "../../../utils"
+import { API, formatDate, isUserWithinBounds } from "../../../utils"
 import { useDispatch, useSelector } from "react-redux"
 import { Link } from "react-router-dom"
 import { setRiwayats } from "../../../redux/source"
@@ -11,11 +11,6 @@ import { setRiwayats } from "../../../redux/source"
 export default function Dahsboard() {
     const account = useSelector(state => state.source.account)
     const riwayats = useSelector(state => state.source.riwayats)
-    const [permission, setPermission] = useState(false)
-
-    useEffect(() => {
-        setPermission(getPermission())
-    }, [])
 
     const dispatch = useDispatch()
 
@@ -41,12 +36,6 @@ export default function Dahsboard() {
 
     return <div className='flex flex-col'>
         <p>Ini halaman dashboard</p>
-        {permission && 
-            <div className='flex gap-2 items-center justify-end'>
-                <Link to={'/admin/dashboard'}><FontAwesomeIcon icon={faServer} className='rounded text-neutral-500 bg-neutral-300 p-2 shadow-lg shadow-primary/50 duration-200 ease-in-out active:scale-95'/></Link>
-                <Link to={'/admin/riwayat'}><FontAwesomeIcon icon={faClockRotateLeft} className='rounded text-neutral-500 bg-neutral-300 p-2 shadow-lg shadow-primary/50 duration-200 ease-in-out active:scale-95'/></Link>
-            </div>
-        }
         <button className='flex gap-2 items-center self-end justify-center rounded text-neutral-100 bg-secondary p-2 shadow-lg shadow-primary/50 duration-200 ease-in-out active:scale-95' onClick={() => fetchRiwayats()}><FontAwesomeIcon icon={faRotate}/> <span>Segarkan</span></button>
         <div className="flex flex-col gap-2 pt-2">
             {riwayats?.map(x => <RiwayatRow data={x} key={x._id}/>)}

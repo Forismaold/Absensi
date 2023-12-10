@@ -1,16 +1,24 @@
 import { useEffect, useState } from "react"
 import { useSelector } from "react-redux"
 import { Link, useLocation } from "react-router-dom"
+import { getPermission } from "../../utils"
 
 export default function Navbar() {
     const akun = useSelector(state => state.source.account)
     const location = useLocation()
     const pathSegments = location?.pathname?.split('/') || 'ABSEN'
     const lastRouteName = pathSegments[pathSegments.length - 1]?.toLocaleUpperCase() || 'ABSEN'
+    const [isAdminRoute, setIsAdminRoute] = useState(false)
     const [routeName, setRouteName] = useState(lastRouteName)
     useEffect(() => {
         setRouteName(lastRouteName)
-    }, [lastRouteName])
+        setIsAdminRoute(location.pathname.split('/')[1].toUpperCase() === 'ADMIN')
+    }, [lastRouteName, location.pathname])
+    const [permission, setPermission] = useState(false)
+
+    useEffect(() => {
+        setPermission(getPermission())
+    }, [akun])
 
     return <nav className="flex px-3 py-2 gap-2 flex-col md:flex-row w-full">
         <h4 className="font-montserrat text-neutral-100 font-extrabold text-2xl">Forisma.</h4>
@@ -22,10 +30,17 @@ export default function Navbar() {
                 </div>
                 </Link>
                 <Link to={'/dashboard'}>
-                <div className={`${routeName === 'DASHBOARD' ? 'border-tertiary' : 'border-transparent'} h-full flex place-items-center pointer border-b-2 border-solid duration-200 ease-in-out active:scale-95`}>
+                <div className={`${routeName === 'DASHBOARD' && !isAdminRoute ? 'border-tertiary' : 'border-transparent'} h-full flex place-items-center pointer border-b-2 border-solid duration-200 ease-in-out active:scale-95`}>
                     <span>Dashboard</span>
                 </div>
                 </Link>
+                {permission && 
+                    <Link to={'/admin/dashboard'}>
+                        <div className={`${isAdminRoute ? 'border-tertiary' : 'border-transparent'} h-full flex place-items-center pointer border-b-2 border-solid duration-200 ease-in-out active:scale-95`}>
+                            <span>Admin</span>
+                        </div>
+                    </Link>
+                }
             </div>
             <div className="flex gap-2">
                 <Link to={'/akun'}>
