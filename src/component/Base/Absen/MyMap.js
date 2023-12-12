@@ -29,8 +29,8 @@ export default function MyMap() {
     return (
         <div className='flex flex-col gap-2'>
             <div className='flex flex-col bg-neutral-300/50 rounded-xl overflow-hidden'>
-                <div className='flex gap-2 p-2'>
-                    <button className='flex flex-1 items-center rounded-lg text-neutral-500 duration-200 ease-in-out active:scale-95 justify-between px-2' onClick={() => dispatch(toggleShowMap())}>
+                <div className='flex gap-2 p-2 rounded-lg text-neutral-500'>
+                    <button className='flex flex-1 items-center duration-200 ease-in-out active:scale-95 justify-between px-2' onClick={() => dispatch(toggleShowMap())}>
                         <div className='flex items-center gap-2'>
                             <FontAwesomeIcon icon={faMap}/>
                             <span>Peta</span> 
@@ -39,6 +39,7 @@ export default function MyMap() {
                     </button>
                 </div>
                 {showMap && 
+                    <>
                     <MapContainer ref={mapRef} center={centerCoordinate} style={{ height: '20rem', width: '100%' }} zoom={18} scrollWheelZoom={false}>
                         <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" className='rounded-md'/>
                             <Rectangle
@@ -56,10 +57,11 @@ export default function MyMap() {
                             </Tooltip>
                         </Marker>
                     </MapContainer>
+                    <AreaLocation focusOnLocation={() => focusOnLocation(firstCoordinate)}/>
+                    </>
                 }
             </div>
             <div className='flex gap-2 flex-wrap mt-2 flex-col md:flex-row'>
-                <AreaLocation focusOnLocation={() => focusOnLocation(firstCoordinate)}/>
                 <UserLocation focusOnLocation={focusOnLocation} focusUserLocation={focusUserLocation}/>
             </div>
         </div>

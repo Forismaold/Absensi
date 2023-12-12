@@ -1,5 +1,5 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faBinoculars, faBolt, faInfo, faLocationCrosshairs } from '@fortawesome/free-solid-svg-icons'
+import { faBinoculars, faBolt, faInfo, faLocationCrosshairs, faRotate } from '@fortawesome/free-solid-svg-icons'
 import { useCallback, useEffect, useState } from 'react'
 import LoadingIcon from '../../utils/LoadingIcon'
 import { useDispatch, useSelector } from 'react-redux'
@@ -52,7 +52,7 @@ export default function UserLocation({focusUserLocation, focusOnLocation}) {
 
     return <div className='relative flex flex-1 flex-col shadow-md bg-neutral-300/50 rounded-xl p-2'>
         <div className='flex gap-2 items-center'>
-            <p className='flex flex-1'>Lokasi kamu</p>
+            <p className='flex flex-1'>Lokasi kamu sekarang</p>
             <button className='flex items-center justify-center px-3 text-neutral-500 p-2 duration-200 ease-in-out active:scale-95' onClick={() => setShowUserCoordinateTutorial(true)}><FontAwesomeIcon icon={faInfo}/></button>
             {showMap && <button className={`flex items-center justify-center rounded-lg text-neutral-100 ${userCoordinate ? ' bg-secondary' : ' bg-primary-quarternary'} p-2 shadow-lg shadow-primary/50 duration-200 ease-in-out active:scale-95`} onClick={focusUserLocation}><FontAwesomeIcon icon={faLocationCrosshairs}/></button>}
         </div>
@@ -60,11 +60,12 @@ export default function UserLocation({focusUserLocation, focusOnLocation}) {
         <div className='flex gap-2 py-1 mt-auto'>
             {isWatchPosition ? <WatchPosition onClose={() => dispatch(setIsWatchPosition(false))} toggleHighAccuracy={toggleHighAccuracy} focusOnLocation={focusOnLocation}/> : 
                 <>
-                <button className={`flex shadow-lg px-2 shadow-primary/50 justify-center items-center rounded text-neutral-500 duration-200 ease-in-out active:scale-95 bg-neutral-200 min-h-[32px] mt-auto`} onClick={() => dispatch(setIsWatchPosition(true))} title='Akurasi tinggi'>
+                <button className={`flex flex-1 gap-2 shadow-lg px-2 shadow-primary/50 justify-center items-center rounded text-neutral-500 duration-200 ease-in-out active:scale-95 bg-neutral-200 min-h-[32px] mt-auto border-2 border-primary border-solid text-primary`} onClick={() => dispatch(setIsWatchPosition(true))} title='Mulai pemindaian lokasi'>
                     <FontAwesomeIcon icon={faBinoculars}/>
+                    <span>Mulai</span>
                 </button>
-                <button className={`flex flex-1 shadow-lg shadow-primary/50 items-center justify-center rounded text-neutral-100 px-2 duration-200 ease-in-out active:scale-95 bg-secondary min-h-[32px] mt-auto`} onClick={getCurrentLocation} title='Akurasi sedang'>
-                    {loadingUserCoor ? <LoadingIcon /> : <span>{isWatchPosition ? 'Posisi menonton' : 'Segarkan'}</span>}
+                <button className={`flex shadow-lg shadow-primary/50 items-center justify-center rounded text-neutral-100 px-2 duration-200 ease-in-out active:scale-95 bg-secondary min-h-[32px] mt-auto`} onClick={getCurrentLocation} title='Segarkan lokasi'>
+                    {loadingUserCoor ? <LoadingIcon /> : <FontAwesomeIcon icon={faRotate}/>}
                 </button>
                 </>
             }
