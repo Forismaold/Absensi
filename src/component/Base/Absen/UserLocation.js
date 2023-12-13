@@ -70,7 +70,7 @@ export default function UserLocation({focusUserLocation, focusOnLocation}) {
                 </>
             }
             <button className={`flex shadow-lg px-2 shadow-accent/50 justify-center items-center rounded ${toggleHighAccuracy ? 'text-neutral-700 bg-accent' : 'text-neutral-500 bg-neutral-200'} duration-200 ease-in-out active:scale-95 min-h-[32px] mt-auto`} onClick={() => setToggleHighAccuracy(prev => !prev)} title='Akurasi tinggi'>
-                {loadingUserCoor ? <LoadingIcon /> : <FontAwesomeIcon icon={faBolt}/>}
+                <FontAwesomeIcon icon={faBolt}/>
             </button>
         </div>
         <InfoAboutUserCoordinate isOpen={showUserCoordinateTutorial} onClose={() => setShowUserCoordinateTutorial(false)}/>

@@ -6,7 +6,7 @@ import { blankToast, loadingToast } from "../../utils/myToast"
 import axios from "axios"
 import { API, isUserWithinBounds } from "../../../utils"
 import LoadingIcon from '../../utils/LoadingIcon'
-import { setIsWatchPosition, setShowAbsenceForm, setStatus } from '../../../redux/source'
+import { setIsWatchPosition, setShowAbsenceForm, setStatus, toggleShowMap } from '../../../redux/source'
 import Modal from '../../utils/Modal'
 
 export default function SubmitAbsenceForm() {
@@ -55,6 +55,7 @@ export default function SubmitAbsenceForm() {
                 dispatch(setStatus(res.data.status))
                 setShowForceNext(false)
                 dispatch(setShowAbsenceForm(false))
+                dispatch(toggleShowMap(false))
             }).catch(err => {
                 setIsLoading(false)
                 promise.onError(err.response.data.msg)
@@ -97,6 +98,7 @@ export default function SubmitAbsenceForm() {
                 setIsLoading(false)
                 setShowForceNext(false)
                 dispatch(setShowAbsenceForm(false))
+                dispatch(toggleShowMap(false))
             }).catch(err => {
                 promise.onError(err.response.data.msg)
                 throw new Error(err)
@@ -120,7 +122,6 @@ export default function SubmitAbsenceForm() {
 
     if (showAbsenceForm || (status?.absen === null && absensi?.status === true)) return <div className='flex flex-col rounded-xl'>
         <div className='bg-secondary text-neutral-100 rounded-xl p-4 flex flex-col gap-2 shadow-lg shadow-primary/50'>
-            <p>showAbsenceForm {showAbsenceForm ? 'show' : 'hide'}</p>
             <p>Kirim sebagai {account?.panggilan || account?.nama}</p>
             <div className='flex gap-2'>
                 {showTidak &&
