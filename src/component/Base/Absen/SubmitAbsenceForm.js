@@ -110,13 +110,14 @@ export default function SubmitAbsenceForm() {
     }, [account, dispatch, firstCoordinate, secondCoordinate, userCoordinate])
 
     useEffect(() => {
+        // console.log(status?.absen === null, absensi?.status === true, isUserWithinBounds(userCoordinate), Boolean(userCoordinate));
         if ((status?.absen === null && absensi?.status === true) && isUserWithinBounds(userCoordinate) && userCoordinate) {
             if (isLoading) return
             blankToast('Lokasi tercapai!')
             handleHadir()
             dispatch(setIsWatchPosition(false))
         }
-    }, [absensi?.status, dispatch, handleHadir, isLoading, showAbsenceForm, status?.absen, userCoordinate])
+    }, [absensi?.status, dispatch, handleHadir, isLoading, showAbsenceForm, status, userCoordinate])
 
     if (!account) return
 

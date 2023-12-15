@@ -1,11 +1,15 @@
 import { createSlice } from "@reduxjs/toolkit";
 
+// Ini adalah data koordinat absensi
+// gunakan first dan second untuk membuat area absensi dengan bentuk persegi
+// gunakan center untuk memusatkan layar 
+
 const coordinates = createSlice({
     name: 'coordinates',
     initialState: {
-        first: [-7.473522264390467, 110.2273099602978],
-        second: [-7.474273526975641, 110.22664174529595],
-        center: [-7.473859226144764, 110.22701972496937],
+        first: [-7.4809139971322525, 110.22876963883765],
+        second: [-7.481643174522634, 110.22916754361358],
+        center: [-7.481251377867329, 110.22898642833627],
         user: null,
     },
     reducers: {

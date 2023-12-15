@@ -90,9 +90,27 @@ export function getPermission() {
     return account?.peran?.some(role => ['admin', 'forisma'].includes(role)) || false
 }
 
+// kode sebelumnya seperti ini
+// const userWithin = (coordinate[0] >= first[0] && coordinate[0] <= second[0]) && (coordinate[1] >= first[1] && coordinate[1] <= second[1])
+// return userWithin
+
 export function isUserWithinBounds (userCoordinate = [0, 0]) {
+    // dapatkan data dari parameter dan redux
     const coordinate = userCoordinate || [0, 0]
     const {first, second} = store.getState().coordinates || {}
-    const userWithin = (coordinate[0] >= first[0] && coordinate[0] <= second[0]) && (coordinate[1] >= first[1] && coordinate[1] <= second[1])
-    return userWithin
+
+    // buat variable sendiri 
+    const [userLat, userLng] = coordinate
+    const [firstLat, firstLng] = first
+    const [secondLat, secondLng] = second
+    
+    // Mengecek apakah userLat berada di antara firstLat dan secondLat
+    const isLatInRange = userLat >= Math.min(firstLat, secondLat) && userLat <= Math.max(firstLat, secondLat)
+
+    // Mengecek apakah userLng berada di antara firstLng dan secondLng
+    const isLngInRange = userLng >= Math.min(firstLng, secondLng) && userLng <= Math.max(firstLng, secondLng)
+
+    // Jika kedua koordinat (latitude dan longitude) berada dalam jangkauan, maka user berada dalam jangkauan
+    console.log(isLatInRange && isLngInRange)
+    return isLatInRange && isLngInRange
 }

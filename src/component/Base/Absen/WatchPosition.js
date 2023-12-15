@@ -15,7 +15,6 @@ export default function WatchPosition({onClose, toggleHighAccuracy, focusOnLocat
             const successCallback = (position) => {
             const { latitude, longitude } = position.coords
             dispatch(setUserCoordinate([latitude,longitude]))
-            console.log(`Current position: ${latitude}, ${longitude}`)
             if (userCoordinate) focusOnLocation(userCoordinate)
         }
     
