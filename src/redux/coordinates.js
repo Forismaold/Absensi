@@ -2,7 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 
 // Ini adalah data koordinat absensi
 // gunakan first dan second untuk membuat area absensi dengan bentuk persegi
-// gunakan center untuk memusatkan layar 
+// gunakan center untuk memusatkan map layar
 
 const coordinates = createSlice({
     name: 'coordinates',
