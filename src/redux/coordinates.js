@@ -3,9 +3,9 @@ import { createSlice } from "@reduxjs/toolkit";
 const coordinates = createSlice({
     name: 'coordinates',
     initialState: {
-        first: [-7.4822300,  110.2220029],
-        second: [-7.4820399, 110.2222523],
-        center: [-7.48213495, 110.2221276],
+        first: [-7.473522264390467, 110.2273099602978],
+        second: [-7.474273526975641, 110.22664174529595],
+        center: [-7.473859226144764, 110.22701972496937],
         user: null,
     },
     reducers: {
