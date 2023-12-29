@@ -36,6 +36,6 @@ BackEnd
 
 ## Contributor
 - Sholahuddin A (McWooden)
-- Rizqy L (Rilaptra)
+- Rizqi L (Erzy.sh)
 - Pak Danang A P
 - Naufal R R
