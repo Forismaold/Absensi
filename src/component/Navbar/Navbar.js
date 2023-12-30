@@ -35,7 +35,7 @@ export default function Navbar() {
                 </div>
                 </Link>
                 {permission && 
-                    <Link to={'/admin/dashboard'}>
+                    <Link to={'/admin/server'}>
                         <div className={`${isAdminRoute ? 'border-tertiary' : 'border-transparent'} h-full flex place-items-center pointer border-b-2 border-solid duration-200 ease-in-out active:scale-95`}>
                             <span>Admin</span>
                         </div>

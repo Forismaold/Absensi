@@ -11,7 +11,7 @@ import { setAbsensi, setStatus } from '../../../redux/source'
 import Modal, { Confirm } from '../../utils/Modal'
 import { Link } from 'react-router-dom'
 
-export default function AdminDashboard() {
+export default function AdminServer() {
     const [permission, setPermission] = useState(false)
 
     useEffect(() => {
@@ -24,8 +24,16 @@ export default function AdminDashboard() {
 
     return <div>
         <div className='flex gap-2 items-center justify-end'>
-            <Link to={'/admin/dashboard'}><FontAwesomeIcon icon={faServer} className='rounded text-neutral-100 bg-secondary p-2 shadow-lg shadow-primary/50 duration-200 ease-in-out active:scale-95'/></Link>
-            <Link to={'/admin/riwayat'}><FontAwesomeIcon icon={faClockRotateLeft} className='rounded text-neutral-500 bg-neutral-300 p-2 shadow-lg shadow-primary/50 duration-200 ease-in-out active:scale-95'/></Link>
+            <Link to={'/admin/server'}>
+                <div className='flex gap-2 items-center bg-secondary p-2 shadow-lg shadow-primary/50 duration-200 ease-in-out active:scale-95 rounded text-neutral-100'>
+                    <FontAwesomeIcon icon={faServer}/> Server
+                </div>
+            </Link>
+            <Link to={'/admin/riwayat'}>
+                <div className='flex gap-2 items-center rounded text-neutral-500 bg-neutral-300 p-2 shadow-lg shadow-primary/50 duration-200 ease-in-out active:scale-95'>
+                    <FontAwesomeIcon icon={faClockRotateLeft}/> Riwayat
+                </div>
+            </Link>
         </div>
         <DashboardActionButton/>
         <UsersList/>

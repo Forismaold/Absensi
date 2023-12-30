@@ -1,13 +1,13 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faArrowLeft } from '@fortawesome/free-solid-svg-icons'
 import Absen from "./Absen/Absen"
-import AdminDashboard from "./Admin/AdminDashboard"
 import Akun from "./Akun/Akun"
 import { Routes, Route, useLocation, Link } from 'react-router-dom'
 import Login from "./Akun/Login"
 import Register from "./Akun/Register"
 import Dahsboard from './Dashboard/Dashboard'
 import AdminRiwayat from './Admin/AdminRiwayat'
+import AdminServer from './Admin/AdminServer'
 
 export default function Base() {
     const location = useLocation()
@@ -19,15 +19,11 @@ export default function Base() {
                     <Route path={'/akun/masuk'} element={<BackTo to={'/akun'}/>}/>
                     <Route path={'/akun/daftar'} element={<BackTo to={'/akun'}/>}/>
                 </Routes>
-                <Routes>
-                    <Route path={'/admin/dashboard'} element={<BackTo to={'/dashboard'}/>}/>
-                    <Route path={'/admin/riwayat'} element={<BackTo to={'/dashboard'}/>}/>
-                </Routes>
                 <h5 className="text-3xl font-bold text-neutral-700 capitalize pt-4">{pathSegments[pathSegments.length - 1] || 'Absen'}</h5>
                 <Routes>
                     <Route path={'*'} element={<Absen/>}></Route>
                     <Route path={'/dashboard'} element={<Dahsboard/>}></Route>
-                    <Route path={'/admin/dashboard'} element={<AdminDashboard/>}></Route>
+                    <Route path={'/admin/server'} element={<AdminServer/>}></Route>
                     <Route path={'/admin/riwayat'} element={<AdminRiwayat/>}></Route>
                     <Route path={'/akun'} element={<Akun/>}></Route>
                     <Route path={'/akun/masuk'} element={<Login/>}></Route>
