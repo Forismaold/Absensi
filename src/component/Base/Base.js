@@ -23,7 +23,7 @@ export default function Base() {
                 <Routes>
                     <Route path={'*'} element={<Absen/>}></Route>
                     <Route path={'/dashboard'} element={<Dahsboard/>}></Route>
-                    <Route path={'/admin/server'} element={<AdminServer/>}></Route>
+                    <Route path={'/admin/server/*'} element={<AdminServer/>}></Route>
                     <Route path={'/admin/riwayat'} element={<AdminRiwayat/>}></Route>
                     <Route path={'/akun'} element={<Akun/>}></Route>
                     <Route path={'/akun/masuk'} element={<Login/>}></Route>

@@ -40,7 +40,7 @@ export default function WatchPosition({onClose, toggleHighAccuracy, focusOnLocat
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [dispatch, toggleHighAccuracy])
     
-    return <button className={`flex gap-2 flex-1 shadow-lg px-2 shadow-primary/50 justify-center items-center rounded text-neutral-200 duration-200 ease-in-out active:scale-95 bg-secondary min-h-[32px] mt-auto`} onClick={onClose} title='Hentikan pemindaian lokasi'>
+    return <button className={`flex gap-2 flex-1 shadow-lg px-2 shadow-primary/50 justify-center items-center rounded text-neutral-200 click-animation bg-secondary min-h-[32px] mt-auto`} onClick={onClose} title='Hentikan pemindaian lokasi'>
         <FontAwesomeIcon icon={faBinoculars} className='animate-pulse animate-spin'/>
         <span className='flex-1'>Selesai</span>
     </button>   

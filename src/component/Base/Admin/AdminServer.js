@@ -1,15 +1,15 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faBoxOpen, faChevronDown, faChevronRight, faClockRotateLeft, faClose, faServer, faTrash } from '@fortawesome/free-solid-svg-icons'
-import { useDispatch, useSelector } from "react-redux"
+import { faBoxOpen, faClockRotateLeft, faDoorClosed, faEllipsisV, faExternalLink, faFloppyDisk, faLink, faPenToSquare, faPlus, faRefresh, faSearch, faServer, faTable, faTrash } from '@fortawesome/free-solid-svg-icons'
+import { useSelector } from "react-redux"
 import { API, formatBeautyDate, getPermission } from "../../../utils"
 import axios from "axios"
-import { setUsers } from "../../../redux/users"
-import { loadingToast } from '../../utils/myToast'
+import { blankToast, loadingToast } from '../../utils/myToast'
 import UsersList from './UsersList'
-import { useCallback, useEffect, useRef, useState } from 'react'
-import { setAbsensi, setStatus } from '../../../redux/source'
+import { useCallback, useEffect, useState } from 'react'
 import Modal, { Confirm } from '../../utils/Modal'
-import { Link } from 'react-router-dom'
+import { Link, Route, Routes, useNavigate, useSearchParams } from 'react-router-dom'
+import LoadingSkeleton from '../../utils/LoadingSkeleton'
+import AbsensiEditor from './AbsensiEditor'
 
 export default function AdminServer() {
     const [permission, setPermission] = useState(false)
@@ -22,66 +22,189 @@ export default function AdminServer() {
         <p>Anda bukan pengelola!</p>
     </div>
 
-    return <div>
+    return <div className='flex flex-col gap-2'>
         <div className='flex gap-2 items-center justify-end'>
             <Link to={'/admin/server'}>
-                <div className='flex gap-2 items-center bg-secondary p-2 shadow-lg shadow-primary/50 duration-200 ease-in-out active:scale-95 rounded text-neutral-100'>
+                <div className='flex gap-2 items-center bg-secondary p-2 shadow-lg shadow-primary/50 click-animation rounded text-neutral-100'>
                     <FontAwesomeIcon icon={faServer}/> Server
                 </div>
             </Link>
             <Link to={'/admin/riwayat'}>
-                <div className='flex gap-2 items-center rounded text-neutral-500 bg-neutral-300 p-2 shadow-lg shadow-primary/50 duration-200 ease-in-out active:scale-95'>
+                <div className='flex gap-2 items-center rounded text-neutral-500 bg-neutral-300 p-2 shadow-lg shadow-primary/50 click-animation'>
                     <FontAwesomeIcon icon={faClockRotateLeft}/> Riwayat
                 </div>
             </Link>
         </div>
-        <DashboardActionButton/>
-        <UsersList/>
+        {/* <DashboardActionButton/> */}
+        {/* <UsersList/> */}
+        <Routes>
+            <Route path='/' Component={ManageAbsence}/>
+            <Route path='/detail' Component={DetailAbsence}/>
+        </Routes>
     </div>
 }
 
-function DashboardActionButton() {
-    const absensi = useSelector(state => state.source.absensi)
-    const account = useSelector(state => state.source.account)
+function DetailAbsence() {
+    const [absensi, setAbsensi] = useState(null)
+    const [isLoading, setIsLoading] = useState(false)
+    const [inputSearch, setInputSearch] = useState('')
+    
+    const [searchParams, setSearchParams] = useSearchParams()
 
-    const [openAbsensiOption, setOpenAbsensiOption] = useState(false)
-    const [showTutupConfirm, setShowTutupConfirm] = useState(false)
-    const [showBuangConfirm, setShowBuangConfirm] = useState(false)
-
-    const dispatch = useDispatch()
-
-    const fetchAbsenceStatus = useCallback(async() => {
-        const promise = loadingToast('Mengecek status')
+    const fetchData = useCallback(async () => {
         try {
-            await axios.get(API + '/absensi/status')
+            await axios.get(API + '/absensi/detail/' + searchParams.get('q'))
             .then(res => {
-                dispatch(setAbsensi(res.data.absensi))
-
-                promise.onSuccess(res.data.msg)
-            })
-            .catch(err => {
-                promise.onError(err?.response?.data?.msg || 'internal server error')
-                console.log(err)
+                setIsLoading(false)
+                setAbsensi(res.data.data)
+                console.log(res.data.data)
+            }).catch(err => {
+                throw new Error(err)
             })
         } catch (error) {
-            
+            setIsLoading(false)
         }
-    }, [dispatch])
+    }, [searchParams])
 
     useEffect(() => {
-        if (!absensi) fetchAbsenceStatus()
-    }, [absensi, fetchAbsenceStatus])
+        if (!absensi) fetchData()
+    },[absensi, fetchData])
 
-    async function bukaAbsensi(title = 'Dzuhur', note) {
+    function handleSubmit(e) {
+        e.preventDefault()
+        searchParams.set('q', inputSearch)
+        setSearchParams(searchParams)
+    }
+
+    if (!searchParams.get('q')) return <div className='flex flex-col gap-2'>
+        <span>Masukkan id</span>
+        <form className='flex items-center border-secondary rounded-md shadow-primary/50 border-2' onSubmit={handleSubmit}>
+            <input autoFocus type="text" placeholder='Id absensi' className='flex-1 border-none rounded-s-md focus:ring-none' value={inputSearch} onChange={e => setInputSearch(e.target.value)} />
+            <button type='submit' className='bg-secondary text-neutral-200 p-3 click-animation flex justify-center shadow cursor-pointer'><FontAwesomeIcon icon={faSearch}/></button>
+        </form>
+    </div>
+    return <div className='flex flex-col gap-2'>
+        <div className='flex items-center justify-end' onClick={fetchData}>
+            <div className='flex gap-2 items-center bg-secondary p-2 shadow-lg shadow-primary/50 click-animation rounded-lg text-neutral-100 cursor-pointer'>
+                <FontAwesomeIcon icon={faRefresh}/> Segarkan
+            </div>
+        </div>
+        {isLoading && <LoadingSkeleton/>}
+        <DashboardActionButton item={absensi}/>
+        <UsersList users={absensi?.users}/>
+    </div>
+}
+function ManageAbsence() {
+    const account = useSelector(state => state.source.account)
+    const [isLoading, setIsLoading] = useState(false)
+    const [fetchError, setFetchError] = useState(false)
+    const [abcenceList, setAbcenceList] = useState(null)
+    const [openCreateAbsence, setOpenCreateAbsence] = useState(false)
+
+    const fetchAbsence = useCallback(async () => {
+        setIsLoading(false)
+        setFetchError(false)
+        try {
+            await axios.get(API + '/absensi').then(res => {
+                setAbcenceList(res.data.data)
+            }).catch(err => {
+                throw new Error(err)
+            })
+        } catch (error) {
+            console.log(error)
+            setFetchError(true)
+        } finally {
+            setIsLoading(false)
+        }
+    }, [])
+
+    async function createAbsence(title, note) {
+        const promise = loadingToast('Membuat absensi baru')
+        try {
+            await axios.post(API + '/absensi', {
+                title,
+                note,
+                openedBy: account?.panggilan || account.nama
+            }).then(res => {
+                promise.onSuccess('berhasil menambahkan absensi')
+                setOpenCreateAbsence(false)
+                setAbcenceList(res.data.data)
+            }).catch(err => {
+                throw new Error(err)
+            })
+        } catch (error) {
+            promise.onError('Gagal menambahkan absensi')
+        }
+    }
+
+    useEffect(() => {
+        if (!abcenceList) fetchAbsence()
+    },[abcenceList, fetchAbsence])
+
+    return <div className='flex flex-col gap-2'>
+        <div className='flex items-center justify-end' onClick={fetchAbsence}>
+            <div className='flex gap-2 items-center bg-secondary p-2 shadow-lg shadow-primary/50 click-animation rounded-lg text-neutral-100 cursor-pointer'>
+                <FontAwesomeIcon icon={faRefresh}/> Segarkan
+            </div>
+        </div>
+        {isLoading && <LoadingSkeleton/>}
+        {fetchError && <span>Gagal mendapatkan data!</span>}
+        {abcenceList?.map(item => <DashboardActionButton item={item} key={item._id}/>) || []}
+        {abcenceList?.length === 0 && <span className='text-center'>Tidak ada absensi</span>}
+        <div className='flex items-center justify-end' onClick={() => setOpenCreateAbsence(true)}>
+            <div className='flex gap-2 items-center bg-primary p-2 shadow-lg shadow-primary/50 click-animation rounded-lg text-neutral-100 cursor-pointer'>
+                <FontAwesomeIcon icon={faPlus}/> Baru
+            </div>
+        </div>
+        <AbsensiEditor isOpen={openCreateAbsence} onClose={() => setOpenCreateAbsence(false)} callBack={createAbsence}/>
+    </div>
+}
+
+function DashboardActionButton({ item }) {
+    const [absensi, setAbsensi] = useState(item)
+    const account = useSelector(state => state.source.account)
+
+    const [openEdit, setOpenEdit] = useState(false)
+    const [showSaveConfirm, setShowSaveConfirm] = useState(false)
+    const [showBuangConfirm, setShowBuangConfirm] = useState(false)
+    const [isOpenMore, setIsOpenMore] = useState(false)
+    const [showUsers, setShowUsers] = useState(false)
+
+    const navigate = useNavigate()
+
+    // const fetchAbsenceStatus = useCallback(async() => {
+    //     const promise = loadingToast('Mengecek status')
+    //     try {
+    //         await axios.get(API + '/absensi/status')
+    //         .then(res => {
+    //             dispatch(setAbsensi(res.data.absensi))
+
+    //             promise.onSuccess(res.data.msg)
+    //         })
+    //         .catch(err => {
+    //             promise.onError(err?.response?.data?.msg || 'internal server error')
+    //             console.log(err)
+    //         })
+    //     } catch (error) {
+            
+    //     }
+    // }, [dispatch])
+
+    // useEffect(() => {
+    //     if (!absensi) fetchAbsenceStatus()
+    // }, [absensi, fetchAbsenceStatus])
+
+    useEffect(() => {
+        setAbsensi(item)
+    },[item])
+
+    async function bukaAbsensi() {
         const promise = loadingToast('Membuka absensi')
         try {
-            await axios.post(API + '/absensi/buka', {openedBy: account.nama, title, note})
+            await axios.post(API + '/absensi/buka/' + absensi?._id, {status: absensi.status})
             .then(res => {
                 promise.onSuccess(res.data.msg)
-                dispatch(setAbsensi(res.data.absensi))
-                dispatch(setUsers())
-                dispatch(setStatus())
-                setOpenAbsensiOption(false)
+                setAbsensi(res.data.absensi)
             }).catch(err => {
                 console.log(err)
                 promise.onError(err.response.data.msg)
@@ -91,16 +214,51 @@ function DashboardActionButton() {
             promise.onError('Internal server error')
         }
     }
+    async function editAbsensi(title, note) {
+        const promise = loadingToast('Mengedit Absensi')
+        try {
+            await axios.put(API + '/absensi/' + absensi?._id, {title, note, openedBy: account?.panggilan || account.nama})
+            .then(res => {
+                promise.onSuccess(res.data.msg)
+                setOpenEdit(false)
+                setAbsensi(res.data.absensi)
+            }).catch(err => {
+                console.log(err)
+                promise.onError(err.response.data.msg)
+            })
+        } catch (error) {
+            console.log(error);
+            promise.onError('Internal server error')
+        }
+    }
+
+    async function saveAbsensi() {
+        const promise = loadingToast('Menutup absensi')
+        try {
+            await axios.post(API + '/absensi/simpan/' + absensi?._id, {status: absensi.status})
+            .then(res => {
+                // promise.onSuccess(`${res.data.msg}, Tidak absen: ${res.data.tidak}, Sudah absen: ${res.data.sudah}`)
+                console.log(res.data)
+                // dispatch(setAbsensi())
+                // dispatch(setUsers())
+                // dispatch(setStatus())
+                setShowSaveConfirm(false)
+                promise.onSuccess('Berhasil menyimpan data')
+            }).catch(err => {
+                promise.onError('Gagal menyimpan data')
+            })
+        } catch (error) {
+            promise.onError('Internal server error')
+        }
+    }
     async function tutupAbsensi() {
         const promise = loadingToast('Menutup absensi')
         try {
-            await axios.post(API + '/absensi/tutup', { closedBy: account?.nama })
+            await axios.post(API + '/absensi/tutup/' + absensi?._id, { closedBy: account?.nama, status: absensi?.status })
             .then(res => {
-                promise.onSuccess(`${res.data.msg}, Tidak absen: ${res.data.tidak}, Belum absen: ${res.data.belum}, Sudah absen: ${res.data.sudah}`)
-                dispatch(setAbsensi())
-                dispatch(setUsers())
-                dispatch(setStatus())
-                setShowTutupConfirm(false)
+                // promise.onSuccess(`${res.data.msg}, Tidak absen: ${res.data.tidak} Sudah absen: ${res.data.sudah}`)
+                promise.onSuccess(res.data.msg)
+                setAbsensi(res.data.absensi)
             })
         } catch (error) {
             promise.onError('Internal server error')
@@ -109,21 +267,30 @@ function DashboardActionButton() {
     async function buangAbsensi() {
         const promise = loadingToast('Membuang absensi')
         try {
-            await axios.post(API + '/absensi/buang', { closedBy: account?.nama })
+            await axios.delete(API + '/absensi/buang/' + absensi?._id)
             .then(res => {
-                promise.onSuccess(`${res.data.msg}, Tidak absen: ${res.data.tidak}, Belum absen: ${res.data.belum}, Sudah absen: ${res.data.sudah}`)
-                dispatch(setAbsensi())
-                dispatch(setUsers())
-                dispatch(setStatus())
+                promise.onSuccess('Absensi berhasil dihapus')
                 setShowBuangConfirm(false)
+                setAbsensi(null)
+            }).catch(err => {
+                promise.onError('Gagal menghapus data')
             })
         } catch (error) {
             promise.onError('Internal server error')
         }
     }
+
+    if (!absensi) return null
     
-    return <div className="flex py-2 gap-2 flex-col shadow-lg p-2 rounded my-2 bg-neutral-200">
+    return <div className="relative flex py-2 gap-2 flex-col shadow-lg p-2 rounded my-2 bg-neutral-200">
+        <div className='absolute top-2 right-2 cursor-pointer click-animation grid items-center px-4 py-2' onClick={() => setIsOpenMore(true)}>
+            <FontAwesomeIcon icon={faEllipsisV}/>
+        </div>
         {absensi && <div className='flex flex-col'>
+            <div className='flex flex-wrap flex-col sm:flex-row'>
+                <p className='sm:w-2/6 font-semibold'>Judul</p>
+                <p>{absensi?.title}</p>
+            </div>
             <div className='flex flex-wrap flex-col sm:flex-row'>
                 <p className='sm:w-2/6 font-semibold'>Status</p>
                 <p>{absensi?.status ? "Buka" : "Tutup"}</p>
@@ -141,67 +308,87 @@ function DashboardActionButton() {
                 <p>{absensi?.note || '-'}</p>
             </div>
         </div>}
-        {absensi?.status ?
-            <>
-            <div className='flex gap-2 justify-end flex-wrap'>
-                <div onClick={() => setShowTutupConfirm(true)} className='flex gap-2 shadow-lg shadow-primary/50 cursor-pointer bg-primary items-center p-2 rounded text-neutral-200 duration-200 ease-in-out active:scale-95'>
-                    <FontAwesomeIcon icon={faClose}/>
-                    <p>Tutup dan simpan</p>
+        <div className='flex gap-2 justify-end flex-wrap'>
+            <div className='flex gap-2 shadow-lg shadow-primary/50 cursor-pointer text-primary items-center p-2 rounded border-primary border-2 border-solid click-animation' onClick={() => setShowSaveConfirm(true)}>
+                <FontAwesomeIcon icon={faFloppyDisk}/>
+                <p>Simpan</p>
+            </div>
+            {absensi?.status ?
+                <>
+                    <div onClick={tutupAbsensi} className='flex gap-2 bg-primary shadow-lg shadow-primary/50 cursor-pointer items-center p-2 rounded text-neutral-200 click-animation'>
+                        <FontAwesomeIcon icon={faDoorClosed}/>
+                        <p>Tutup</p>
+                    </div>
+                </>
+                :
+                <>
+                <div onClick={bukaAbsensi} className='flex flex-1 justify-center gap-2 shadow-lg shadow-primary/50 cursor-pointer bg-primary items-center p-2 rounded text-neutral-200 click-animation'>
+                    <FontAwesomeIcon icon={faBoxOpen}/>
+                    <p>Buka</p>
                 </div>
-                <div onClick={() => setShowBuangConfirm(true)} className='flex gap-2 border-2 border-primary shadow-lg shadow-primary/50 cursor-pointer bg-transparent items-center p-2 rounded text-primary duration-200 ease-in-out active:scale-95'>
-                    <FontAwesomeIcon icon={faTrash}/>
-                    <p>Tutup dan Buang</p>
-                </div>
-            </div>
-            </>
-            :
-            <>
-            <div onClick={() => setOpenAbsensiOption(true)} className='flex gap-2 shadow-lg shadow-primary/50 cursor-pointer bg-primary items-center p-2 rounded text-neutral-200 duration-200 ease-in-out active:scale-95'>
-                <FontAwesomeIcon icon={faBoxOpen}/>
-                <p>Buka</p>
-            </div>
-            <AbsensiTitle isOpen={openAbsensiOption} onClose={() => setOpenAbsensiOption(false)} callBack={bukaAbsensi}/>
-            </>
-        }
-        <Confirm isOpen={showTutupConfirm} title='Tutup dan simpan' subTitle='Menutup absensi dan menyimpannya sekarang?' onClose={() => setShowTutupConfirm(false)} callBack={tutupAbsensi} textConfirm='Simpan'/>
-        <Confirm isOpen={showBuangConfirm} title='Tutup dan Buang' subTitle='Menutup absensi dan membuang perubahan absensi setiap pengguna?' onClose={() => setShowBuangConfirm(false)} callBack={buangAbsensi} textConfirm='Buang'/>
-    </div>
-}
-
-function AbsensiTitle({isOpen, onClose, callBack}) {
-    const [inputTitle, setInputTitle] = useState('Dzhuhur')
-    const inputRef = useRef(null);
-    const [showNote, setShowNote] = useState(false)
-    const [inputNote, setInputNote] = useState('')
-
-    function handleInput(e) {
-        setInputTitle(e.target.value)
-    }
-
-    useEffect(() => {
-        if (isOpen) {
-            if (!inputTitle) setInputTitle('Dzhuhur')
-            inputRef.current.focus();
-            inputRef.current.select()
-        }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [isOpen])
-
-    function handleCallback() {
-        callBack(inputTitle, inputNote)
-    }
-
-    return <Modal isOpen={isOpen} onClose={onClose}>
-        <div className='text-neutral-500 flex flex-col gap-2 p-2'>
-            <div className='flex flex-col'>
-                <p className='flex-1'>Ketik judul absensi</p>
-                <input ref={inputRef} type="text" placeholder='Bawaan: Dzuhur' className='shadow-lg shadow-primary/50 border-secondary rounded focus:ring-primary' onChange={handleInput} value={inputTitle} maxLength={20}/>
-                <p className='flex-1 mt-2 duration-200 ease-in-out active:scale-95 cursor-pointer' onClick={() => setShowNote(prev => !prev)}>Tambahkan catatan <FontAwesomeIcon icon={showNote ? faChevronDown : faChevronRight}/></p>
-                {showNote && <textarea className='shadow-lg shadow-primary/50 border-secondary rounded focus:ring-primary' placeholder='Ketik catatan' onChange={e => setInputNote(e.target.value)}/>}
-            </div>
-            <div onClick={handleCallback} className={`flex-1 bg-secondary shadow-lg shadow-secondary/50 text-neutral-200 p-2 duration-200 ease-in-out active:scale-95 rounded flex justify-center shadow cursor-pointer hover:shadow-xl duration-300 hover:-translate-y-1`}>
-                <span>Buka absensi</span>
-            </div>
+                </>
+            }
         </div>
-    </Modal>
+        <Modal isOpen={isOpenMore} onClose={() => setIsOpenMore(false)}>
+            <div className='flex flex-col gap-2'>
+                <div className='flex gap-2 items-center click-animation cursor-pointer p-2 hover:bg-tertiary rounded' onClick={() => navigate(`/admin/server/detail?q=${absensi._id}`)}>
+                    <FontAwesomeIcon icon={faExternalLink}/> Detail
+                </div>
+                <div className='flex gap-2 items-center click-animation cursor-pointer p-2 hover:bg-tertiary rounded' onClick={() => {
+                    navigator.clipboard.writeText(window.location.origin + '/absen?q=' + absensi?._id)
+                    blankToast('Link disimpan di papan klip')
+                    setIsOpenMore(false)
+                }}>
+                    <FontAwesomeIcon icon={faLink}/> Salin link Absensi
+                </div>
+                <div className='flex gap-2 items-center click-animation cursor-pointer p-2 hover:bg-tertiary rounded' onClick={() => {
+                    setShowUsers(true)
+                    setIsOpenMore(false)
+                    }}>
+                    <FontAwesomeIcon icon={faTable}/> Peserta
+                </div>
+                <div className='flex gap-2 items-center click-animation cursor-pointer p-2 hover:bg-tertiary rounded' onClick={() => {
+                    setOpenEdit(true)
+                    setIsOpenMore(false)
+                }}>
+                    <FontAwesomeIcon icon={faPenToSquare}/> Edit
+                </div>
+                <div className='flex gap-2 items-center click-animation cursor-pointer p-2 hover:bg-tertiary rounded' onClick={() => {
+                    setIsOpenMore(false)
+                    setShowBuangConfirm(true)
+                }}>
+                    <FontAwesomeIcon icon={faTrash}/> Buang
+                </div>
+            </div>
+        </Modal>
+        <Confirm isOpen={showSaveConfirm} title='Tutup dan simpan' subTitle={`Menutup absensi ${absensi?.title} dan menyimpannya sekarang?`} onClose={() => setShowSaveConfirm(false)} callBack={saveAbsensi} textConfirm='Simpan'/>
+        {/* <Confirm isOpen={showSaveConfirm} title='Tutup dan simpan' subTitle='Menutup absensi dan menyimpannya sekarang?' onClose={() => setShowSaveConfirm(false)} callBack={tutupAbsensi} textConfirm='Simpan'/> */}
+        <Confirm isOpen={showBuangConfirm} title='Buang' subTitle={`Menutup absensi ${absensi?.title} dan membuang perubahan absensi?`} onClose={() => setShowBuangConfirm(false)} callBack={buangAbsensi} textConfirm='Buang'/>
+        <AbsensiEditor isOpen={openEdit} onClose={() => setOpenEdit(false)} callBack={editAbsensi} submitText='Simpan' title={absensi?.title} note={absensi?.note}/>
+        <Modal isOpen={showUsers} onClose={() => setShowUsers(false)}>
+            <div className="flex flex-col p-2">
+                <div className='flex flex-wrap flex-col sm:flex-row'>
+                    <p className='sm:w-2/6 font-semibold'>Judul</p>
+                    <p>{absensi?.title}</p>
+                </div>
+                <div className='flex flex-wrap flex-col sm:flex-row'>
+                    <p className='sm:w-2/6 font-semibold'>Status</p>
+                    <p>{absensi?.status ? "Buka" : "Tutup"}</p>
+                </div>
+                <div className='flex flex-wrap flex-col sm:flex-row'>
+                    <p className='sm:w-2/6 font-semibold'>{absensi?.status ? 'Dibuka oleh': 'Ditutup oleh'}</p>
+                    <p>{absensi?.openedBy || 'Anon'}</p>
+                </div>
+                <div className='flex flex-wrap flex-col sm:flex-row'>
+                    <p className='sm:w-2/6 font-semibold'>Pada</p>
+                    <p>{formatBeautyDate(absensi?.date)}</p>
+                </div>
+                <div className='flex flex-wrap flex-col sm:flex-row'>
+                    <p className='sm:w-2/6 font-semibold'>Catatan</p>
+                    <p>{absensi?.note || '-'}</p>
+                </div>
+            </div>
+            <UsersList users={absensi?.users}/>
+        </Modal>
+    </div>
 }

@@ -17,6 +17,15 @@ body {
 .font-montserrat {
     font-family: 'Montserrat', sans-serif;
 }
+/* utility */
+/* click-animation */
+.click-animation {
+    transition-duration: 200ms;
+    transition-timing-function: ease-in-out;
+}
+.click-animation:active {
+    scale: .95;
+}
 /* kode Tailwind */
 @tailwind base;
 @tailwind components;

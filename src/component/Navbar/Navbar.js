@@ -25,18 +25,18 @@ export default function Navbar() {
         <div className="flex justify-between w-full text-neutral-200">
             <div className="flex gap-2">
                 <Link to={'/absen'}>
-                <div className={`${routeName === 'ABSEN' ? 'border-tertiary' : 'border-transparent'} h-full flex place-items-center pointer border-b-2 border-solid duration-200 ease-in-out active:scale-95`}>
+                <div className={`${routeName === 'ABSEN' ? 'border-tertiary' : 'border-transparent'} h-full flex place-items-center pointer border-b-2 border-solid click-animation`}>
                     <span>Absen</span>
                 </div>
                 </Link>
                 <Link to={'/dashboard'}>
-                <div className={`${routeName === 'DASHBOARD' && !isAdminRoute ? 'border-tertiary' : 'border-transparent'} h-full flex place-items-center pointer border-b-2 border-solid duration-200 ease-in-out active:scale-95`}>
+                <div className={`${routeName === 'DASHBOARD' && !isAdminRoute ? 'border-tertiary' : 'border-transparent'} h-full flex place-items-center pointer border-b-2 border-solid click-animation`}>
                     <span>Dashboard</span>
                 </div>
                 </Link>
                 {permission && 
                     <Link to={'/admin/server'}>
-                        <div className={`${isAdminRoute ? 'border-tertiary' : 'border-transparent'} h-full flex place-items-center pointer border-b-2 border-solid duration-200 ease-in-out active:scale-95`}>
+                        <div className={`${isAdminRoute ? 'border-tertiary' : 'border-transparent'} h-full flex place-items-center pointer border-b-2 border-solid click-animation`}>
                             <span>Admin</span>
                         </div>
                     </Link>
@@ -45,7 +45,7 @@ export default function Navbar() {
             <div className="flex gap-2">
                 <Link to={'/akun'}>
                     <div className="h-full flex place-items-center pointer">
-                        {akun ? <img src={akun?.avatar} alt={akun?.nickname || akun?.nama} referrerPolicy="no-referrer" className="w-[32px] h-[32px] rounded-full shadow duration-200 ease-in-out active:scale-95"/>: <span className="duration-200 ease-in-out active:scale-95">Akun</span>}
+                        {akun ? <img src={akun?.avatar} alt={akun?.nickname || akun?.nama} referrerPolicy="no-referrer" className="w-[32px] h-[32px] rounded-full shadow click-animation"/>: <span className="click-animation">Akun</span>}
                     </div>
                 </Link>
             </div>

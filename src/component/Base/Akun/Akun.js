@@ -29,7 +29,7 @@ export default function Akun() {
             <hr />
             <div className='mt-2 items-center flex gap-2 flex-wrap'>
                 {account.email ? <p>{account.email}</p> : <TautkanDenganGoogle/>}
-                <div className='flex gap-2 rounded p-2 px-3 items-center bg-neutral-200 text-neutral-600 cursor-pointer shadow duration-200 ease-in-out active:scale-95' onClick={keluar}>
+                <div className='flex gap-2 rounded p-2 px-3 items-center bg-neutral-200 text-neutral-600 cursor-pointer shadow click-animation' onClick={keluar}>
                     <FontAwesomeIcon icon={faArrowRightFromBracket}/>
                     <span>keluar</span>
                 </div>

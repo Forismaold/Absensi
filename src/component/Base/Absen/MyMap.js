@@ -30,7 +30,7 @@ export default function MyMap() {
         <div className='flex flex-col gap-2'>
             <div className='flex flex-col bg-neutral-300/50 rounded-xl overflow-hidden'>
                 <div className='flex gap-2 p-2 rounded-lg text-neutral-500'>
-                    <button className='flex flex-1 items-center duration-200 ease-in-out active:scale-95 justify-between px-2' onClick={() => dispatch(toggleShowMap())}>
+                    <button className='flex flex-1 items-center click-animation justify-between px-2' onClick={() => dispatch(toggleShowMap())}>
                         <div className='flex items-center gap-2'>
                             <FontAwesomeIcon icon={faMap}/>
                             <span>Peta</span> 

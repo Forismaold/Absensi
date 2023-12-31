@@ -46,8 +46,8 @@ export default function RiwayatRow({data}) {
                 <p className='ml-auto'>{formatDate(data.date)}</p>
             </div>
             <div className='flex gap-2 self-end'>
-                <FontAwesomeIcon icon={faFilter} className='shadow p-2 rounded bg-primary text-quaternary cursor-pointer duration-200 ease-in-out active:scale-95' onClick={() => setShowSearch(true)}/>
-                <FontAwesomeIcon icon={faEllipsis} className='shadow p-2 rounded text-neutral-600 cursor-pointer duration-200 ease-in-out active:scale-95 self-end' onClick={() => setShowOption(true)}/>
+                <FontAwesomeIcon icon={faFilter} className='shadow p-2 rounded bg-primary text-quaternary cursor-pointer click-animation' onClick={() => setShowSearch(true)}/>
+                <FontAwesomeIcon icon={faEllipsis} className='shadow p-2 rounded text-neutral-600 cursor-pointer click-animation self-end' onClick={() => setShowOption(true)}/>
             </div>
         </div>
         <div className='flex gap-2'>
@@ -164,7 +164,7 @@ function SearchUser({isOpen, onClose, users = [], title, date}) {
                     <span>-</span>
                     <input className='p-2 rounded-x shadow' type="number" value={nomorKelas} onChange={(e) => setNomorKelas(e.target.value)} placeholder='nomor kelas' autoComplete='off' min='0' max='9'/>
                 </>}
-                <FontAwesomeIcon onClick={handleSearch} icon={faSearch} className='rounded text-neutral-100 bg-secondary p-3 shadow-lg shadow-primary/50 duration-200 ease-in-out active:scale-95 cursor-pointer'/>
+                <FontAwesomeIcon onClick={handleSearch} icon={faSearch} className='rounded text-neutral-100 bg-secondary p-3 shadow-lg shadow-primary/50 click-animation cursor-pointer'/>
             </div>
             <div className='flex flex-wrap gap-2'>
                 {result.map(user => <span key={user._id} className={`p-2 rounded-xl ${user.absen ? 'bg-secondary text-neutral-200' : 'bg-neutral-300 text-neutral-700'}`}>{user.kelas}-{user.nomorKelas} {user.nama}</span>)}

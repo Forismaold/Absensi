@@ -100,7 +100,7 @@ function RegisterForm() {
             <p>Kata sandi</p>
             <input className='p-2 rounded shadow w-full' type="password" value={password} onChange={e => setPassword(e.target.value)} placeholder='Kata sandi' autoComplete='off' required/>
             <input className='p-2 rounded shadow w-full' type="password" value={confirmPassword} onChange={e => setConfirmPassword(e.target.value)} placeholder='Konfirmasi kata sandi' autoComplete='off' required/>
-            <div className='flex gap-2 text-neutral-700 items-center font-mediumm justify-between duration-200 ease-in-out active:scale-95 cursor-pointer' onClick={() => setShowOptionalInput(prev => !prev)}>
+            <div className='flex gap-2 text-neutral-700 items-center font-mediumm justify-between click-animation cursor-pointer' onClick={() => setShowOptionalInput(prev => !prev)}>
                 <div className='flex gap-2 items-center'>
                     <FontAwesomeIcon icon={faEllipsisH}/>
                     <p>Opsional</p>
@@ -121,7 +121,7 @@ function RegisterForm() {
             <div className='max-w-full overflow-auto'>
                 <ReCAPTCHA sitekey={process.env.REACT_APP_RECAPTCHA_SITE} onChange={onChange}/>
             </div>
-            <button type='submit' className={`text-center rounded ${isRecaptchaVerified ? 'bg-primary' : 'bg-tertiary'} text-neutral-200 shadow-md shadow-primary/50 p-2 duration-200 ease-in-out active:scale-95`}>Submit</button>
+            <button type='submit' className={`text-center rounded ${isRecaptchaVerified ? 'bg-primary' : 'bg-tertiary'} text-neutral-200 shadow-md shadow-primary/50 p-2 click-animation`}>Submit</button>
         </form>
     </div>
 }

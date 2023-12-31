@@ -36,7 +36,7 @@ export default function Dahsboard() {
 
     return <div className='flex flex-col'>
         <p>Ini halaman dashboard</p>
-        <button className='flex gap-2 items-center self-end justify-center rounded text-neutral-100 bg-secondary p-2 shadow-lg shadow-primary/50 duration-200 ease-in-out active:scale-95' onClick={() => fetchRiwayats()}><FontAwesomeIcon icon={faRotate}/> <span>Segarkan</span></button>
+        <button className='flex gap-2 items-center self-end justify-center rounded text-neutral-100 bg-secondary p-2 shadow-lg shadow-primary/50 click-animation' onClick={() => fetchRiwayats()}><FontAwesomeIcon icon={faRotate}/> <span>Segarkan</span></button>
         <div className="flex flex-col gap-2 pt-2">
             {riwayats?.map(x => <RiwayatRow data={x} key={x._id}/>)}
         </div>
