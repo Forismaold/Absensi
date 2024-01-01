@@ -6,16 +6,15 @@ import { blankToast, loadingToast } from "../../utils/myToast"
 import axios from "axios"
 import { API, isUserWithinBounds } from "../../../utils"
 import LoadingIcon from '../../utils/LoadingIcon'
-import { setIsWatchPosition, setShowAbsenceForm, setStatus, toggleShowMap } from '../../../redux/source'
+import { setIsWatchPosition, setShowAbsenceForm, setShowMap } from '../../../redux/source'
 import Modal from '../../utils/Modal'
 
-export default function SubmitAbsenceForm() {
-    const firstCoordinate = useSelector(state => state.coordinates.first)
-    const secondCoordinate = useSelector(state => state.coordinates.second)
+export default function SubmitAbsenceForm({absensi, setAbsensi}) {
     const userCoordinate = useSelector(state => state.coordinates.user)
 
-    const status = useSelector(state => state.source.status)
-    const absensi = useSelector(state => state.source.absensi)
+    // const status = useSelector(state => state.source.status)
+    const [status, setStatus] = useState(false)
+    // const absensi = useSelector(state => state.source.absensi)
     const account = useSelector(state => state.source.account)
     const showAbsenceForm = useSelector(state => state.source.showAbsenceForm)
 
@@ -52,10 +51,11 @@ export default function SubmitAbsenceForm() {
                 promise.onSuccess(res.data.msg)
                 handleTidakHadir()
                 setIsLoading(false)
-                dispatch(setStatus(res.data.status))
+                // dispatch(setStatus(res.data.status))
                 setShowForceNext(false)
-                dispatch(setShowAbsenceForm(false))
-                dispatch(toggleShowMap(false))
+                // dispatch(setShowAbsenceForm(false))
+                // dispatch(toggleShowMap(false))
+                setAbsensi(res.data.data)
             }).catch(err => {
                 setIsLoading(false)
                 promise.onError(err.response.data.msg)
@@ -69,36 +69,40 @@ export default function SubmitAbsenceForm() {
     async function handleButtonHadir() {
         if (!userCoordinate) return blankToast('Koordinat kamu belum ditetapkan')
 
-        const inArea = (userCoordinate[0] >= firstCoordinate[0] && userCoordinate[0] <= secondCoordinate[0]) && (userCoordinate[1] >= firstCoordinate[1] && userCoordinate[1] <= secondCoordinate[1])
-
-        
-        if (!inArea) {
-            return setShowForceNext(true)
-        }
+        // const inArea = (userCoordinate[0] >= firstCoordinate[0] && userCoordinate[0] <= secondCoordinate[0]) && (userCoordinate[1] >= firstCoordinate[1] && userCoordinate[1] <= secondCoordinate[1])
+        const inArea = isUserWithinBounds(userCoordinate)
+        if (!inArea) return setShowForceNext(true)
 
         handleHadir()
     }
     const handleHadir = useCallback(async () => {
-        const dataToSend = {
-            _id: account._id,
-            userCoordinate
-        }
-
         if (!userCoordinate) return blankToast('Koordinat kamu belum ditetapkan')
 
-        if (!(userCoordinate[0] >= firstCoordinate[0] && userCoordinate[0] <= secondCoordinate[0]) &&(userCoordinate[1] >= firstCoordinate[1] && userCoordinate[1] <= secondCoordinate[1])) blankToast('Kamu berada diluar area, pengiriman tetap dilanjutkan')
+        setShowForceNext(false)
+        const dataToSend = {
+            _id: account._id,
+            userCoordinate,
+            nama: account.nama,
+            kelas: account.kelas,
+            nomorKelas: account.nomorKelas,
+            nomorAbsen: account.nomorAbsen,
+            status
+        }
 
         const promise = loadingToast('Mengirim...')
         setIsLoading(true)
+
+        if (!isUserWithinBounds(userCoordinate)) blankToast('Kamu berada diluar area, pengiriman tetap dilanjutkan')
+
         try {
-            await axios.post(API + '/absen/hadir', dataToSend)
+            await axios.post(API + '/absen/hadir/' + absensi?._id, dataToSend)
             .then(res => {
-                dispatch(setStatus(res.data.status))
+                // dispatch(setStatus(res.data.status))
                 promise.onSuccess(res.data.msg)
                 setIsLoading(false)
-                setShowForceNext(false)
                 dispatch(setShowAbsenceForm(false))
-                dispatch(toggleShowMap(false))
+                dispatch(setShowMap(false))
+                setAbsensi(res.data.data)
             }).catch(err => {
                 promise.onError(err.response.data.msg)
                 throw new Error(err)
@@ -107,7 +111,12 @@ export default function SubmitAbsenceForm() {
             setIsLoading(false)
             promise.onError('Server error')
         }
-    }, [account, dispatch, firstCoordinate, secondCoordinate, userCoordinate])
+    }, [absensi, account, dispatch, setAbsensi, userCoordinate, status])
+
+    useEffect(() => {
+        const userStatus = absensi?.users?.find(item => item._id === account._id)
+        setStatus(userStatus || null)
+    },[absensi, account._id])
 
     useEffect(() => {
         // console.log(status?.absen === null, absensi?.status === true, isUserWithinBounds(userCoordinate), Boolean(userCoordinate));
@@ -119,9 +128,9 @@ export default function SubmitAbsenceForm() {
         }
     }, [absensi?.status, dispatch, handleHadir, isLoading, showAbsenceForm, status, userCoordinate])
 
-    if (!account) return
-
-    if (showAbsenceForm || (status?.absen === null && absensi?.status === true)) return <div className='flex flex-col rounded-xl'>
+    if (!account || !absensi) return
+    
+    if (showAbsenceForm || (status === null && absensi?.status === true)) return <div className='flex flex-col rounded-xl'>
         <div className='bg-secondary text-neutral-100 rounded-xl p-4 flex flex-col gap-2 shadow-lg shadow-primary/50'>
             <p>Kirim sebagai {account?.panggilan || account?.nama}</p>
             <div className='flex gap-2'>
@@ -159,7 +168,7 @@ export default function SubmitAbsenceForm() {
                         {isLoading ? <LoadingIcon/> : <span>Kirim</span>}
                     </div>
                 }
-                {showforceNext && <ForceNext isOpen={showforceNext} onClose={() => setShowForceNext(false)} callBack={handleHadir}/>}
+                <ForceNext isOpen={showforceNext} onClose={() => setShowForceNext(false)} callBack={handleHadir}/>
             </div>
         </div>
     </div>

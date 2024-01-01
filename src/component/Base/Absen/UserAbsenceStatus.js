@@ -1,61 +1,86 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faCheck, faCheckDouble, faDoorClosed, faDoorOpen, faRotate, faXmark } from '@fortawesome/free-solid-svg-icons'
+import { faCheck, faCheckDouble, faDoorClosed, faDoorOpen, faRefresh, faXmark } from '@fortawesome/free-solid-svg-icons'
 import { useCallback, useEffect, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import axios from "axios"
 import { API, formatBeautyDate, formatTime, isUserWithinBounds } from "../../../utils"
-import LoadingIcon from '../../utils/LoadingIcon'
-import { setAbsensi, setStatus, toggleShowAbsenceForm } from '../../../redux/source'
+import { toggleShowAbsenceForm } from '../../../redux/source'
 import SubmitAbsenceForm from './SubmitAbsenceForm'
+import { useParams } from 'react-router-dom'
 
 export default function UserAbsenceStatus() {
     const account = useSelector(state => state.source.account)
-    const status = useSelector(state => state.source.status)
+    // const status = useSelector(state => state.source.status)
+    const [absensi, setAbsensi] = useState(null)
 
     const [isFetchLoading, setIsFetchLoading] = useState(false)
 
-    const dispatch = useDispatch()
+    // const dispatch = useDispatch()
+    const param = useParams()
 
-    const fetchStatus = useCallback(async () => {
+    // const fetchStatus = useCallback(async () => {
+    //     setIsFetchLoading(true)
+    //     try {
+    //         await axios.get(API + '/absen/status/' + account?._id)
+    //         .then(res => {
+    //             dispatch(setStatus(res.data.status))
+    //             dispatch(setAbsensi(res.data.absensi))
+    //             setIsFetchLoading(false)
+    //         })
+    //         .catch(err => {
+    //             setIsFetchLoading(false)
+    //             console.log(err)
+    //         })
+    //     } catch (error) {
+    //         setIsFetchLoading(false)
+    //         console.log(error);
+    //     }
+    // },[account, dispatch])
+
+    // useEffect(() => {
+    //     if (!status) fetchStatus()
+    // },[account, fetchStatus, status])
+
+    // const absensi = useSelector(state => state.source.absensi)
+
+    const fetchData = useCallback(async () => {
         setIsFetchLoading(true)
         try {
-            await axios.get(API + '/absen/status/' + account?._id)
+            await axios.get(API + '/absensi/' + param.absenceId)
             .then(res => {
-                dispatch(setStatus(res.data.status))
-                dispatch(setAbsensi(res.data.absensi))
-                setIsFetchLoading(false)
-            })
-            .catch(err => {
-                setIsFetchLoading(false)
-                console.log(err)
+                console.log(res.data.data);
+                setAbsensi(res.data.data)
             })
         } catch (error) {
+            
+        } finally {
             setIsFetchLoading(false)
-            console.log(error);
         }
-    },[account, dispatch])
-
+    },[param.absenceId])
     useEffect(() => {
-        if (!status) fetchStatus()
-    },[account, fetchStatus, status])
+        if (!absensi) fetchData()
+    },[absensi, fetchData])
 
-    const absensi = useSelector(state => state.source.absensi)
+    // if (!absensi === null) return <div>
+    //     <button className='flex ml-auto items-center justify-center rounded text-neutral-100 bg-secondary p-2 shadow-lg shadow-primary/50 click-animation' onClick={() => fetchStatus()}>{isFetchLoading ? <LoadingIcon/> : <><FontAwesomeIcon icon={faRotate} className='p-0.5 pr-2'/> Segarkan status absensi</>}</button>
+    // </div>
 
-    if (absensi === null) return <div>
-        <button className='flex ml-auto items-center justify-center rounded text-neutral-100 bg-secondary p-2 shadow-lg shadow-primary/50 click-animation' onClick={() => fetchStatus()}>{isFetchLoading ? <LoadingIcon/> : <><FontAwesomeIcon icon={faRotate} className='p-0.5 pr-2'/> Segarkan status absensi</>}</button>
-    </div>
+    if (!absensi === null) return null
 
     return <>
-        <StatusDate/>
-        <StatusUser/> 
-        <StatusServer/>
-        <SubmitAbsenceForm/>
+        <div className='flex items-center justify-end' onClick={fetchData}>
+            <div className='flex gap-2 items-center bg-secondary p-2 shadow-lg shadow-primary/50 click-animation rounded-lg text-neutral-100 cursor-pointer'>
+                <FontAwesomeIcon icon={faRefresh} className={`${isFetchLoading && 'animate-spin'}`}/> Segarkan Absensi
+            </div>
+        </div>
+        <StatusDate absensi={absensi}/>
+        <StatusUser status={absensi?.users.find(item => item._id === account._id)}/> 
+        {/* <StatusServer absensi={absensi}/> */}
+        <SubmitAbsenceForm absensi={absensi} setAbsensi={setAbsensi}/>
     </>
 }
 
-function StatusDate() {
-    const absensi = useSelector(state => state.source.absensi)
-
+function StatusDate({ absensi }) {
     if (!absensi) return null
 
     return <div className='flex items-center gap-2 px-2'>
@@ -69,14 +94,13 @@ function StatusDate() {
     </div>
 }
 
-function StatusUser() {
+function StatusUser({ status }) {
     const account = useSelector(state => state.source.account)
-    const status = useSelector(state => state.source.status)
     const showAbsenceForm = useSelector(state => state.source.showAbsenceForm)
 
     const dispatch = useDispatch()
 
-    if (status?.absen === null || !account) return null
+    if (!status|| !account) return null
 
     return <>    
     <div className='bg-secondary shadow-lg shadow-primary/50 text-neutral-100 rounded p-4 flex gap-2 items-center relative'>
@@ -105,44 +129,43 @@ function StatusUser() {
     </>
 }
 
-function StatusServer() {
-    const absensi = useSelector(state => state.source.absensi)
-    const account = useSelector(state => state.source.account)
-    const status = useSelector(state => state.source.status)
+// function StatusServer({ absensi }) {
+//     const account = useSelector(state => state.source.account)
+//     const status = useSelector(state => state.source.status)
 
-    const dispatch = useDispatch()
-    const [fetchLoading, setIsFetchLoading] = useState(false)
+//     const dispatch = useDispatch()
+//     const [fetchLoading, setIsFetchLoading] = useState(false)
 
-    const fetchStatus = useCallback(async () => {
-        setIsFetchLoading(true)
-        try {
-            await axios.get(API + '/absen/status/' + account._id)
-            .then(res => {
-                dispatch(setStatus(res.data.status))
-                dispatch(setAbsensi(res.data.absensi))
-                setIsFetchLoading(false)
-            })
-            .catch(err => {
-                setIsFetchLoading(false)
-                console.log(err)
-            })
-        } catch (error) {
-            setIsFetchLoading(false)
-            console.log(error);
-        }
-    },[account, dispatch])
+//     const fetchStatus = useCallback(async () => {
+//         setIsFetchLoading(true)
+//         try {
+//             await axios.get(API + '/absen/status/' + account._id)
+//             .then(res => {
+//                 dispatch(setStatus(res.data.status))
+//                 dispatch(setAbsensi(res.data.absensi))
+//                 setIsFetchLoading(false)
+//             })
+//             .catch(err => {
+//                 setIsFetchLoading(false)
+//                 console.log(err)
+//             })
+//         } catch (error) {
+//             setIsFetchLoading(false)
+//             console.log(error);
+//         }
+//     },[account, dispatch])
 
-    useEffect(() => {
-        if (!status && account) fetchStatus()
-    },[account, fetchStatus, status])
+//     useEffect(() => {
+//         if (!status && account) fetchStatus()
+//     },[account, fetchStatus, status])
 
-    if (absensi?.status === true) return
+//     if (absensi?.status === true) return
 
-    return <div className='bg-neutral-300 shadow-lg shadow-primary/50 text-neutral-500 rounded-xl p-4 flex gap-2 items-center relative'>
-        {!absensi ? <p>Periksa internet kamu</p> : <p>Absensi belum dibuka</p>}
-        <button className='flex ml-auto items-center justify-center rounded text-neutral-100 bg-secondary p-2 shadow-lg shadow-primary/50 click-animation' onClick={() => fetchStatus()}>{fetchLoading ? <LoadingIcon/> :<FontAwesomeIcon icon={faRotate} className='p-0.5'/>}</button>
-    </div>
-}
+//     return <div className='bg-neutral-300 shadow-lg shadow-primary/50 text-neutral-500 rounded-xl p-4 flex gap-2 items-center relative'>
+//         {!absensi ? <p>Periksa internet kamu</p> : <p>Absensi belum dibuka</p>}
+//         <button className='flex ml-auto items-center justify-center rounded text-neutral-100 bg-secondary p-2 shadow-lg shadow-primary/50 click-animation' onClick={() => fetchStatus()}>{fetchLoading ? <LoadingIcon/> :<FontAwesomeIcon icon={faRotate} className='p-0.5'/>}</button>
+//     </div>
+// }
 
 function AbsenceCell({prop, value}) {
     return <div className='flex flex-col sm:flex-row border-b-[1px] border-solid border-neutral-300 last:border-transparent py-2'>

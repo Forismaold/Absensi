@@ -43,8 +43,11 @@ const source = createSlice({
         },
         toggleShowMap: (state, action) => {
             state.showMap = action.payload || !state.showMap
+        },
+        setShowMap: (state, action) => {
+            state.showMap = action.payload
         }
     }
 })
-export const { setAccount, refreshAccount, setStatus, setRiwayats, setAbsensi, setAdminRiwayats, toggleShowAbsenceForm, setIsWatchPosition, toggleShowMap, setShowAbsenceForm } = source.actions
+export const { setAccount, refreshAccount, setStatus, setRiwayats, setAbsensi, setAdminRiwayats, toggleShowAbsenceForm, setIsWatchPosition, toggleShowMap, setShowAbsenceForm, setShowMap } = source.actions
 export default source.reducer
