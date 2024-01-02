@@ -1,12 +1,13 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faCheck, faCheckDouble, faDoorClosed, faDoorOpen, faRefresh, faXmark } from '@fortawesome/free-solid-svg-icons'
+import { faCheck, faCheckDouble, faRefresh, faXmark } from '@fortawesome/free-solid-svg-icons'
 import { useCallback, useEffect, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import axios from "axios"
-import { API, formatBeautyDate, formatTime, isUserWithinBounds } from "../../../utils"
+import { API, formatTime, isUserWithinBounds } from "../../../utils"
 import { toggleShowAbsenceForm } from '../../../redux/source'
 import SubmitAbsenceForm from './SubmitAbsenceForm'
 import { useParams } from 'react-router-dom'
+import Note from './Note'
 
 export default function UserAbsenceStatus() {
     const account = useSelector(state => state.source.account)
@@ -73,25 +74,11 @@ export default function UserAbsenceStatus() {
                 <FontAwesomeIcon icon={faRefresh} className={`${isFetchLoading && 'animate-spin'}`}/> Segarkan Absensi
             </div>
         </div>
-        <StatusDate absensi={absensi}/>
-        <StatusUser status={absensi?.users.find(item => item._id === account._id)}/> 
+        <Note absensi={absensi}/>
+        <StatusUser status={absensi?.users?.find(item => item._id === account._id)}/> 
         {/* <StatusServer absensi={absensi}/> */}
         <SubmitAbsenceForm absensi={absensi} setAbsensi={setAbsensi}/>
     </>
-}
-
-function StatusDate({ absensi }) {
-    if (!absensi) return null
-
-    return <div className='flex items-center gap-2 px-2'>
-        <FontAwesomeIcon icon={absensi?.status ? faDoorOpen : faDoorClosed}/>
-        {absensi?.status ?
-            <p>{absensi?.title} dibuka sejak</p>
-            :
-            <p>Terakhir ditutup</p>
-        }
-        <span className='ml-auto'>{formatBeautyDate(absensi?.date)}</span>
-    </div>
 }
 
 function StatusUser({ status }) {

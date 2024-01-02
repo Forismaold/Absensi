@@ -1,6 +1,5 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faExternalLink, faRefresh } from '@fortawesome/free-solid-svg-icons'
-import Note from './Note'
 import UserAbsenceStatus from './UserAbsenceStatus'
 import MyMap from './MyMap'
 import { useCallback, useEffect, useState } from 'react'
@@ -77,6 +76,5 @@ function DetailAbsen() {
     return <div className='flex flex-col gap-2'>
         <MyMap/>
         <UserAbsenceStatus/>
-        <Note/>
     </div>
 }

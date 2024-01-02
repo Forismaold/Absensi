@@ -39,9 +39,14 @@ export default function SubmitAbsenceForm({absensi, setAbsensi}) {
         e.preventDefault()
         const dataToSend = {
             _id: account._id,
+            nama: account.nama,
+            kelas: account.kelas,
+            nomorKelas: account.nomorKelas,
+            nomorAbsen: account.nomorAbsen,
+            status,
             kode,
             keterangan,
-            userCoordinate
+            userCoordinate,
         }
         const promise = loadingToast('Mengirim keterangan tidak hadir')
         setIsLoading(true)
