@@ -51,7 +51,7 @@ export default function SubmitAbsenceForm({absensi, setAbsensi}) {
         const promise = loadingToast('Mengirim keterangan tidak hadir')
         setIsLoading(true)
         try {
-            await axios.post(API + '/absen/tidakHadir', dataToSend)
+            await axios.post(API + '/absen/tidakHadir/' + absensi?._id, dataToSend)
             .then(res => {
                 promise.onSuccess(res.data.msg)
                 handleTidakHadir()
@@ -108,6 +108,7 @@ export default function SubmitAbsenceForm({absensi, setAbsensi}) {
                 dispatch(setShowAbsenceForm(false))
                 dispatch(setShowMap(false))
                 setAbsensi(res.data.data)
+                console.log(res.data)
             }).catch(err => {
                 promise.onError(err.response.data.msg)
                 throw new Error(err)

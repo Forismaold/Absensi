@@ -51,6 +51,8 @@ export default function UserAbsenceStatus() {
             .then(res => {
                 console.log(res.data.data);
                 setAbsensi(res.data.data)
+            }).catch(err => {
+                console.log(err.response.data)
             })
         } catch (error) {
             
@@ -76,7 +78,7 @@ export default function UserAbsenceStatus() {
         </div>
         <Note absensi={absensi}/>
         <StatusUser status={absensi?.users?.find(item => item._id === account._id)}/> 
-        {/* <StatusServer absensi={absensi}/> */}
+        <StatusAbsensi absensi={absensi}/>
         <SubmitAbsenceForm absensi={absensi} setAbsensi={setAbsensi}/>
     </>
 }
@@ -116,43 +118,47 @@ function StatusUser({ status }) {
     </>
 }
 
-// function StatusServer({ absensi }) {
-//     const account = useSelector(state => state.source.account)
-//     const status = useSelector(state => state.source.status)
+function StatusAbsensi({ absensi }) {
+    // const account = useSelector(state => state.source.account)
+    // const status = useSelector(state => state.source.status)
 
-//     const dispatch = useDispatch()
-//     const [fetchLoading, setIsFetchLoading] = useState(false)
+    // const dispatch = useDispatch()
+    // const [fetchLoading, setIsFetchLoading] = useState(false)
 
-//     const fetchStatus = useCallback(async () => {
-//         setIsFetchLoading(true)
-//         try {
-//             await axios.get(API + '/absen/status/' + account._id)
-//             .then(res => {
-//                 dispatch(setStatus(res.data.status))
-//                 dispatch(setAbsensi(res.data.absensi))
-//                 setIsFetchLoading(false)
-//             })
-//             .catch(err => {
-//                 setIsFetchLoading(false)
-//                 console.log(err)
-//             })
-//         } catch (error) {
-//             setIsFetchLoading(false)
-//             console.log(error);
-//         }
-//     },[account, dispatch])
+    // const fetchStatus = useCallback(async () => {
+    //     setIsFetchLoading(true)
+    //     try {
+    //         await axios.get(API + '/absen/status/' + account._id)
+    //         .then(res => {
+    //             dispatch(setStatus(res.data.status))
+    //             dispatch(setAbsensi(res.data.absensi))
+    //             setIsFetchLoading(false)
+    //         })
+    //         .catch(err => {
+    //             setIsFetchLoading(false)
+    //             console.log(err)
+    //         })
+    //     } catch (error) {
+    //         setIsFetchLoading(false)
+    //         console.log(error);
+    //     }
+    // },[account, dispatch])
 
-//     useEffect(() => {
-//         if (!status && account) fetchStatus()
-//     },[account, fetchStatus, status])
+    // useEffect(() => {
+    //     if (!status && account) fetchStatus()
+    // },[account, fetchStatus, status])
 
-//     if (absensi?.status === true) return
+    if (!absensi) return
 
-//     return <div className='bg-neutral-300 shadow-lg shadow-primary/50 text-neutral-500 rounded-xl p-4 flex gap-2 items-center relative'>
-//         {!absensi ? <p>Periksa internet kamu</p> : <p>Absensi belum dibuka</p>}
-//         <button className='flex ml-auto items-center justify-center rounded text-neutral-100 bg-secondary p-2 shadow-lg shadow-primary/50 click-animation' onClick={() => fetchStatus()}>{fetchLoading ? <LoadingIcon/> :<FontAwesomeIcon icon={faRotate} className='p-0.5'/>}</button>
-//     </div>
-// }
+    if (absensi?.status) return
+
+    // if (absensi?.status === true) return
+
+    // return <div className='bg-neutral-300 shadow-lg shadow-primary/50 text-neutral-500 rounded-xl p-4 flex gap-2 items-center relative'>
+    //     {!absensi ? <p>Periksa internet kamu</p> : <p>Absensi belum dibuka</p>}
+    //     <button className='flex ml-auto items-center justify-center rounded text-neutral-100 bg-secondary p-2 shadow-lg shadow-primary/50 click-animation' onClick={() => fetchStatus()}>{fetchLoading ? <LoadingIcon/> :<FontAwesomeIcon icon={faRotate} className='p-0.5'/>}</button>
+    // </div>
+}
 
 function AbsenceCell({prop, value}) {
     return <div className='flex flex-col sm:flex-row border-b-[1px] border-solid border-neutral-300 last:border-transparent py-2'>
