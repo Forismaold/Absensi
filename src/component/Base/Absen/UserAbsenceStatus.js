@@ -15,6 +15,7 @@ export default function UserAbsenceStatus() {
     const [absensi, setAbsensi] = useState(null)
 
     const [isFetchLoading, setIsFetchLoading] = useState(false)
+    const [errorMsg, setErrorMsg] = useState('')
 
     // const dispatch = useDispatch()
     const param = useParams()
@@ -52,7 +53,7 @@ export default function UserAbsenceStatus() {
                 console.log(res.data.data);
                 setAbsensi(res.data.data)
             }).catch(err => {
-                console.log(err.response.data)
+                setErrorMsg(err.response.data.msg)
             })
         } catch (error) {
             
@@ -60,6 +61,9 @@ export default function UserAbsenceStatus() {
             setIsFetchLoading(false)
         }
     },[param.absenceId])
+    useEffect(() => {
+        setErrorMsg('')
+    },[absensi])
     useEffect(() => {
         if (!absensi) fetchData()
     },[absensi, fetchData])
@@ -78,7 +82,7 @@ export default function UserAbsenceStatus() {
         </div>
         <Note absensi={absensi}/>
         <StatusUser status={absensi?.users?.find(item => item._id === account._id)}/> 
-        <StatusAbsensi absensi={absensi}/>
+        <StatusAbsensi absensi={absensi} msg={errorMsg}/>
         <SubmitAbsenceForm absensi={absensi} setAbsensi={setAbsensi}/>
     </>
 }
@@ -118,7 +122,7 @@ function StatusUser({ status }) {
     </>
 }
 
-function StatusAbsensi({ absensi }) {
+function StatusAbsensi({ absensi, msg }) {
     // const account = useSelector(state => state.source.account)
     // const status = useSelector(state => state.source.status)
 
@@ -148,16 +152,15 @@ function StatusAbsensi({ absensi }) {
     //     if (!status && account) fetchStatus()
     // },[account, fetchStatus, status])
 
-    if (!absensi) return
-
     if (absensi?.status) return
 
-    // if (absensi?.status === true) return
+    if (absensi?.status === false) return <div className='bg-neutral-300 shadow-lg shadow-primary/50 text-neutral-500 rounded-xl p-4 flex gap-2 items-center relative'>
+        <p>Absensi {absensi?.title} belum ditutup</p>
+    </div>
 
-    // return <div className='bg-neutral-300 shadow-lg shadow-primary/50 text-neutral-500 rounded-xl p-4 flex gap-2 items-center relative'>
-    //     {!absensi ? <p>Periksa internet kamu</p> : <p>Absensi belum dibuka</p>}
-    //     <button className='flex ml-auto items-center justify-center rounded text-neutral-100 bg-secondary p-2 shadow-lg shadow-primary/50 click-animation' onClick={() => fetchStatus()}>{fetchLoading ? <LoadingIcon/> :<FontAwesomeIcon icon={faRotate} className='p-0.5'/>}</button>
-    // </div>
+    return <div className='bg-neutral-300 shadow-lg shadow-primary/50 text-neutral-500 rounded-xl p-4 flex gap-2 items-center relative'>
+        {!absensi && <p>{msg}</p>}
+    </div>
 }
 
 function AbsenceCell({prop, value}) {
