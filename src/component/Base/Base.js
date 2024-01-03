@@ -2,7 +2,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faArrowLeft } from '@fortawesome/free-solid-svg-icons'
 import Absen from "./Absen/Absen"
 import Akun from "./Akun/Akun"
-import { Routes, Route, useLocation, Link } from 'react-router-dom'
+import { Routes, Route, Link } from 'react-router-dom'
 import Login from "./Akun/Login"
 import Register from "./Akun/Register"
 import Dahsboard from './Dashboard/Dashboard'
