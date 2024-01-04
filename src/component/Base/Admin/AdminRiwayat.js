@@ -47,16 +47,12 @@ export default function AdminRiwayat() {
     </div>
 
     return <div className='flex flex-col gap-2'>
-        <div className='flex gap-2 items-center justify-end'>
-            <Link to={'/admin/server'}>
-                <div className='flex gap-2 items-center bg-neutral-300 p-2 shadow-lg shadow-primary/50 click-animation rounded text-neutral-500'>
-                    <FontAwesomeIcon icon={faServer}/> Server
-                </div>
+        <div className='flex items-center rounded shadow overflow-hidden'>
+            <Link to={'/admin/server'} className='flex flex-1 px-4 items-center py-2 gap-2 click-animation border-b-2 border-transparent text-neutral-500 bg-neutral-200'>
+                <FontAwesomeIcon icon={faServer}/> Server
             </Link>
-            <Link to={'/admin/riwayat'}>
-                <div className='flex gap-2 items-center rounded text-neutral-100 bg-secondary p-2 shadow-lg shadow-primary/50 click-animation'>
-                    <FontAwesomeIcon icon={faClockRotateLeft}/> Riwayat
-                </div>
+            <Link to={'/admin/riwayat'} className='flex flex-1 px-4 items-center py-2 gap-2 click-animation border-b-2 border-secondary text-secondary bg-quaternary'>
+                <FontAwesomeIcon icon={faClockRotateLeft}/> Riwayat
             </Link>
         </div>
         <button className='flex gap-2 items-center self-end justify-center rounded text-neutral-100 bg-secondary p-2 shadow-lg shadow-primary/50 click-animation' onClick={() => fetchRiwayats()}>{isLoading?<LoadingIcon/>:<FontAwesomeIcon icon={faRotate} className='p-0.5'/>} Segarkan riwayat</button>

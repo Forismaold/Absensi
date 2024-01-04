@@ -23,16 +23,12 @@ export default function AdminServer() {
     </div>
 
     return <div className='flex flex-col gap-2'>
-        <div className='flex gap-2 items-center justify-end'>
-            <Link to={'/admin/server'}>
-                <div className='flex gap-2 items-center bg-secondary p-2 shadow-lg shadow-primary/50 click-animation rounded text-neutral-100'>
-                    <FontAwesomeIcon icon={faServer}/> Server
-                </div>
+        <div className='flex items-center rounded shadow overflow-hidden'>
+            <Link to={'/admin/server'} className='flex flex-1 px-4 items-center py-2 gap-2 click-animation border-b-2 border-secondary text-secondary bg-quaternary'>
+                <FontAwesomeIcon icon={faServer}/> Server
             </Link>
-            <Link to={'/admin/riwayat'}>
-                <div className='flex gap-2 items-center rounded text-neutral-500 bg-neutral-300 p-2 shadow-lg shadow-primary/50 click-animation'>
-                    <FontAwesomeIcon icon={faClockRotateLeft}/> Riwayat
-                </div>
+            <Link to={'/admin/riwayat'} className='flex flex-1 px-4 items-center py-2 gap-2 click-animation border-b-2 border-transparent text-neutral-500 bg-neutral-200'>
+                <FontAwesomeIcon icon={faClockRotateLeft}/> Riwayat
             </Link>
         </div>
         {/* <DashboardActionButton/> */}
@@ -102,7 +98,7 @@ function ManageAbsence() {
     const [openCreateAbsence, setOpenCreateAbsence] = useState(false)
 
     const fetchAbsence = useCallback(async () => {
-        setIsLoading(false)
+        setIsLoading(true)
         setFetchError(false)
         try {
             await axios.get(API + '/absensi').then(res => {
@@ -144,13 +140,13 @@ function ManageAbsence() {
     return <div className='flex flex-col gap-2'>
         <div className='flex items-center justify-end' onClick={fetchAbsence}>
             <div className='flex gap-2 items-center bg-secondary p-2 shadow-lg shadow-primary/50 click-animation rounded-lg text-neutral-100 cursor-pointer'>
-                <FontAwesomeIcon icon={faRefresh}/> Segarkan
+                <FontAwesomeIcon icon={faRefresh} className={`${isLoading && 'animate-spin'}`}/> Segarkan
             </div>
         </div>
         {isLoading && <LoadingSkeleton/>}
         {fetchError && <span>Gagal mendapatkan data!</span>}
         {abcenceList?.map(item => <DashboardActionButton item={item} key={item._id}/>) || []}
-        {abcenceList?.length === 0 && <span className='text-center'>Tidak ada absensi</span>}
+        {abcenceList?.filter(Boolean)?.length === 0 && <span className='text-center'>Tidak ada absensi</span>}
         <div className='flex items-center justify-end' onClick={() => setOpenCreateAbsence(true)}>
             <div className='flex gap-2 items-center bg-primary p-2 shadow-lg shadow-primary/50 click-animation rounded-lg text-neutral-100 cursor-pointer'>
                 <FontAwesomeIcon icon={faPlus}/> Baru
