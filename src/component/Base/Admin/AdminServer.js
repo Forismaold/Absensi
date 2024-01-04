@@ -335,7 +335,7 @@ function DashboardActionButton({ item }) {
                     <FontAwesomeIcon icon={faExternalLink}/> Detail
                 </div>
                 <div className='flex gap-2 items-center click-animation cursor-pointer p-2 hover:bg-tertiary rounded' onClick={() => {
-                    navigator.clipboard.writeText(window.location.origin + '/absen?q=' + absensi?._id)
+                    navigator.clipboard.writeText(window.location.origin + '/absen/' + absensi?._id)
                     blankToast('Link disimpan di papan klip')
                     setIsOpenMore(false)
                 }}>
