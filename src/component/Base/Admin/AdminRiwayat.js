@@ -1,7 +1,6 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faClockRotateLeft, faRotate, faServer } from '@fortawesome/free-solid-svg-icons'
 import { useCallback, useEffect, useState } from "react"
-import { useDispatch, useSelector } from "react-redux"
 import axios from "axios"
 import { API, getPermission } from "../../../utils"
 import LoadingIcon from '../../utils/LoadingIcon'
