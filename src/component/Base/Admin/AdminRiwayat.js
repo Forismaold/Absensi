@@ -33,7 +33,7 @@ export default function AdminRiwayat() {
             console.log(error)
             setIsLoading(false)
         }
-    },[dispatch])
+    },[])
     
     useEffect(() => {
         if (!adminRiwayats) fetchRiwayats()
