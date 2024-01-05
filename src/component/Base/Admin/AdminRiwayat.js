@@ -4,13 +4,12 @@ import { useCallback, useEffect, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import axios from "axios"
 import { API, getPermission } from "../../../utils"
-import { setAdminRiwayats } from '../../../redux/source'
 import LoadingIcon from '../../utils/LoadingIcon'
 import RiwayatRow from './RiwayatRow'
 import { Link } from 'react-router-dom'
 
 export default function AdminRiwayat() {
-    const adminRiwayats = useSelector(state => state.source.adminRiwayats)
+    const [adminRiwayats, setAdminRiwayats] = useState(null)
     const [permission, setPermission] = useState(false)
     const [isLoading, setIsLoading] = useState(false)
     
@@ -18,14 +17,12 @@ export default function AdminRiwayat() {
         setPermission(getPermission())
     }, [])
 
-    const dispatch = useDispatch()
-
     const fetchRiwayats = useCallback(async () => {
         setIsLoading(true)
         try {
             await axios.get(API+'/riwayats/all')
             .then(res => {
-                dispatch(setAdminRiwayats(res.data.riwayats))
+                setAdminRiwayats(res.data.riwayats)
                 setIsLoading(false)
             })
             .catch(err => {
@@ -39,7 +36,7 @@ export default function AdminRiwayat() {
     },[dispatch])
     
     useEffect(() => {
-        if (!adminRiwayats?.length) fetchRiwayats()
+        if (!adminRiwayats) fetchRiwayats()
     }, [adminRiwayats, fetchRiwayats])
 
     if (!permission) return <div>
