@@ -3,32 +3,33 @@ import { faCheck, faCheckDouble, faMinus, faRotate, faXmark } from '@fortawesome
 import axios from "axios"
 import { useCallback, useEffect, useState } from "react"
 import { API, formatDate, isUserWithinBounds } from "../../../utils"
-import { useDispatch, useSelector } from "react-redux"
+import { useSelector } from "react-redux"
 import { Link } from "react-router-dom"
-import { setRiwayats } from "../../../redux/source"
 
 
 export default function Dahsboard() {
     const account = useSelector(state => state.source.account)
-    const riwayats = useSelector(state => state.source.riwayats)
-
-    const dispatch = useDispatch()
+    const [riwayats, setRiwayats] = useState(null)
+    const [isLoading, setIsLoading] = useState(false)
 
     const fetchRiwayats = useCallback(async () => {
+        setIsLoading(true)
         try {
             await axios.get(API+'/riwayats/' + account?._id)
             .then(res => {
-                dispatch(setRiwayats(res.data.riwayats))
+                setRiwayats(res.data.riwayats)
             })
             .catch(err => {
                 console.log(err)
             })
         } catch (error) {
             console.log(error)
+        } finally {
+            setIsLoading(false)
         }
-    },[account, dispatch])
+    },[account])
     useEffect(() => {
-        if (account || !riwayats?.length) fetchRiwayats()
+        if (account && !riwayats) fetchRiwayats()
     }, [account, fetchRiwayats, riwayats])
     if (!account) return <div>
         <p>Untuk melihat riwayat, kamu perlu memiliki akun. Silakan kunjungi <Link to={'/akun'} className="underline">Akun</Link>.</p>
@@ -36,8 +37,9 @@ export default function Dahsboard() {
 
     return <div className='flex flex-col'>
         <p>Ini halaman dashboard</p>
-        <button className='flex gap-2 items-center self-end justify-center rounded text-neutral-100 bg-secondary p-2 shadow-lg shadow-primary/50 click-animation' onClick={() => fetchRiwayats()}><FontAwesomeIcon icon={faRotate}/> <span>Segarkan</span></button>
+        <button className='flex gap-2 items-center self-end justify-center rounded text-neutral-100 bg-secondary p-2 shadow-lg shadow-primary/50 click-animation' onClick={() => fetchRiwayats()}><FontAwesomeIcon className={`${isLoading && 'animate-spin'}`} icon={faRotate}/> <span>Segarkan</span></button>
         <div className="flex flex-col gap-2 pt-2">
+            {riwayats?.length === 0 && <span className='text-center'>Tidak ada riwayat</span>}
             {riwayats?.map(x => <RiwayatRow data={x} key={x._id}/>)}
         </div>
     </div>

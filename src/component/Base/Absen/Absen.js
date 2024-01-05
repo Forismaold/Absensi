@@ -29,7 +29,6 @@ function ListAbsen() {
         try {
             await axios.get(API + '/absensi/short')
             .then(res => {
-                console.log(res);
                 setList(res.data.data)
             }).catch(err => {
                 console.log(err);
@@ -51,6 +50,7 @@ function ListAbsen() {
                 <FontAwesomeIcon icon={faRefresh} className={`${isLoading && 'animate-spin'}`}/> Segarkan
             </div>
         </div>
+        {list?.length === 0 && <span className='text-center'>Tidak ada absensi</span>}
         {list?.map(item => <AbsenCard data={item} key={item._id}/>)}
     </div>
 }

@@ -5,10 +5,6 @@ const source = createSlice({
     name: 'source',
     initialState: {
         account: getDecryptObjectLocalStorage('account') || null,
-        status: null,
-        absensi: null,
-        adminRiwayats: null,
-        riwayats: null,
         isWatchPosition: false,
         showAbsenceForm: false,
         showMap: true
@@ -19,18 +15,6 @@ const source = createSlice({
         },
         refreshAccount: (state, action) => {
             state.account = getDecryptObjectLocalStorage('account')
-        },
-        setStatus: (state, action) => {
-            state.status = action.payload || null
-        },
-        setAdminRiwayats: (state, action) => {
-            state.adminRiwayats = action.payload || null
-        },
-        setRiwayats: (state, action) => {
-            state.riwayats = action.payload || null
-        },
-        setAbsensi: (state, action) => {
-            state.absensi = action.payload || null
         },
         setIsWatchPosition: (state, action) => {
             state.isWatchPosition = action.payload || !state.isWatchPosition

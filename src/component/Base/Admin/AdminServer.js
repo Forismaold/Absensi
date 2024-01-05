@@ -192,6 +192,7 @@ function DashboardActionButton({ item }) {
 
     useEffect(() => {
         setAbsensi(item)
+        console.log(item)
     },[item])
 
     async function bukaAbsensi() {
@@ -239,6 +240,8 @@ function DashboardActionButton({ item }) {
                 // dispatch(setUsers())
                 // dispatch(setStatus())
                 setShowSaveConfirm(false)
+                setAbsensi(null)
+                navigate('/admin/server')
                 promise.onSuccess('Berhasil menyimpan data')
             }).catch(err => {
                 promise.onError('Gagal menyimpan data')
@@ -267,6 +270,7 @@ function DashboardActionButton({ item }) {
             .then(res => {
                 promise.onSuccess('Absensi berhasil dihapus')
                 setShowBuangConfirm(false)
+                navigate('/admin/server')
                 setAbsensi(null)
             }).catch(err => {
                 promise.onError('Gagal menghapus data')
@@ -302,6 +306,10 @@ function DashboardActionButton({ item }) {
             <div className='flex flex-wrap flex-col sm:flex-row'>
                 <p className='sm:w-2/6 font-semibold'>Catatan</p>
                 <p>{absensi?.note || '-'}</p>
+            </div>
+            <div className='flex flex-wrap flex-col sm:flex-row'>
+                <p className='sm:w-2/6 font-semibold'>Jumlah Peserta</p>
+                <p>{absensi?.users?.length || '-'}</p>
             </div>
         </div>}
         <div className='flex gap-2 justify-end flex-wrap'>

@@ -8,7 +8,7 @@ import RiwayatRow from './RiwayatRow'
 import { Link } from 'react-router-dom'
 
 export default function AdminRiwayat() {
-    const [adminRiwayats, setAdminRiwayats] = useState(null)
+    const [riwayats, setRiwayats] = useState(null)
     const [permission, setPermission] = useState(false)
     const [isLoading, setIsLoading] = useState(false)
     
@@ -21,7 +21,8 @@ export default function AdminRiwayat() {
         try {
             await axios.get(API+'/riwayats/all')
             .then(res => {
-                setAdminRiwayats(res.data.riwayats)
+                setRiwayats(res.data.riwayats)
+                console.log(res.data)
                 setIsLoading(false)
             })
             .catch(err => {
@@ -35,8 +36,8 @@ export default function AdminRiwayat() {
     },[])
     
     useEffect(() => {
-        if (!adminRiwayats) fetchRiwayats()
-    }, [adminRiwayats, fetchRiwayats])
+        if (!riwayats) fetchRiwayats()
+    }, [riwayats, fetchRiwayats])
 
     if (!permission) return <div>
         <p>Anda bukan pengelola!</p>
@@ -53,7 +54,8 @@ export default function AdminRiwayat() {
         </div>
         <button className='flex gap-2 items-center self-end justify-center rounded text-neutral-100 bg-secondary p-2 shadow-lg shadow-primary/50 click-animation' onClick={() => fetchRiwayats()}>{isLoading?<LoadingIcon/>:<FontAwesomeIcon icon={faRotate} className='p-0.5'/>} Segarkan riwayat</button>
         <div className="flex flex-col gap-2">
-            {adminRiwayats?.map(x => <RiwayatRow data={x} key={x._id}/>)}
+            {riwayats?.length === 0 && <span className='text-center'>Tidak ada riwayat</span>}
+            {riwayats?.map(x => <RiwayatRow data={x} key={x._id} setRiwayats={setRiwayats}/>)}
         </div>
     </div>
 }

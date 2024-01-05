@@ -1,23 +1,17 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faEllipsis, faFilter, faSearch, faTable, faTrash } from '@fortawesome/free-solid-svg-icons'
 import { useCallback, useEffect, useState } from "react"
-import { useDispatch, useSelector } from "react-redux"
 import axios from "axios"
 import { API, formatBeautyDate, formatDate, isUserWithinBounds } from "../../../utils"
-import { setAdminRiwayats } from '../../../redux/source'
 import UsersGroup from './UsersGroup'
 import Modal, { Confirm } from '../../utils/Modal'
 import { loadingToast } from '../../utils/myToast'
 import xlsx from 'json-as-xlsx'
 
-export default function RiwayatRow({data}) {
-    const adminRiwayats = useSelector(state => state.source.adminRiwayats)
-
+export default function RiwayatRow({data, setRiwayats}) {
     const [showSearch, setShowSearch] = useState(false)
     const [showOption, setShowOption] = useState(false)
     const [showDeleteConfirm, setShowDeleteConfirm] = useState(false)
-
-    const dispatch = useDispatch()
 
     async function deleteRiwayat() {
         const promise = loadingToast('Menghapus Riwayat')
@@ -26,9 +20,8 @@ export default function RiwayatRow({data}) {
             .then(res => {
                 setShowDeleteConfirm(false)
                 setShowOption(false)
-                dispatch(setAdminRiwayats(adminRiwayats.filter(x => x._id !== data._id)))
-                console.log(res.data)
                 promise.onSuccess(res.data.msg)
+                setRiwayats(res.data.riwayats)
             })
             .catch(res => {
                 promise.onError(res.response.data.msg)
@@ -46,7 +39,6 @@ export default function RiwayatRow({data}) {
                 <p className='ml-auto'>{formatDate(data.date)}</p>
             </div>
             <div className='flex gap-2 self-end'>
-                <FontAwesomeIcon icon={faFilter} className='shadow p-2 rounded bg-primary text-quaternary cursor-pointer click-animation' onClick={() => setShowSearch(true)}/>
                 <FontAwesomeIcon icon={faEllipsis} className='shadow p-2 rounded text-neutral-600 cursor-pointer click-animation self-end' onClick={() => setShowOption(true)}/>
             </div>
         </div>
@@ -58,10 +50,10 @@ export default function RiwayatRow({data}) {
         <Modal isOpen={showOption} onClose={() => setShowOption(false)}>
             <div className='flex flex-col gap-2'>
                 <DownloadCSVButton onClose={() => setShowOption(false)} data={data}/>
-                <p className='hover:bg-neutral-300 rounded p-2 cursor-pointer'><FontAwesomeIcon icon={faFilter} onClick={() => {
+                <p className='hover:bg-neutral-300 rounded p-2 cursor-pointer' onClick={() => {
                     setShowSearch(true)
                     setShowOption(false)
-                }}/> Filter Riwayat</p>
+                }}><FontAwesomeIcon icon={faFilter}/> Filter Riwayat</p>
                 <p className='hover:bg-neutral-300 rounded p-2 cursor-pointer' onClick={() => {
                     setShowDeleteConfirm(true)
                 }}><FontAwesomeIcon icon={faTrash}/> Hapus Riwayat</p>
