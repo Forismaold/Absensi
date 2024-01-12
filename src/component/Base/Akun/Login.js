@@ -6,7 +6,7 @@ import { API, setLocalStorage } from "../../../utils"
 import axios from "axios"
 import { useState } from 'react'
 import { useDispatch } from 'react-redux'
-import { refreshAccount, setAbsensi, setStatus } from '../../../redux/source'
+import { refreshAccount } from '../../../redux/source'
 import { loadingToast } from '../../utils/myToast'
 import ReCAPTCHA from "react-google-recaptcha";
 import { toast } from 'react-toastify'
@@ -44,8 +44,8 @@ function LoginForm() {
             .then(res => {
                 setLocalStorage('account', res.data.user)
                 dispatch(refreshAccount())
-                dispatch(setStatus())
-                dispatch(setAbsensi())
+                // dispatch(setStatus())
+                // dispatch(setAbsensi())
                 navigate('/akun')
                 promise.onSuccess('Berhasil masuk ke akun')
             }).catch(err => {
@@ -55,6 +55,7 @@ function LoginForm() {
                 throw new Error(err)
             })
         } catch (error) {
+            console.log(error)
             promise.onError(error?.msg || 'Server error')
         }
     }
@@ -94,8 +95,8 @@ function GoogleLoginButton() {
             .then(res => {
                 setLocalStorage('account', res.data.user)
                 dispatch(refreshAccount())
-                dispatch(setAbsensi())
-                dispatch(setStatus())
+                // dispatch(setAbsensi())
+                // dispatch(setStatus())
                 navigate('/akun')
                 promise.onSuccess('Berhasil masuk ke akun')
             })
@@ -104,6 +105,7 @@ function GoogleLoginButton() {
                 throw new Error(err)
             })
         } catch (error) {
+            console.log(error)
             promise.onError(error?.msg || 'Server error')
         }
     }

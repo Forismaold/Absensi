@@ -5,7 +5,7 @@ import { API, setLocalStorage } from "../../../utils"
 import axios from "axios"
 import { useState } from 'react'
 import { useDispatch } from 'react-redux'
-import { refreshAccount, setAbsensi, setStatus } from '../../../redux/source'
+import { refreshAccount } from '../../../redux/source'
 import { toast } from 'react-toastify'
 import { loadingToast } from '../../utils/myToast'
 import ReCAPTCHA from "react-google-recaptcha";
@@ -60,8 +60,8 @@ function RegisterForm() {
                 setLocalStorage('account', res.data.user)
                 dispatch(refreshAccount())
                 navigate('/akun')
-                dispatch(setStatus())
-                dispatch(setAbsensi())
+                // dispatch(setStatus())
+                // dispatch(setAbsensi())
                 promise.onSuccess('Berhasil membuat akun')
             })
             .catch(err => {
@@ -121,7 +121,7 @@ function RegisterForm() {
             <div className='max-w-full overflow-auto'>
                 <ReCAPTCHA sitekey={process.env.REACT_APP_RECAPTCHA_SITE} onChange={onChange}/>
             </div>
-            <button type='submit' className={`text-center rounded ${isRecaptchaVerified ? 'bg-primary' : 'bg-tertiary'} text-neutral-200 shadow-md shadow-primary/50 p-2 click-animation`}>Submit</button>
+            <button type='submit' className={`text-center rounded ${isRecaptchaVerified ? 'bg-primary' : 'bg-tertiary'} text-neutral-200 shadow-md shadow-primary/50 p-2 click-animation`}>Kirim</button>
         </form>
     </div>
 }

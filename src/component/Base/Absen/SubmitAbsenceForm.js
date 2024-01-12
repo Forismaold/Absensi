@@ -120,9 +120,9 @@ export default function SubmitAbsenceForm({absensi, setAbsensi}) {
     }, [absensi, account, dispatch, setAbsensi, userCoordinate, status])
 
     useEffect(() => {
-        const userStatus = absensi?.users?.find(item => item._id === account._id)
+        const userStatus = absensi?.users?.find(item => item._id === account?._id)
         setStatus(userStatus || null)
-    },[absensi, account._id])
+    },[absensi, account])
 
     useEffect(() => {
         // console.log(status?.absen === null, absensi?.status === true, isUserWithinBounds(userCoordinate), Boolean(userCoordinate));

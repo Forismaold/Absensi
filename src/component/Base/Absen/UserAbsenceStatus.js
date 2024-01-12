@@ -81,7 +81,7 @@ export default function UserAbsenceStatus() {
             </div>
         </div>
         <Note absensi={absensi}/>
-        <StatusUser status={absensi?.users?.find(item => item._id === account._id)}/> 
+        <StatusUser status={absensi?.users?.find(item => item._id === account?._id)}/> 
         <StatusAbsensi absensi={absensi} msg={errorMsg}/>
         <SubmitAbsenceForm absensi={absensi} setAbsensi={setAbsensi}/>
     </>
