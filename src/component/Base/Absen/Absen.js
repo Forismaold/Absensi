@@ -76,9 +76,9 @@ function AbsenCard ({data}) {
 
 function DetailAbsen() {
     const account = useSelector(state => state.source.account)
-    return <div className='flex flex-col gap-2 relative'>
+    return <div className='flex flex-col gap-2'>
         <CheckAccountExist/>
-        <div className={`${!account && 'opacity-20'}`}>
+        <div className={`${!account && 'opacity-50'} flex flex-col gap-2`}>
             <MyMap/>
             <UserAbsenceStatus/>
         </div>
@@ -88,7 +88,7 @@ function DetailAbsen() {
 function CheckAccountExist() {
     const account = useSelector(state => state.source.account)
 
-    if (!account) return <div className='bg-quaternary p-2 py-6 rounded-md shadow-xl sticky top-0 text-center'>
+    if (!account) return <div className='bg-quaternary p-2 py-6 rounded-md shadow-xl text-center'>
         <FontAwesomeIcon icon={faUserSlash} className='text-5xl text-primary p-2'/>
         <div>
             <h2 className='font-bold text-3xl text-neutral-700'>Masuk ke akun</h2>
