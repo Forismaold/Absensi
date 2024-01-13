@@ -125,7 +125,7 @@ export default function SubmitAbsenceForm({absensi, setAbsensi, status}) {
 
     if (!account || !absensi) return
     
-    if (showAbsenceForm || (status === null && absensi?.status === true)) return <div className='flex flex-col rounded-xl'>
+    if (showAbsenceForm || (status === undefined && absensi?.status === true)) return <div className='flex flex-col rounded-xl'>
         <div className='bg-secondary text-neutral-100 rounded-xl p-4 flex flex-col gap-2 shadow-lg shadow-primary/50'>
             <p>Kirim sebagai {account?.panggilan || account?.nama}</p>
             <div className='flex gap-2'>
