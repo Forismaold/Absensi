@@ -50,7 +50,6 @@ export default function UserAbsenceStatus() {
         try {
             await axios.get(API + '/absensi/' + param.absenceId)
             .then(res => {
-                console.log(res.data.data);
                 setAbsensi(res.data.data)
             }).catch(err => {
                 setErrorMsg(err.response.data.msg)
@@ -83,7 +82,7 @@ export default function UserAbsenceStatus() {
         <Note absensi={absensi}/>
         <StatusUser status={absensi?.users?.find(item => item._id === account?._id)}/> 
         <StatusAbsensi absensi={absensi} msg={errorMsg}/>
-        <SubmitAbsenceForm absensi={absensi} setAbsensi={setAbsensi}/>
+        <SubmitAbsenceForm absensi={absensi} setAbsensi={setAbsensi} status={absensi?.users?.find(item => item._id === account?._id)}/>
     </>
 }
 

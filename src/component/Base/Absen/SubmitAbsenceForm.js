@@ -9,11 +9,10 @@ import LoadingIcon from '../../utils/LoadingIcon'
 import { setIsWatchPosition, setShowAbsenceForm, setShowMap } from '../../../redux/source'
 import Modal from '../../utils/Modal'
 
-export default function SubmitAbsenceForm({absensi, setAbsensi}) {
+export default function SubmitAbsenceForm({absensi, setAbsensi, status}) {
     const userCoordinate = useSelector(state => state.coordinates.user)
 
     // const status = useSelector(state => state.source.status)
-    const [status, setStatus] = useState(false)
     // const absensi = useSelector(state => state.source.absensi)
     const account = useSelector(state => state.source.account)
     const showAbsenceForm = useSelector(state => state.source.showAbsenceForm)
@@ -56,10 +55,7 @@ export default function SubmitAbsenceForm({absensi, setAbsensi}) {
                 promise.onSuccess(res.data.msg)
                 handleTidakHadir()
                 setIsLoading(false)
-                // dispatch(setStatus(res.data.status))
                 setShowForceNext(false)
-                // dispatch(setShowAbsenceForm(false))
-                // dispatch(toggleShowMap(false))
                 setAbsensi(res.data.data)
             }).catch(err => {
                 setIsLoading(false)
@@ -102,13 +98,12 @@ export default function SubmitAbsenceForm({absensi, setAbsensi}) {
         try {
             await axios.post(API + '/absen/hadir/' + absensi?._id, dataToSend)
             .then(res => {
-                // dispatch(setStatus(res.data.status))
                 promise.onSuccess(res.data.msg)
                 setIsLoading(false)
                 dispatch(setShowAbsenceForm(false))
                 dispatch(setShowMap(false))
                 setAbsensi(res.data.data)
-                console.log(res.data)
+                console.log(res.data.data);
             }).catch(err => {
                 promise.onError(err.response.data.msg)
                 throw new Error(err)
@@ -120,21 +115,13 @@ export default function SubmitAbsenceForm({absensi, setAbsensi}) {
     }, [absensi, account, dispatch, setAbsensi, userCoordinate, status])
 
     useEffect(() => {
-        const userStatus = absensi?.users?.find(item => item._id === account?._id)
-        setStatus(userStatus || null)
-    },[absensi, account])
-
-    useEffect(() => {
-        // console.log(status?.absen === null, absensi?.status === true, isUserWithinBounds(userCoordinate), Boolean(userCoordinate));
-        // console.log('useeffect triggered', userCoordinate, isUserWithinBounds(userCoordinate))
-        // console.log(status?.absen, 'expect null')
-        if ((status?.absen === undefined && absensi?.status === true) && isUserWithinBounds(userCoordinate) && userCoordinate) {
+        if (!status && absensi?.status === true && isUserWithinBounds(userCoordinate)) {
             if (isLoading) return
-            // blankToast('Lokasi tercapai!')
+            blankToast('Lokasi tercapai!')
             handleHadir()
             dispatch(setIsWatchPosition(false))
         }
-    }, [absensi?.status, dispatch, handleHadir, isLoading, showAbsenceForm, status, userCoordinate])
+    },[absensi, dispatch, handleHadir, isLoading, status, userCoordinate])
 
     if (!account || !absensi) return
     

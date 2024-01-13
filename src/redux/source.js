@@ -17,7 +17,7 @@ const source = createSlice({
             state.account = getDecryptObjectLocalStorage('account')
         },
         setIsWatchPosition: (state, action) => {
-            state.isWatchPosition = action.payload || !state.isWatchPosition
+            state.isWatchPosition = action.payload
         },
         setShowAbsenceForm: (state, action) => {
             state.showAbsenceForm = action.payload
