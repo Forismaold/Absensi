@@ -21,7 +21,10 @@ export default function Navbar() {
     }, [akun])
 
     return <nav className="flex px-3 py-2 gap-2 flex-col md:flex-row w-full">
-        <h4 className="font-montserrat text-neutral-100 font-extrabold text-2xl">Forisma.</h4>
+        <div className="flex flex-col">
+            <h4 className="font-montserrat text-neutral-100 font-extrabold text-2xl">FOR IS MA.</h4>
+            <span className="text-neutral-200 text-xs">(untuk presensi siswa muslim SMA 3 Magelang)</span>
+        </div>
         <div className="flex justify-between w-full text-neutral-200">
             <div className="flex gap-2">
                 <Link to={'/absen'}>
