@@ -126,6 +126,7 @@ export default function SubmitAbsenceForm({absensi, setAbsensi}) {
 
     useEffect(() => {
         // console.log(status?.absen === null, absensi?.status === true, isUserWithinBounds(userCoordinate), Boolean(userCoordinate));
+        console.log('useeffect triggered', userCoordinate)
         if ((status?.absen === null && absensi?.status === true) && isUserWithinBounds(userCoordinate) && userCoordinate) {
             if (isLoading) return
             blankToast('Lokasi tercapai!')

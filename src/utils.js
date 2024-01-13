@@ -111,5 +111,6 @@ export function isUserWithinBounds (userCoordinate = [0, 0]) {
     const isLngInRange = userLng >= Math.min(firstLng, secondLng) && userLng <= Math.max(firstLng, secondLng)
 
     // Jika kedua koordinat (latitude dan longitude) berada dalam jangkauan, maka user berada dalam jangkauan
+    console.log(coordinate, isLatInRange, isLngInRange)
     return isLatInRange && isLngInRange
 }
