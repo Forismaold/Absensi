@@ -2,6 +2,8 @@ import { useEffect, useState } from "react"
 import { useSelector } from "react-redux"
 import { Link, useLocation } from "react-router-dom"
 import { getPermission } from "../../utils"
+// import revIcon from '../../assets/rev4.jpeg'
+import revIcon from '../../assets/forisma.webp'
 
 export default function Navbar() {
     const akun = useSelector(state => state.source.account)
@@ -20,37 +22,42 @@ export default function Navbar() {
         setPermission(getPermission())
     }, [akun])
 
-    return <nav className="flex px-3 py-2 gap-2 flex-col md:flex-row w-full">
-        <div className="flex flex-col">
-            <h4 className="font-montserrat text-neutral-100 font-extrabold text-2xl">FOR IS MA.</h4>
-            <span className="text-neutral-200 text-xs">(untuk presensi siswa muslim SMA 3 Magelang)</span>
+    return <nav className="flex px-3 py-2 gap-2 flex-col w-full">
+        <div className="flex gap-2 items-center">
+            <img src={revIcon} alt="aaa" className="w-16 h-16 shadow rounded"/>
+            <div className="flex flex-col">
+                <h4 className="font-montserrat text-neutral-100 font-extrabold text-3xl">For IS MA.</h4>
+                <span className="text-neutral-200 text-[8px]">(untuk presensi siswa muslim SMA 3 Magelang)</span>
+            </div>
         </div>
-        <div className="flex justify-between w-full text-neutral-200">
-            <div className="flex gap-2">
-                <Link to={'/absen'}>
-                <div className={`${routeName === 'ABSEN' ? 'border-tertiary' : 'border-transparent'} h-full flex place-items-center pointer border-b-2 border-solid click-animation`}>
-                    <span>Absen</span>
+        <div className="flex gap-2">
+            <div className="flex justify-between w-full text-neutral-200">
+                <div className="flex gap-2">
+                    <Link to={'/absen'}>
+                    <div className={`${routeName === 'ABSEN' ? 'border-tertiary' : 'border-transparent'} h-full flex place-items-center pointer border-b-2 border-solid click-animation`}>
+                        <span>Absen</span>
+                    </div>
+                    </Link>
+                    <Link to={'/dashboard'}>
+                    <div className={`${routeName === 'DASHBOARD' && !isAdminRoute ? 'border-tertiary' : 'border-transparent'} h-full flex place-items-center pointer border-b-2 border-solid click-animation`}>
+                        <span>Dashboard</span>
+                    </div>
+                    </Link>
+                    {permission && 
+                        <Link to={'/admin/server'}>
+                            <div className={`${isAdminRoute ? 'border-tertiary' : 'border-transparent'} h-full flex place-items-center pointer border-b-2 border-solid click-animation`}>
+                                <span>Admin</span>
+                            </div>
+                        </Link>
+                    }
                 </div>
-                </Link>
-                <Link to={'/dashboard'}>
-                <div className={`${routeName === 'DASHBOARD' && !isAdminRoute ? 'border-tertiary' : 'border-transparent'} h-full flex place-items-center pointer border-b-2 border-solid click-animation`}>
-                    <span>Dashboard</span>
-                </div>
-                </Link>
-                {permission && 
-                    <Link to={'/admin/server'}>
-                        <div className={`${isAdminRoute ? 'border-tertiary' : 'border-transparent'} h-full flex place-items-center pointer border-b-2 border-solid click-animation`}>
-                            <span>Admin</span>
+                <div className="flex gap-2">
+                    <Link to={'/akun'}>
+                        <div className="h-full flex place-items-center pointer">
+                            {akun ? <img src={akun?.avatar} alt={akun?.nickname || akun?.nama} referrerPolicy="no-referrer" className="w-[32px] h-[32px] rounded-full shadow click-animation"/>: <span className="click-animation">Akun</span>}
                         </div>
                     </Link>
-                }
-            </div>
-            <div className="flex gap-2">
-                <Link to={'/akun'}>
-                    <div className="h-full flex place-items-center pointer">
-                        {akun ? <img src={akun?.avatar} alt={akun?.nickname || akun?.nama} referrerPolicy="no-referrer" className="w-[32px] h-[32px] rounded-full shadow click-animation"/>: <span className="click-animation">Akun</span>}
-                    </div>
-                </Link>
+                </div>
             </div>
         </div>
     </nav>
