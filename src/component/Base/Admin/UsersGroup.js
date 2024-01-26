@@ -26,7 +26,7 @@ function UserGroupModel({data}) {
             <AbsenceCell prop={'Kode'} value={data.kode}/>
             <AbsenceCell prop={'Keterangan'} value={data.keterangan}/>
             <AbsenceCell prop={'Lokasi'} value={isUserWithinBounds(data.koordinat)? 'Di dalam area' : 'Di luar area'}/>
-            <AbsenceCell prop={'Koordinat'} value={`${data.koordinat[0]}, ${data.koordinat[1]}`}/>
+            <AbsenceCell prop={'Koordinat'} value={`${data?.koordinat ? data.koordinat[0] : 'defaultX'}, ${data?.koordinat ? data.koordinat[1] : 'defaultY'}`}/>
             <AbsenceCell prop={'Waktu Absen'} value={formatTime(data.waktuAbsen)}/>
         </Modal>
     </>

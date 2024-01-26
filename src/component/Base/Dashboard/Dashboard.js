@@ -48,7 +48,7 @@ export default function Dahsboard() {
 function RiwayatRow({data}) {
     const [withinBounds, setWithinBounds] = useState(false)
     useEffect(() => {
-        setWithinBounds(isUserWithinBounds(data.koordinat))
+        setWithinBounds(isUserWithinBounds(data?.koordinat))
     }, [data.koordinat])
     if (data.absen === true) return <div className="flex bg-primary text-neutral-200 items-center p-2 gap-2 rounded">
         <FontAwesomeIcon icon={withinBounds?faCheckDouble:faCheck}/>

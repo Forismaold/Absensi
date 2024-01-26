@@ -101,6 +101,7 @@ function ManageAbsence() {
         setIsLoading(true)
         setFetchError(false)
         try {
+            console.log(API + '/absensi')
             await axios.get(API + '/absensi').then(res => {
                 setAbcenceList(res.data.data)
             }).catch(err => {
