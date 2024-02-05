@@ -1,5 +1,5 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons'
+import { faChevronLeft, faChevronRight, faQuestion } from '@fortawesome/free-solid-svg-icons'
 import { useCallback, useEffect, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { blankToast, loadingToast } from "../../utils/myToast"
@@ -8,6 +8,7 @@ import { API, isUserWithinBounds } from "../../../utils"
 import LoadingIcon from '../../utils/LoadingIcon'
 import { setIsWatchPosition, setShowAbsenceForm, setShowMap } from '../../../redux/source'
 import Modal from '../../utils/Modal'
+import { InfoManualSubmit } from './InfoModals'
 
 export default function SubmitAbsenceForm({absensi, setAbsensi, status}) {
     const userCoordinate = useSelector(state => state.coordinates.user)
@@ -25,6 +26,8 @@ export default function SubmitAbsenceForm({absensi, setAbsensi, status}) {
     const [keterangan, setKeterangan] = useState('')
     const [isLoading, setIsLoading] = useState(false)
     const [showforceNext, setShowForceNext] = useState(false)
+
+    const [showInfoManualSubmit, setShowInfoManualSubmit] = useState(false)
 
     const dispatch = useDispatch()
 
@@ -126,9 +129,12 @@ export default function SubmitAbsenceForm({absensi, setAbsensi, status}) {
     if (!account || !absensi) return
     
     if (showAbsenceForm || (status === undefined && absensi?.status === true)) return <div className='flex flex-col rounded-xl'>
-        <div className='bg-secondary text-neutral-100 rounded-xl p-4 flex flex-col gap-2 shadow-lg shadow-primary/50'>
-            <p>Kirim sebagai {account?.panggilan || account?.nama}</p>
-            <div className='flex gap-2'>
+        <div className='bg-neutral-200 rounded-xl p-2 flex flex-col gap-2 shadow-lg shadow-primary/50'>
+            <div className='flex gap-2 items-center'>
+                <p>Kirim manual sebagai {account?.panggilan || account?.nama}</p>
+                <button className='flex items-center justify-center px-3 text-neutral-500 p-2 click-animation' onClick={() => setShowInfoManualSubmit(true)}><FontAwesomeIcon icon={faQuestion}/></button>
+            </div>
+            <div className='flex gap-2 bg-secondary text-neutral-100 p-2 rounded-md'>
                 {showTidak &&
                     <div className='border-2 border-solid border-neutral-200 bg-inherit text-neutral-200 px-3 rounded flex justify-center items-center shadow cursor-pointer' onClick={handleTidakHadir}>
                         <FontAwesomeIcon icon={faChevronRight}/>
@@ -136,9 +142,6 @@ export default function SubmitAbsenceForm({absensi, setAbsensi, status}) {
                 }
                 {showFormTidak &&
                     <form className='flex flex-col gap-2 w-full' onSubmit={handleSubmitTidakHadir}>
-                        <div className='flex items-center rounded shadow-md mt-2 p-2'>
-                            <p>Tidak hadir</p>
-                        </div>
                         <div className='flex flex-col sm:flex-row gap-2 flex-1'>
                             <select value={kode} onChange={(e) => setKode(e.target.value)} className='min-h-[40px] shadow px-2 rounded bg-primary border-2 border-solid border-neutral-200 shadow' placeholder='Kode keterangan'>
                                 <option value="-" disable='true'>Kode</option>
@@ -153,7 +156,7 @@ export default function SubmitAbsenceForm({absensi, setAbsensi, status}) {
                                 <FontAwesomeIcon icon={faChevronLeft}/>
                             </div>
                             <button className={`flex-1 ${isLoading ? 'bg-neutral-transparent' : 'bg-neutral-200 shadow-lg shadow-neutral-300/10'} click-animation text-secondary p-2 rounded flex justify-center shadow cursor-pointer hover:shadow-xl duration-300 hover:-translate-y-1`}>
-                                {isLoading ? <LoadingIcon/> : <span>Kirim tidak absen</span>}
+                                {isLoading ? <LoadingIcon/> : <span>Kirim tidak hadir</span>}
                             </button>
                         </div>
                     </form>
@@ -166,6 +169,7 @@ export default function SubmitAbsenceForm({absensi, setAbsensi, status}) {
                 <ForceNext isOpen={showforceNext} onClose={() => setShowForceNext(false)} callBack={handleHadir}/>
             </div>
         </div>
+        <InfoManualSubmit isOpen={showInfoManualSubmit} onClose={() => setShowInfoManualSubmit(false)}/>
     </div>
 
     return null

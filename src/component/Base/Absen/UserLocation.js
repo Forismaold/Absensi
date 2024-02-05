@@ -1,10 +1,10 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faBinoculars, faBolt, faInfo, faLocationCrosshairs, faRotate } from '@fortawesome/free-solid-svg-icons'
+import { faBinoculars, faBolt, faInfo, faLocationCrosshairs, faQuestion, faRotate } from '@fortawesome/free-solid-svg-icons'
 import { useCallback, useEffect, useState } from 'react'
 import LoadingIcon from '../../utils/LoadingIcon'
 import { useDispatch, useSelector } from 'react-redux'
 import { setUserCoordinate } from '../../../redux/coordinates'
-import InfoAboutUserCoordinate from './InfoAboutUserCoordinate'
+import { InfoAutoSubmit, InfoCommonProblem } from './InfoModals'
 import WatchPosition from './WatchPosition'
 import { setIsWatchPosition } from '../../../redux/source'
 
@@ -15,7 +15,8 @@ export default function UserLocation({focusUserLocation, focusOnLocation}) {
 
     const [loadingUserCoor, setLoadingUserCoor] = useState(false)
     const [toggleHighAccuracy, setToggleHighAccuracy] = useState(true)
-    const [showUserCoordinateTutorial, setShowUserCoordinateTutorial] = useState(false)
+    const [showCommonProblem, setShowCommonProblem] = useState(false)
+    const [showHowToUseAutoAbsence, setShowHowToUseAutoAbsence] = useState(false)
 
     const dispatch = useDispatch()
 
@@ -52,8 +53,9 @@ export default function UserLocation({focusUserLocation, focusOnLocation}) {
 
     return <div className='relative flex flex-1 flex-col shadow-md bg-neutral-300/50 rounded-xl p-2'>
         <div className='flex gap-2 items-center'>
-            <p className='flex flex-1'>Lokasi kamu sekarang</p>
-            <button className='flex items-center justify-center px-3 text-neutral-500 p-2 click-animation' onClick={() => setShowUserCoordinateTutorial(true)}><FontAwesomeIcon icon={faInfo}/></button>
+            <p className='flex flex-1'>Lokasi kamu</p>
+            <button className='flex items-center justify-center px-3 text-neutral-500 p-2 click-animation' onClick={() => setShowHowToUseAutoAbsence(true)}><FontAwesomeIcon icon={faQuestion}/></button>
+            <button className='flex items-center justify-center px-3 text-neutral-500 p-2 click-animation' onClick={() => setShowCommonProblem(true)}><FontAwesomeIcon icon={faInfo}/></button>
             {showMap && <button className={`flex items-center justify-center rounded-lg text-neutral-100 ${userCoordinate ? ' bg-secondary' : ' bg-primary-quarternary'} p-2 shadow-lg shadow-primary/50 click-animation`} onClick={focusUserLocation}><FontAwesomeIcon icon={faLocationCrosshairs}/></button>}
         </div>
         <span>{userCoordinate ? `${userCoordinate[0]}, ${userCoordinate[1]}` : '0, 0'}</span>
@@ -73,6 +75,7 @@ export default function UserLocation({focusUserLocation, focusOnLocation}) {
                 <FontAwesomeIcon icon={faBolt}/>
             </button>
         </div>
-        <InfoAboutUserCoordinate isOpen={showUserCoordinateTutorial} onClose={() => setShowUserCoordinateTutorial(false)}/>
+        <InfoCommonProblem isOpen={showCommonProblem} onClose={() => setShowCommonProblem(false)}/>
+        <InfoAutoSubmit isOpen={showHowToUseAutoAbsence} onClose={() => setShowHowToUseAutoAbsence(false)}/>
     </div>
 }
