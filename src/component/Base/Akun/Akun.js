@@ -2,7 +2,7 @@ import { faArrowRightFromBracket, faLink } from '@fortawesome/free-solid-svg-ico
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
-import Modal from '../../utils/Modal'
+import Modal, { Confirm } from '../../utils/Modal'
 import { GoogleOAuthProvider, GoogleLogin } from '@react-oauth/google'
 import { API, setLocalStorage } from '../../../utils'
 import axios from 'axios'
@@ -13,8 +13,15 @@ import Auth from './Auth'
 
 export default function Akun() {
     const account = useSelector(state => state.source.account)
+    const [openKeluarDialog, setOpenKeluarDialog] = useState(false)
 
     const dispatch = useDispatch()
+
+    function checkForAccount() {
+        console.log(account);
+        if (!account.email) return setOpenKeluarDialog(true)
+        keluar()
+    }
     
     function keluar() {
         localStorage.removeItem('account')
@@ -29,11 +36,12 @@ export default function Akun() {
             <hr />
             <div className='mt-2 items-center flex gap-2 flex-wrap'>
                 {account.email ? <p>{account.email}</p> : <TautkanDenganGoogle/>}
-                <div className='flex gap-2 rounded p-2 px-3 items-center bg-neutral-200 text-neutral-600 cursor-pointer shadow click-animation' onClick={keluar}>
+                <div className='flex gap-2 rounded p-2 px-3 items-center bg-neutral-200 text-neutral-600 cursor-pointer shadow click-animation' onClick={checkForAccount}>
                     <FontAwesomeIcon icon={faArrowRightFromBracket}/>
                     <span>keluar</span>
                 </div>
             </div>
+            <Confirm isOpen={openKeluarDialog} onClose={() => setOpenKeluarDialog(false)} callBack={keluar} title='Lanjutkan keluar' subTitle='Untuk mempermudah saat masuk kembali, kami menyarankan untuk menautkan akun Google kamu sebelum keluar. Kamu tetap ingin lanjut keluar?'/>
         </>
         : <Auth/>}
     </div>
