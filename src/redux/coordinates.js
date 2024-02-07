@@ -14,8 +14,8 @@ import { createSlice } from "@reduxjs/toolkit";
 const coordinates = createSlice({
     name: 'coordinates',
     initialState: {
-        first: [-7.4822071, 110.2223281],
-        second: [-7.4826203, 110.2221863],
+        first: [-7.4821931, 110.2223684],
+        second: [-7.4826406, 110.2221829],
         center: [-7.482137557891397, 110.22213944103149],
         user: null,
     },
