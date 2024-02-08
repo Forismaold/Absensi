@@ -40,7 +40,7 @@ function LoginForm() {
         if (!isRecaptchaVerified) return toast.error('Silakan lengkapi reCAPTCHA')
         const promise = loadingToast('Mencari akun')
         try {
-            await axios.post(API + '/akun/login/form', {nama, password})
+            await axios.post(API + '/akun/login/form', {nama: nama.trim(), password})
             .then(res => {
                 setLocalStorage('account', res.data.user)
                 dispatch(refreshAccount())
