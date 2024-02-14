@@ -12,6 +12,7 @@ import axios from 'axios';
 export default function AbsenceScan() {
     const userCoordinate = useSelector(state => state.coordinates.user)
     const absensi = useSelector(state => state.source.absensi)
+    const isWatchPosition = useSelector(state => state.source.isWatchPosition)
 
     const [qrAccount, setQrAccount] = useState('')
     const [turnOnOnCam, setTurnOnOnCam] = useState(false)
@@ -30,15 +31,20 @@ export default function AbsenceScan() {
             status: qrAccount.status
         }
 
-        const promise = loadingToast('Mengirim...')
-        setIsLoading(true)
+        if (!isWatchPosition) return blankToast('Harap mulai Gps')
 
-        if (!isUserWithinBounds(userCoordinate)) return blankToast('Kamu berada diluar area, harap pergi ke area')
+        if (!isUserWithinBounds(userCoordinate)) return blankToast('Pemindai berada diluar area, harap pergi ke area')
+
+        setIsLoading(true)
+        
+
+        const promise = loadingToast('Mengirim absen teman...')
 
         try {
             await axios.post(API + '/absen/hadir/' + absensi?._id, dataToSend)
             .then(res => {
                 promise.onSuccess(res.data.msg)
+                setQrAccount('')
                 setIsLoading(false)
             }).catch(err => {
                 promise.onError(err.response.data.msg)
@@ -48,7 +54,7 @@ export default function AbsenceScan() {
             setIsLoading(false)
             promise.onError('Server error')
         }
-    }, [qrAccount, userCoordinate, absensi?._id])
+    }, [qrAccount, userCoordinate, isWatchPosition, absensi])
 
     return <div className="flex flex-col gap-2 shadow rounded-xl">
         <div className='flex gap-2 items-center justify-between'>
@@ -70,10 +76,13 @@ export default function AbsenceScan() {
                 <span className='click-animation text-primary text-xs p-2 underline' onClick={() => setFlipHorizontally(prev => !prev)}>Balikkan horizontal</span>
             </>
         }
-        {qrAccount && <div onClick={handleHadir} className='break-all'>
-            <div className='shadow p-2 rounded text-center'>
+        {qrAccount && <div className='break-all flex flex-col gap-2'>
+            <div className='shadow p-2 rounded text-center' onClick={handleHadir}>
                 <p>{qrAccount.nama}</p>
                 <p>{qrAccount.kelas}/{qrAccount.nomorAbsen}</p>
+            </div>
+            <div className='bg-neutral-200 text-neutral-500 shadow p-2 rounded' onClick={() => setQrAccount(null)}>
+                Setel ulang
             </div>
         </div>}
         {isLoading && <div>Mengirim...</div>}

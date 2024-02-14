@@ -74,9 +74,14 @@ export default function AbsenceMethod() {
             <div className={`flex flex-1 px-4 items-center py-2 gap-2 click-animation border-b-2 ${methodSelected === 'scan' ? 'border-secondary text-secondary bg-quaternary' : 'border-transparent'}`} onClick={() => setMethodSelected('scan')}>Pindai</div>
             <div className={`flex flex-1 px-4 items-center py-2 gap-2 click-animation border-b-2 ${methodSelected === 'qecode' ? 'border-secondary text-secondary bg-quaternary' : 'border-transparent'}`} onClick={() => setMethodSelected('qrcode')}>kode</div>
         </div>
-        {methodSelected === 'gps' && <AbsenceLocation/>}
-        {methodSelected === 'form' && <AbsenceForm/>}
-        {methodSelected === 'scan' && <AbsenceScan/>}
-        {methodSelected === 'qrcode' && <AbsenceQrCode/>}
+        <div className={`${isLoading && 'opacity-50'}`}>
+            {methodSelected === 'gps' && <AbsenceLocation/>}
+            {methodSelected === 'form' && <AbsenceForm/>}
+            {methodSelected === 'scan' && <div className="flex flex-col gap-2">
+                <AbsenceScan/>
+                <AbsenceLocation/>
+            </div>}
+            {methodSelected === 'qrcode' && <AbsenceQrCode/>}
+        </div>
     </div>
 }
