@@ -65,7 +65,7 @@ export default function AbsenceScan() {
                     setQrAccount(decryptObject(value))
                     console.log(decryptObject(value))
                     }}
-                    flipHorizontally={true}
+                    flipHorizontally={flipHorizontally}
                 />
                 <span className='click-animation text-primary text-xs p-2 underline' onClick={() => setFlipHorizontally(prev => !prev)}>Balikkan horizontal</span>
             </>
