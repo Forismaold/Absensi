@@ -1,14 +1,14 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faBinoculars, faBolt, faQuestion, faRotate } from '@fortawesome/free-solid-svg-icons'
 import { useCallback, useState } from 'react'
-import LoadingIcon from '../../utils/LoadingIcon'
+import LoadingIcon from '../../../utils/LoadingIcon'
 import { useDispatch, useSelector } from 'react-redux'
-import { setUserCoordinate } from '../../../redux/coordinates'
+import { setUserCoordinate } from '../../../../redux/coordinates'
 import WatchPosition from './WatchPosition'
-import { setIsWatchPosition } from '../../../redux/source'
-import { InfoAutoSubmit } from './InfoModals'
+import { setIsWatchPosition } from '../../../../redux/source'
+import { InfoAutoSubmit } from '../InfoModals'
 
-export default function UserAbsenceLocation() {
+export default function AbsenceLocation() {
     const isWatchPosition = useSelector(state => state.source.isWatchPosition)
     const account = useSelector(state => state.source.account)
     // const userCoordinate = useSelector(state => state.coordinates.user)
@@ -51,9 +51,9 @@ export default function UserAbsenceLocation() {
     //     if (!userCoordinate) getCurrentLocation()
     // },[getCurrentLocation, userCoordinate])
 
-    return <div className="flex flex-col gap-2 bg-neutral-200 gap-2 rounded-xl p-2 shadow-lg shadow-primary/50">
+    return <div className="flex flex-col gap-2 gap-2 rounded-xl p-2 shadow-lg shadow-primary/50">
         <div className='flex gap-2 items-center justify-between'>
-                <p>Kirim otomatis sebagai {account?.panggilan || account?.nama}</p>
+                <p>Kirim lokasi sebagai {account?.panggilan || account?.nama}</p>
                 <button className='flex items-center justify-center px-3 text-neutral-500 p-2 click-animation' onClick={() => setShowHowToUseAutoAbsence(true)}><FontAwesomeIcon icon={faQuestion}/></button>
             </div>
         <div className='flex gap-2 py-1 mt-auto'>

@@ -2,11 +2,12 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faBinoculars } from '@fortawesome/free-solid-svg-icons'
 import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { setUserCoordinate } from '../../../redux/coordinates'
+import { setUserCoordinate } from '../../../../redux/coordinates'
 
 
-export default function WatchPosition({onClose, toggleHighAccuracy, focusOnLocation}) {
+export default function WatchPosition({onClose, toggleHighAccuracy}) {
     const userCoordinate = useSelector(state => state.coordinates.user)
+    const focusOnLocation = useSelector(state => state.map.focusOnLocation)
 
     const dispatch = useDispatch()
 

@@ -1,17 +1,19 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faChevronLeft, faChevronRight, faQuestion } from '@fortawesome/free-solid-svg-icons'
-import { useCallback, useEffect, useState } from "react"
+import { useCallback, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
-import { blankToast, loadingToast } from "../../utils/myToast"
+import { blankToast, loadingToast } from "../../../utils/myToast"
 import axios from "axios"
-import { API, isUserWithinBounds } from "../../../utils"
-import LoadingIcon from '../../utils/LoadingIcon'
-import { setIsWatchPosition, setShowAbsenceForm, setShowMap } from '../../../redux/source'
-import Modal from '../../utils/Modal'
-import { InfoManualSubmit } from './InfoModals'
+import { API, isUserWithinBounds } from "../../../../utils"
+import LoadingIcon from '../../../utils/LoadingIcon'
+import { setAbsensi, setShowAbsenceForm, setShowMap } from '../../../../redux/source'
+import Modal from '../../../utils/Modal'
+import { InfoManualSubmit } from '../InfoModals'
 
-export default function SubmitAbsenceForm({absensi, setAbsensi, status}) {
+export default function AbsenceForm() {
     const userCoordinate = useSelector(state => state.coordinates.user)
+    const absensi = useSelector(state => state.source.absensi)
+    const status = useSelector(state => state.source.status)
 
     // const status = useSelector(state => state.source.status)
     // const absensi = useSelector(state => state.source.absensi)
@@ -59,7 +61,7 @@ export default function SubmitAbsenceForm({absensi, setAbsensi, status}) {
                 handleTidakHadir()
                 setIsLoading(false)
                 setShowForceNext(false)
-                setAbsensi(res.data.data)
+                dispatch(setAbsensi(res.data.data))
             }).catch(err => {
                 setIsLoading(false)
                 promise.onError(err.response.data.msg)
@@ -80,7 +82,6 @@ export default function SubmitAbsenceForm({absensi, setAbsensi, status}) {
         handleHadir()
     }
     const handleHadir = useCallback(async () => {
-        if (!userCoordinate) return blankToast('Koordinat kamu belum ditetapkan')
 
         setShowForceNext(false)
         const dataToSend = {
@@ -105,7 +106,7 @@ export default function SubmitAbsenceForm({absensi, setAbsensi, status}) {
                 setIsLoading(false)
                 dispatch(setShowAbsenceForm(false))
                 dispatch(setShowMap(false))
-                setAbsensi(res.data.data)
+                dispatch(setAbsensi(res.data.data))
                 console.log(res.data.data);
             }).catch(err => {
                 promise.onError(err.response.data.msg)
@@ -115,23 +116,14 @@ export default function SubmitAbsenceForm({absensi, setAbsensi, status}) {
             setIsLoading(false)
             promise.onError('Server error')
         }
-    }, [absensi, account, dispatch, setAbsensi, userCoordinate, status])
-
-    useEffect(() => {
-        if (!status && absensi?.status === true && isUserWithinBounds(userCoordinate)) {
-            if (isLoading) return
-            blankToast('Lokasi tercapai!')
-            handleHadir()
-            dispatch(setIsWatchPosition(false))
-        }
-    },[absensi, dispatch, handleHadir, isLoading, status, userCoordinate])
+    }, [absensi, account, dispatch, userCoordinate, status])
 
     if (!account || !absensi) return
     
     if (showAbsenceForm || (status === undefined && absensi?.status === true)) return <div className='flex flex-col rounded-xl'>
         <div className='bg-neutral-200 rounded-xl p-2 flex flex-col gap-2 shadow-lg shadow-primary/50'>
             <div className='flex gap-2 items-center justify-between'>
-                <p>Kirim manual sebagai {account?.panggilan || account?.nama}</p>
+                <p>Kirim form sebagai {account?.panggilan || account?.nama}</p>
                 <button className='flex items-center justify-center px-3 text-neutral-500 p-2 click-animation' onClick={() => setShowInfoManualSubmit(true)}><FontAwesomeIcon icon={faQuestion}/></button>
             </div>
             <div className='flex gap-2 bg-secondary text-neutral-100 p-2 rounded-md'>

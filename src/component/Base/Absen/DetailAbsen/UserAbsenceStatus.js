@@ -4,22 +4,23 @@ import { useCallback, useEffect, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import axios from "axios"
 import { API, formatTime, isUserWithinBounds } from "../../../../utils"
-import { toggleShowAbsenceForm } from '../../../../redux/source'
-import SubmitAbsenceForm from '../SubmitAbsenceForm'
+import { setAbsensi, toggleShowAbsenceForm } from '../../../../redux/source'
 import { useParams } from 'react-router-dom'
 import Note from '../Note'
-import UserAbsenceLocation from '../UserAbsenceLocation'
+import AbsenceMethod from '../AbsenceMethod/AbsenceMethod'
 
 export default function UserAbsenceStatus() {
     const account = useSelector(state => state.source.account)
     // const status = useSelector(state => state.source.status)
-    const [absensi, setAbsensi] = useState(null)
+    // const [absensi, setAbsensi] = useState(null)
+    const absensi = useSelector(state => state.source.absensi)
 
     const [isFetchLoading, setIsFetchLoading] = useState(false)
     const [errorMsg, setErrorMsg] = useState('')
 
     // const dispatch = useDispatch()
     const param = useParams()
+    const dispatch = useDispatch()
 
     // const fetchStatus = useCallback(async () => {
     //     setIsFetchLoading(true)
@@ -51,7 +52,7 @@ export default function UserAbsenceStatus() {
         try {
             await axios.get(API + '/absensi/' + param.absenceId)
             .then(res => {
-                setAbsensi(res.data.data)
+                dispatch(setAbsensi(res.data.data))
                 console.log(res.data.data);
             }).catch(err => {
                 setErrorMsg(err.response.data.msg)
@@ -61,7 +62,7 @@ export default function UserAbsenceStatus() {
         } finally {
             setIsFetchLoading(false)
         }
-    },[param.absenceId])
+    },[dispatch, param.absenceId])
     useEffect(() => {
         setErrorMsg('')
     },[absensi])
@@ -84,8 +85,9 @@ export default function UserAbsenceStatus() {
         <Note absensi={absensi}/>
         <StatusUser status={absensi?.users?.find(item => item._id === account?._id)}/> 
         <StatusAbsensi absensi={absensi} msg={errorMsg}/>
-        <SubmitAbsenceForm absensi={absensi} setAbsensi={setAbsensi} status={absensi?.users?.find(item => item._id === account?._id) || undefined}/>
-        <UserAbsenceLocation />
+        <AbsenceMethod/>
+        {/* <SubmitAbsenceForm absensi={absensi} setAbsensi={setAbsensi} status={absensi?.users?.find(item => item._id === account?._id) || undefined}/> */}
+        {/* <UserAbsenceLocation /> */}
     </>
 }
 

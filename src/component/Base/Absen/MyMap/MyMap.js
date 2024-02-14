@@ -19,7 +19,6 @@ export default function MyMap() {
     const dispatch = useDispatch()
 
     const focusOnLocation = (location) => {
-        console.log('it is work?', location)
         const map = mapRef.current
         map && map?.flyTo(location, map.getZoom())
     }

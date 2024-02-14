@@ -7,7 +7,9 @@ const source = createSlice({
         account: getDecryptObjectLocalStorage('account') || null,
         isWatchPosition: false,
         showAbsenceForm: false,
-        showMap: true
+        showMap: true,
+        absensi: null,
+        status: null,
     },
     reducers: {
         setAccount: (state, action) => {
@@ -30,6 +32,10 @@ const source = createSlice({
         },
         setShowMap: (state, action) => {
             state.showMap = action.payload
+        },
+        setAbsensi: (state, action) => {
+            state.absensi = action.payload
+            state.status = action.payload?.users?.find(item => item._id === state.account?._id) || undefined
         }
     }
 })
