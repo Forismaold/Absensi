@@ -6,7 +6,7 @@ const source = createSlice({
     initialState: {
         account: getDecryptObjectLocalStorage('account') || null,
         isWatchPosition: false,
-        showAbsenceForm: false,
+        showAbsence: false,
         showMap: true,
         absensi: null,
         status: null,
@@ -24,8 +24,8 @@ const source = createSlice({
         setShowAbsenceForm: (state, action) => {
             state.showAbsenceForm = action.payload
         },
-        toggleShowAbsenceForm: (state, action) => {
-            state.showAbsenceForm = !state.showAbsenceForm
+        toggleShowAbsence: (state, action) => {
+            state.showAbsence = !state.showAbsenceForm
         },
         toggleShowMap: (state, action) => {
             state.showMap = action.payload || !state.showMap
@@ -39,5 +39,5 @@ const source = createSlice({
         }
     }
 })
-export const { setAccount, refreshAccount, setStatus, setRiwayats, setAbsensi, setAdminRiwayats, toggleShowAbsenceForm, setIsWatchPosition, toggleShowMap, setShowAbsenceForm, setShowMap } = source.actions
+export const { setAccount, refreshAccount, setStatus, setRiwayats, setAbsensi, setAdminRiwayats, toggleShowAbsenceForm, setIsWatchPosition, toggleShowMap, setShowAbsence, setShowMap } = source.actions
 export default source.reducer

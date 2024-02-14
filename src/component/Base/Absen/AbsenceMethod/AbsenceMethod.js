@@ -5,7 +5,9 @@ import { API, isUserWithinBounds } from "../../../../utils";
 import { useDispatch, useSelector } from "react-redux";
 import { blankToast, loadingToast } from "../../../utils/myToast";
 import axios from "axios";
-import { setAbsensi, setIsWatchPosition, setShowAbsenceForm, setShowMap } from "../../../../redux/source";
+import { setAbsensi, setIsWatchPosition, setShowAbsence, setShowMap } from "../../../../redux/source";
+import AbsenceScan from "./AbsenceScan";
+import AbsenceQrCode from "./AbsenceQrCode";
 
 export default function AbsenceMethod() {
     const account = useSelector(state => state.source.account)
@@ -40,7 +42,7 @@ export default function AbsenceMethod() {
             .then(res => {
                 promise.onSuccess(res.data.msg)
                 setIsLoading(false)
-                dispatch(setShowAbsenceForm(false))
+                dispatch(setShowAbsence(false))
                 dispatch(setShowMap(false))
                 dispatch(setAbsensi(res.data.data))
                 console.log(res.data.data);
@@ -66,15 +68,15 @@ export default function AbsenceMethod() {
     if (!account || !absensi) return
 
     return <div className="bg-neutral-200 flex flex-col gap-2 p-2 rounded">
-        <div className='flex items-center rounded shadow overflow-hidden text-neutral-500'>
+        <div className='flex items-center rounded shadow text-neutral-500 overflow-auto w-full'>
             <div className={`flex flex-1 px-4 items-center py-2 gap-2 click-animation border-b-2 ${methodSelected === 'gps' ? 'border-secondary text-secondary bg-quaternary' : 'border-transparent'}`} onClick={() => setMethodSelected('gps')}>Lokasi</div>
-            <div className={`flex flex-1 px-4 items-center py-2 gap-2 click-animation border-b-2 ${methodSelected === 'scan' ? 'border-secondary text-secondary bg-quaternary' : 'border-transparent'}`} onClick={() => setMethodSelected('scan')}>Pindai</div>
             <div className={`flex flex-1 px-4 items-center py-2 gap-2 click-animation border-b-2 ${methodSelected === 'form' ? 'border-secondary text-secondary bg-quaternary' : 'border-transparent'}`} onClick={() => setMethodSelected('form')}>Form</div>
+            <div className={`flex flex-1 px-4 items-center py-2 gap-2 click-animation border-b-2 ${methodSelected === 'scan' ? 'border-secondary text-secondary bg-quaternary' : 'border-transparent'}`} onClick={() => setMethodSelected('scan')}>Pindai</div>
+            <div className={`flex flex-1 px-4 items-center py-2 gap-2 click-animation border-b-2 ${methodSelected === 'qecode' ? 'border-secondary text-secondary bg-quaternary' : 'border-transparent'}`} onClick={() => setMethodSelected('qrcode')}>kode</div>
         </div>
-        {/* {methodSelected === 'auto' && <AbsenceLocation/>}
-        {methodSelected === 'scan' && <AbsenceLocation/>}
-        {methodSelected === 'form' && <AbsenceForm/>} */}
-        <AbsenceLocation/>
-        <AbsenceForm/>
+        {methodSelected === 'gps' && <AbsenceLocation/>}
+        {methodSelected === 'form' && <AbsenceForm/>}
+        {methodSelected === 'scan' && <AbsenceScan/>}
+        {methodSelected === 'qrcode' && <AbsenceQrCode/>}
     </div>
 }

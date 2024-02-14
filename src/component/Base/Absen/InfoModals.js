@@ -55,3 +55,21 @@ export function InfoManualSubmit({isOpen, onClose}) {
         </div>
     </Modal>
 }
+
+export function InfoScanSubmit({isOpen, onClose}) {
+    return <Modal isOpen={isOpen} onClose={onClose} zIndex={'z-[1001]'}>
+        <div className='text-neutral-500 p-2'>
+            <h3 className='font-semibold mt-2'>Cara Menggunakan</h3>
+            <p>Gunakan bagian ini untuk mengirim absen temanmu.</p>
+            <p>Dapatkan kode qr di halaman profile akun.</p>
+            <h3 className='font-semibold mt-2'>Pindai</h3>
+            <ol className='pl-4'>
+                <li>Arahkan kamera pemindai ke kode qr</li>
+            </ol>
+            <h3 className='font-semibold mt-2'>Kirim</h3>
+            <ol className='pl-4'>
+                <li>Pemindai harus terhubung dengan gps dan berada didalam area</li>
+            </ol>
+        </div>
+    </Modal>
+}

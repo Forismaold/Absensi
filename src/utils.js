@@ -5,14 +5,14 @@ import 'moment/locale/id'
 
 export const API = process.env.REACT_APP_API
 
-function encryptObject(object) {
+export function encryptObject(object) {
     const jsonString = JSON.stringify(object)
 
     const encryptedMessage = CryptoJS.AES.encrypt(jsonString, process.env.REACT_APP_CRYPTO_KEY).toString()
     return encryptedMessage
 }
 
-function decryptObject(encryptedMessage) {
+export function decryptObject(encryptedMessage) {
     const decryptedBytes = CryptoJS.AES.decrypt(encryptedMessage, process.env.REACT_APP_CRYPTO_KEY)
     const decryptedJsonString = decryptedBytes.toString(CryptoJS.enc.Utf8)
 

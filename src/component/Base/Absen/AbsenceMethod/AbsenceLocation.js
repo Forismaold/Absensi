@@ -53,9 +53,9 @@ export default function AbsenceLocation() {
 
     return <div className="flex flex-col gap-2 gap-2 rounded-xl p-2 shadow-lg shadow-primary/50">
         <div className='flex gap-2 items-center justify-between'>
-                <p>Kirim lokasi sebagai {account?.panggilan || account?.nama}</p>
-                <button className='flex items-center justify-center px-3 text-neutral-500 p-2 click-animation' onClick={() => setShowHowToUseAutoAbsence(true)}><FontAwesomeIcon icon={faQuestion}/></button>
-            </div>
+            <p>Kirim lokasi sebagai {account?.panggilan || account?.nama}</p>
+            <button className='flex items-center justify-center px-3 text-neutral-500 p-2 click-animation' onClick={() => setShowHowToUseAutoAbsence(true)}><FontAwesomeIcon icon={faQuestion}/></button>
+        </div>
         <div className='flex gap-2 py-1 mt-auto'>
             {isWatchPosition ? <WatchPosition onClose={() => dispatch(setIsWatchPosition(false))} toggleHighAccuracy={toggleHighAccuracy} focusOnLocation={focusOnLocation}/> : 
                 <>

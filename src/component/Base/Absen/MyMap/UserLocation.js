@@ -50,7 +50,7 @@ export default function UserLocation({focusUserLocation, focusOnLocation}) {
         <div className='flex gap-2 items-center'>
             <p className='flex flex-1'>Lokasi kamu</p>
             <button className='flex items-center justify-center px-3 text-neutral-500 p-2 click-animation' onClick={() => setShowCommonProblem(true)}><FontAwesomeIcon icon={faInfo}/></button>
-            {showMap && <button className={`flex items-center justify-center rounded-lg text-neutral-100 ${userCoordinate ? ' bg-secondary' : ' bg-primary-quarternary'} p-2 shadow-lg shadow-primary/50 click-animation`} onClick={focusUserLocation}><FontAwesomeIcon icon={faLocationCrosshairs}/></button>}
+            {showMap && <button className={`flex items-center justify-center rounded-lg ${userCoordinate ? ' bg-secondary shadow-primary/50 shadow-lg text-neutral-100' : ' bg-primary-quarternary text-transparent'} p-2 click-animation`} onClick={focusUserLocation}><FontAwesomeIcon icon={faLocationCrosshairs}/></button>}
         </div>
         <span>{userCoordinate ? `${userCoordinate[0]}, ${userCoordinate[1]}` : '0, 0'}</span>
         {/* <div className='flex gap-2 py-1 mt-auto'>

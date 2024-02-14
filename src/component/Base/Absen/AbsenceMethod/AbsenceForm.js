@@ -6,7 +6,7 @@ import { blankToast, loadingToast } from "../../../utils/myToast"
 import axios from "axios"
 import { API, isUserWithinBounds } from "../../../../utils"
 import LoadingIcon from '../../../utils/LoadingIcon'
-import { setAbsensi, setShowAbsenceForm, setShowMap } from '../../../../redux/source'
+import { setAbsensi, setShowAbsence, setShowMap } from '../../../../redux/source'
 import Modal from '../../../utils/Modal'
 import { InfoManualSubmit } from '../InfoModals'
 
@@ -18,7 +18,6 @@ export default function AbsenceForm() {
     // const status = useSelector(state => state.source.status)
     // const absensi = useSelector(state => state.source.absensi)
     const account = useSelector(state => state.source.account)
-    const showAbsenceForm = useSelector(state => state.source.showAbsenceForm)
 
     const [showTidak, setShowTidak] = useState(true)
     const [showKirim, setShowKirim] = useState(true)
@@ -73,9 +72,6 @@ export default function AbsenceForm() {
     }
 
     async function handleButtonHadir() {
-        // if (!userCoordinate) return blankToast('Koordinat kamu belum ditetapkan')
-
-        // const inArea = (userCoordinate[0] >= firstCoordinate[0] && userCoordinate[0] <= secondCoordinate[0]) && (userCoordinate[1] >= firstCoordinate[1] && userCoordinate[1] <= secondCoordinate[1])
         const inArea = isUserWithinBounds(userCoordinate)
         if (!inArea) return setShowForceNext(true)
 
@@ -104,7 +100,7 @@ export default function AbsenceForm() {
             .then(res => {
                 promise.onSuccess(res.data.msg)
                 setIsLoading(false)
-                dispatch(setShowAbsenceForm(false))
+                dispatch(setShowAbsence(false))
                 dispatch(setShowMap(false))
                 dispatch(setAbsensi(res.data.data))
                 console.log(res.data.data);
@@ -119,8 +115,8 @@ export default function AbsenceForm() {
     }, [absensi, account, dispatch, userCoordinate, status])
 
     if (!account || !absensi) return
-    
-    if (showAbsenceForm || (status === undefined && absensi?.status === true)) return <div className='flex flex-col rounded-xl'>
+    // if (showAbsenceForm || (status === undefined && absensi?.status === true))
+    return <div className='flex flex-col rounded-xl'>
         <div className='bg-neutral-200 rounded-xl p-2 flex flex-col gap-2 shadow-lg shadow-primary/50'>
             <div className='flex gap-2 items-center justify-between'>
                 <p>Kirim form sebagai {account?.panggilan || account?.nama}</p>
@@ -163,8 +159,6 @@ export default function AbsenceForm() {
         </div>
         <InfoManualSubmit isOpen={showInfoManualSubmit} onClose={() => setShowInfoManualSubmit(false)}/>
     </div>
-
-    return null
 }
 
 function ForceNext({isOpen, onClose, callBack}) {
