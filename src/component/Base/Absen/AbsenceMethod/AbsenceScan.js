@@ -17,6 +17,7 @@ export default function AbsenceScan() {
     const [turnOnOnCam, setTurnOnOnCam] = useState(false)
     const [showInfo, setShowInfo] = useState(false)
     const [isLoading, setIsLoading] = useState(false)
+    const [flipHorizontally, setFlipHorizontally] = useState(false)
 
     const handleHadir = useCallback(async () => {
         const dataToSend = {
@@ -58,10 +59,17 @@ export default function AbsenceScan() {
             if (turnOnOnCam) return window.location.reload()
             setTurnOnOnCam(true)
         }}>{turnOnOnCam ? 'Matikan' : 'Nyalakan'} kamera</div>
-        {turnOnOnCam && <QrScanner onScan={value => {
-            setQrAccount(decryptObject(value))
-            console.log(decryptObject(value))
-        }}/>}
+        {turnOnOnCam && 
+            <>
+                <QrScanner onScan={value => {
+                    setQrAccount(decryptObject(value))
+                    console.log(decryptObject(value))
+                    }}
+                    flipHorizontally={true}
+                />
+                <span className='click-animation text-primary text-xs p-2 underline' onClick={() => setFlipHorizontally(prev => !prev)}>Balikkan horizontal</span>
+            </>
+        }
         {qrAccount && <div onClick={handleHadir} className='break-all'>
             <div className='shadow p-2 rounded text-center'>
                 <p>{qrAccount.nama}</p>
