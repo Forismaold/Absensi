@@ -16,7 +16,7 @@ export default function AbsenceQrCode() {
             kelas: account.kelas,
             nomorKelas: account.nomorKelas,
             nomorAbsen: account.nomorAbsen,
-            status: status
+            status: Boolean(status)
         }))
     }, [account._id, account.kelas, account.nama, account.nomorAbsen, account.nomorKelas, status])
     return <div className="flex flex-col gap-2 items-center">

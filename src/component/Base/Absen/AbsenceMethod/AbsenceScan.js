@@ -13,14 +13,12 @@ export default function AbsenceScan() {
     const userCoordinate = useSelector(state => state.coordinates.user)
     const absensi = useSelector(state => state.source.absensi)
 
-    const [read, setRead] = useState('')
+    const [qrAccount, setQrAccount] = useState('')
     const [turnOnOnCam, setTurnOnOnCam] = useState(false)
     const [showInfo, setShowInfo] = useState(false)
     const [isLoading, setIsLoading] = useState(false)
 
     const handleHadir = useCallback(async () => {
-        const qrAccount = decryptObject(read)
-
         const dataToSend = {
             _id: qrAccount._id,
             userCoordinate: userCoordinate ? userCoordinate : [0,0],
@@ -49,7 +47,7 @@ export default function AbsenceScan() {
             setIsLoading(false)
             promise.onError('Server error')
         }
-    }, [read, userCoordinate, absensi])
+    }, [qrAccount, userCoordinate, absensi?._id])
 
     return <div className="flex flex-col gap-2 shadow rounded-xl">
         <div className='flex gap-2 items-center justify-between'>
@@ -61,15 +59,15 @@ export default function AbsenceScan() {
             setTurnOnOnCam(true)
         }}>{turnOnOnCam ? 'Matikan' : 'Nyalakan'} kamera</div>
         {turnOnOnCam && <QrScanner onScan={value => {
-            setRead(value)
+            setQrAccount(decryptObject(value))
             console.log(decryptObject(value))
         }}/>}
-        {turnOnOnCam &&
-            <div className='flex flex-col gap-2'>
-                <input type="text" className='p-2 rounded shadow w-full' readOnly value={read} placeholder='Menunggu pemindai' autoComplete='off'/>
+        {qrAccount && <div onClick={handleHadir} className='break-all'>
+            <div className='shadow p-2 rounded text-center'>
+                <p>{qrAccount.nama}</p>
+                <p>{qrAccount.kelas}/{qrAccount.nomorAbsen}</p>
             </div>
-        }
-        {read && <div onClick={handleHadir}>Isi: {read}</div>}
+        </div>}
         {isLoading && <div>Mengirim...</div>}
         <InfoScanSubmit isOpen={showInfo} onClose={() => setShowInfo(false)}/>
     </div>
