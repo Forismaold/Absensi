@@ -18,11 +18,15 @@ const coordinates = createSlice({
         second: [-7.4826406, 110.2221829],
         center: [-7.482137557891397, 110.22213944103149],
         user: null,
+        focusOnLocation: null
     },
     reducers: {
         setUserCoordinate: (state, action) => {
             state.user = action.payload
         },
+        setFocusOnLocation: (state, action) => {
+            state.focusOnLocation = action.payload
+        }
     }
 })
 export const { setUserCoordinate } = coordinates.actions

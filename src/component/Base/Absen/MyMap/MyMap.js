@@ -1,11 +1,12 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faChevronDown, faChevronRight, faMap } from '@fortawesome/free-solid-svg-icons'
-import { useRef } from 'react'
+import { useEffect, useRef } from 'react'
 import { MapContainer, Marker, Rectangle, TileLayer, Tooltip } from 'react-leaflet'
 import { useDispatch, useSelector } from 'react-redux'
 import UserLocation from './UserLocation'
 import AreaLocation from './AreaLocation'
-import { toggleShowMap } from '../../../redux/source'
+import { toggleShowMap } from '../../../../redux/source'
+import { setFocusOnLocation } from '../../../../redux/map'
 
 export default function MyMap() {
     const firstCoordinate = useSelector(state => state.coordinates.first)
@@ -18,9 +19,19 @@ export default function MyMap() {
     const dispatch = useDispatch()
 
     const focusOnLocation = (location) => {
+        console.log('it is work?', location)
         const map = mapRef.current
         map && map?.flyTo(location, map.getZoom())
     }
+
+    useEffect(() => {
+        dispatch(setFocusOnLocation(focusOnLocation))
+        
+        return () => {
+            dispatch(setFocusOnLocation(null))
+        }
+    }, [dispatch])
+    
 
     function focusUserLocation() {
         if (userCoordinate) focusOnLocation(userCoordinate)

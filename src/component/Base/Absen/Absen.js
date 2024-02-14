@@ -1,13 +1,10 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faExternalLink, faRefresh, faUserSlash } from '@fortawesome/free-solid-svg-icons'
-import UserAbsenceStatus from './UserAbsenceStatus'
-import MyMap from './MyMap'
+import { faExternalLink, faRefresh } from '@fortawesome/free-solid-svg-icons'
 import { useCallback, useEffect, useState } from 'react'
 import axios from 'axios'
 import { API, formatDate } from '../../../utils'
 import { Route, Routes, useNavigate } from 'react-router-dom'
-import { useSelector } from 'react-redux'
-import Auth from '../Akun/Auth'
+import DetailAbsen from './DetailAbsen/DetailAbsen'
 
 export default function Absen() {
     return <div className={'flex flex-col gap-2'}>
@@ -73,29 +70,4 @@ function AbsenCard ({data}) {
             </div>
         </div>
     </div>
-}
-
-function DetailAbsen() {
-    const account = useSelector(state => state.source.account)
-    return <div className='flex flex-col gap-2'>
-        <CheckAccountExist/>
-        <div className={`${!account && 'opacity-50'} flex flex-col gap-2`}>
-            <MyMap/>
-            <UserAbsenceStatus/>
-        </div>
-    </div>
-}
-
-function CheckAccountExist() {
-    const account = useSelector(state => state.source.account)
-
-    if (!account) return <div className='bg-quaternary p-2 py-6 rounded-md shadow-xl text-center'>
-        <FontAwesomeIcon icon={faUserSlash} className='text-5xl text-primary p-2'/>
-        <div>
-            <h2 className='font-bold text-3xl text-neutral-700'>Masuk ke akun</h2>
-            <p className='text-neutral-600'>Harap masuk atau daftar sebelum melakukan absensi</p>
-        </div>
-        <Auth/>
-    </div>
-    return null
 }

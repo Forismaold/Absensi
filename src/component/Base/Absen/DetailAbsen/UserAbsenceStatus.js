@@ -3,11 +3,12 @@ import { faCheck, faCheckDouble, faRefresh, faXmark } from '@fortawesome/free-so
 import { useCallback, useEffect, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import axios from "axios"
-import { API, formatTime, isUserWithinBounds } from "../../../utils"
-import { toggleShowAbsenceForm } from '../../../redux/source'
-import SubmitAbsenceForm from './SubmitAbsenceForm'
+import { API, formatTime, isUserWithinBounds } from "../../../../utils"
+import { toggleShowAbsenceForm } from '../../../../redux/source'
+import SubmitAbsenceForm from '../SubmitAbsenceForm'
 import { useParams } from 'react-router-dom'
-import Note from './Note'
+import Note from '../Note'
+import UserAbsenceLocation from '../UserAbsenceLocation'
 
 export default function UserAbsenceStatus() {
     const account = useSelector(state => state.source.account)
@@ -84,6 +85,7 @@ export default function UserAbsenceStatus() {
         <StatusUser status={absensi?.users?.find(item => item._id === account?._id)}/> 
         <StatusAbsensi absensi={absensi} msg={errorMsg}/>
         <SubmitAbsenceForm absensi={absensi} setAbsensi={setAbsensi} status={absensi?.users?.find(item => item._id === account?._id) || undefined}/>
+        <UserAbsenceLocation />
     </>
 }
 

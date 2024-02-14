@@ -71,7 +71,7 @@ export default function SubmitAbsenceForm({absensi, setAbsensi, status}) {
     }
 
     async function handleButtonHadir() {
-        if (!userCoordinate) return blankToast('Koordinat kamu belum ditetapkan')
+        // if (!userCoordinate) return blankToast('Koordinat kamu belum ditetapkan')
 
         // const inArea = (userCoordinate[0] >= firstCoordinate[0] && userCoordinate[0] <= secondCoordinate[0]) && (userCoordinate[1] >= firstCoordinate[1] && userCoordinate[1] <= secondCoordinate[1])
         const inArea = isUserWithinBounds(userCoordinate)
@@ -85,7 +85,7 @@ export default function SubmitAbsenceForm({absensi, setAbsensi, status}) {
         setShowForceNext(false)
         const dataToSend = {
             _id: account._id,
-            userCoordinate,
+            userCoordinate: userCoordinate ? userCoordinate : [0,0],
             nama: account.nama,
             kelas: account.kelas,
             nomorKelas: account.nomorKelas,
@@ -130,7 +130,7 @@ export default function SubmitAbsenceForm({absensi, setAbsensi, status}) {
     
     if (showAbsenceForm || (status === undefined && absensi?.status === true)) return <div className='flex flex-col rounded-xl'>
         <div className='bg-neutral-200 rounded-xl p-2 flex flex-col gap-2 shadow-lg shadow-primary/50'>
-            <div className='flex gap-2 items-center'>
+            <div className='flex gap-2 items-center justify-between'>
                 <p>Kirim manual sebagai {account?.panggilan || account?.nama}</p>
                 <button className='flex items-center justify-center px-3 text-neutral-500 p-2 click-animation' onClick={() => setShowInfoManualSubmit(true)}><FontAwesomeIcon icon={faQuestion}/></button>
             </div>

@@ -12,7 +12,7 @@ function encryptObject(object) {
     return encryptedMessage
 }
 
-function dencryptObject(encryptedMessage) {
+function decryptObject(encryptedMessage) {
     const decryptedBytes = CryptoJS.AES.decrypt(encryptedMessage, process.env.REACT_APP_CRYPTO_KEY)
     const decryptedJsonString = decryptedBytes.toString(CryptoJS.enc.Utf8)
 
@@ -24,7 +24,7 @@ function dencryptObject(encryptedMessage) {
 export function setLocalStorage(key, string) {
     localStorage.setItem(key, string)
 }
-  
+
 export function getLocalStorage(key) {
     const dataString = localStorage.getItem(key)
 
@@ -38,7 +38,7 @@ export function setObjectLocalStorage(key, data) {
     const dataString = JSON.stringify(data)
     localStorage.setItem(key, dataString)
 }
-  
+
 export function getObjectLocalStorage(key) {
     const dataString = localStorage.getItem(key)
 
@@ -54,13 +54,13 @@ export function setEncryptObjectLocalStorage(key, data) {
     const dataString = encryptObject(data)
     localStorage.setItem(key, dataString)
 }
-  
+
 export function getDecryptObjectLocalStorage(key) {
     try {
         const dataString = localStorage.getItem(key)
         
         if (dataString) {
-            const data = dencryptObject(dataString)
+            const data = decryptObject(dataString)
             return data
         } else {
             return null

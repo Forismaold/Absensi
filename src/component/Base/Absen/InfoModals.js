@@ -43,10 +43,10 @@ export function InfoManualSubmit({isOpen, onClose}) {
     return <Modal isOpen={isOpen} onClose={onClose} zIndex={'z-[1001]'}>
         <div className='text-neutral-500 p-2'>
             <h3 className='font-semibold mt-2'>Cara Menggunakan</h3>
-            <span>Gunakan bagian ini untuk mengirim absen secara manual</span>
+            <span>Gunakan bagian ini untuk mengirim absen secara manual, bahkan bisa diluar area.</span>
             <h3 className='font-semibold mt-2'>Kirim absen</h3>
             <ol className='pl-4'>
-                <li>Klik tombol [kirim] untuk mengirimkan absen dengan lokasi terbaru kamu, bahkan bisa diluar area.</li>
+                <li>Klik tombol [kirim] untuk mengirimkan absen dengan lokasi terbaru kamu</li>
             </ol>
             <h3 className='font-semibold mt-2'>Kirim keterangan tidak hadir</h3>
             <ol className='pl-4'>
