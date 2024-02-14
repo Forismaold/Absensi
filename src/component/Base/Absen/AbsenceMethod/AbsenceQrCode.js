@@ -10,15 +10,25 @@ export default function AbsenceQrCode() {
     const [value, setValue] = useState('')
 
     useEffect(() => {
-        setValue(encryptObject({
-            _id: account._id,
-            nama: account.nama,
-            kelas: account.kelas,
-            nomorKelas: account.nomorKelas,
-            nomorAbsen: account.nomorAbsen,
-            status: Boolean(status)
-        }))
+        setValue(encryptObject([
+            account._id,
+            account.nama,
+            account.kelas,
+            account.nomorKelas,
+            account.nomorAbsen,
+            Boolean(status)
+        ]))
     }, [account._id, account.kelas, account.nama, account.nomorAbsen, account.nomorKelas, status])
+    // useEffect(() => {
+    //     setValue(encryptObject({
+    //         _id: account._id,
+    //         nama: account.nama,
+    //         kelas: account.kelas,
+    //         nomorKelas: account.nomorKelas,
+    //         nomorAbsen: account.nomorAbsen,
+    //         status: Boolean(status)
+    //     }))
+    // }, [account._id, account.kelas, account.nama, account.nomorAbsen, account.nomorKelas, status])
     return <div className="flex flex-col gap-2 items-center">
         <div className="bg-neutral-100">
             <QRCode value={value}/>

@@ -62,8 +62,8 @@ export default function AbsenceScan() {
         {turnOnOnCam && 
             <>
                 <QrScanner onScan={value => {
-                    setQrAccount(decryptObject(value))
-                    console.log(decryptObject(value))
+                        const [_id, nama, kelas, nomorKelas, nomorAbsen, status] = decryptObject(value)
+                        setQrAccount({_id, nama, kelas, nomorKelas, nomorAbsen, status})
                     }}
                     flipHorizontally={flipHorizontally}
                 />
