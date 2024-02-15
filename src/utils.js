@@ -66,6 +66,7 @@ export function getDecryptObjectLocalStorage(key) {
             return null
         }
     } catch (error) {
+        console.log(error)
         localStorage.removeItem(key)
     }
 }
