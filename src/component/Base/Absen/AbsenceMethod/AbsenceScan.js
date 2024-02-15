@@ -1,4 +1,4 @@
-import { faQuestion } from '@fortawesome/free-solid-svg-icons';
+import { faQuestion, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useCallback, useState } from 'react'
 import {QrScanner} from "react-qrcode-scanner";
@@ -7,53 +7,14 @@ import { API, decryptObject, isUserWithinBounds } from '../../../../utils';
 import { useSelector } from 'react-redux';
 import { blankToast, loadingToast } from '../../../utils/myToast';
 import axios from 'axios';
+import LoadingIcon from '../../../utils/LoadingIcon';
 
 
 export default function AbsenceScan() {
-    const userCoordinate = useSelector(state => state.coordinates.user)
-    const absensi = useSelector(state => state.source.absensi)
-    const isWatchPosition = useSelector(state => state.source.isWatchPosition)
-
-    const [qrAccount, setQrAccount] = useState('')
+    const [qrAccount, setQrAccount] = useState(null)
     const [turnOnOnCam, setTurnOnOnCam] = useState(false)
     const [showInfo, setShowInfo] = useState(false)
-    const [isLoading, setIsLoading] = useState(false)
     const [flipHorizontally, setFlipHorizontally] = useState(false)
-
-    const handleHadir = useCallback(async () => {
-        const dataToSend = {
-            _id: qrAccount._id,
-            userCoordinate: userCoordinate ? userCoordinate : [0,0],
-            nama: qrAccount.nama,
-            kelas: qrAccount.kelas,
-            nomorKelas: qrAccount.nomorKelas,
-            nomorAbsen: qrAccount.nomorAbsen,
-        }
-
-        if (!isWatchPosition) return blankToast('Harap mulai Gps')
-
-        if (!isUserWithinBounds(userCoordinate)) return blankToast('Pemindai berada diluar area, harap pergi ke area')
-
-        setIsLoading(true)
-        
-
-        const promise = loadingToast('Mengirim absen teman...')
-
-        try {
-            await axios.post(API + '/absen/hadir/' + absensi?._id, dataToSend)
-            .then(res => {
-                promise.onSuccess(res.data.msg)
-                setQrAccount('')
-                setIsLoading(false)
-            }).catch(err => {
-                promise.onError(err.response.data.msg)
-                throw new Error(err)
-            })
-        } catch (error) {
-            setIsLoading(false)
-            promise.onError('Server error')
-        }
-    }, [qrAccount, userCoordinate, isWatchPosition, absensi])
 
     return <div className="flex flex-col gap-2 shadow rounded-xl">
         <div className='flex gap-2 items-center justify-between'>
@@ -68,6 +29,7 @@ export default function AbsenceScan() {
             <>
                 <QrScanner onScan={value => {
                         const [_id, nama, kelas, nomorKelas, nomorAbsen] = decryptObject(value)
+                        console.log(decryptObject(value))
                         setQrAccount({_id, nama, kelas, nomorKelas, nomorAbsen})
                     }}
                     flipHorizontally={flipHorizontally}
@@ -75,16 +37,94 @@ export default function AbsenceScan() {
                 <span className='click-animation text-primary text-xs p-2 underline' onClick={() => setFlipHorizontally(prev => !prev)}>Balikkan horizontal</span>
             </>
         }
-        {qrAccount && <div className='break-all flex flex-col gap-2'>
-            <div className='shadow p-2 rounded text-center' onClick={handleHadir}>
+        {qrAccount && <SubmitScan setQrAccount={(value) => setQrAccount(value)} qrAccount={qrAccount}/>}
+        <InfoScanSubmit isOpen={showInfo} onClose={() => setShowInfo(false)} setQrAccount={value => setQrAccount(value)}/>
+    </div>
+}
+
+function SubmitScan({qrAccount, setQrAccount}) {
+    const absensi = useSelector(state => state.source.absensi)
+
+    const [isLoading, setIsLoading] = useState(false)
+
+    const handleHadir = useCallback(async () => {
+        if (navigator.geolocation) {
+            setIsLoading(true)
+            navigator.geolocation.getCurrentPosition(async (position) => {
+                    const { latitude, longitude } = position.coords
+                    const value = [latitude, longitude]
+
+                    const dataToSend = {
+                        _id: qrAccount._id,
+                        userCoordinate: value ? value : [0,0],
+                        nama: qrAccount.nama,
+                        kelas: qrAccount.kelas,
+                        nomorKelas: qrAccount.nomorKelas,
+                        nomorAbsen: qrAccount.nomorAbsen,
+                    }
+            
+                    if (!isUserWithinBounds(value)) {
+                        blankToast('Pemindai berada diluar area, harap pergi ke area')
+                        setIsLoading(false)
+                        return
+                    }
+                    
+                    const promise = loadingToast('Mengirim absen teman...')
+            
+                    try {
+                        await axios.post(API + '/absen/hadir/' + absensi?._id, dataToSend)
+                        .then(res => {
+                            promise.onSuccess(res?.data?.msg)
+                            setQrAccount(null)
+                            setIsLoading(false)
+                        }).catch(err => {
+                            console.log(err)
+                            promise.onError(err?.response?.data?.msg)
+                            throw new Error(err)
+                        })
+                    } catch (error) {
+                        setIsLoading(false)
+                        console.log(error)
+                        promise.onError('Server error')
+                    }
+                },
+                (error) => {
+                    console.error('Error getting location:', error)
+                    setIsLoading(false)
+                },
+                {
+                    enableHighAccuracy: true,
+                    maximumAge: 0,
+                }
+            )
+        } else {
+            alert('Geolocation tidak didukung browsermu.')
+            setIsLoading(false)
+        }
+        
+    }, [qrAccount, absensi, setQrAccount])
+
+
+    return <div className='break-all flex flex-col gap-2'>
+        <div className='flex flex-col gap-2 shadow-lg shadow-primary/50 p-2 rounded-md text-center'>
+            <div className='flex flex-col'>
                 <p>{qrAccount.nama}</p>
-                <p>{qrAccount.kelas}/{qrAccount.nomorAbsen}</p>
+                <p>{qrAccount.kelas}{qrAccount.nomorKelas}/{qrAccount.nomorAbsen}</p>
             </div>
-            <div className='bg-neutral-200 text-neutral-500 shadow p-2 rounded' onClick={() => setQrAccount(null)}>
-                Setel ulang
+            <div className='flex gap-2'>
+                <div className='flex gap-2 items-center p-2 click-animation rounded-lg cursor-pointer border border-solid border-primary text-primary' onClick={() => setQrAccount(null)}>
+                    <FontAwesomeIcon icon={faTrash}/>
+                </div>
+                {isLoading ? 
+                    <div className='flex flex-1 gap-2 items-center bg-secondary p-2 px-4 shadow-lg shadow-primary/50 click-animation rounded-lg text-neutral-100 cursor-pointer'>
+                        <LoadingIcon/>
+                    </div>
+                    :
+                    <div className='flex flex-1 gap-2 items-center bg-secondary p-2 px-4 shadow-lg shadow-primary/50 click-animation rounded-lg text-neutral-100 cursor-pointer' onClick={handleHadir}>
+                        Kirimkan
+                    </div>
+                }
             </div>
-        </div>}
-        {isLoading && <div>Mengirim...</div>}
-        <InfoScanSubmit isOpen={showInfo} onClose={() => setShowInfo(false)}/>
+        </div>
     </div>
 }
