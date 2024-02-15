@@ -122,6 +122,7 @@ export default function AbsenceForm() {
                 <p>Kirim form sebagai {account?.panggilan || account?.nama}</p>
                 <button className='flex items-center justify-center px-3 text-neutral-500 p-2 click-animation' onClick={() => setShowInfoManualSubmit(true)}><FontAwesomeIcon icon={faQuestion}/></button>
             </div>
+            
             <div className='flex gap-2 bg-secondary text-neutral-100 p-2 rounded-md'>
                 {showTidak &&
                     <div className='border-2 border-solid border-neutral-200 bg-inherit text-neutral-200 px-3 rounded flex justify-center items-center shadow cursor-pointer' onClick={handleTidakHadir}>

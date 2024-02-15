@@ -28,7 +28,6 @@ export default function AbsenceScan() {
             kelas: qrAccount.kelas,
             nomorKelas: qrAccount.nomorKelas,
             nomorAbsen: qrAccount.nomorAbsen,
-            status: qrAccount.status
         }
 
         if (!isWatchPosition) return blankToast('Harap mulai Gps')
@@ -68,8 +67,8 @@ export default function AbsenceScan() {
         {turnOnOnCam && 
             <>
                 <QrScanner onScan={value => {
-                        const [_id, nama, kelas, nomorKelas, nomorAbsen, status] = decryptObject(value)
-                        setQrAccount({_id, nama, kelas, nomorKelas, nomorAbsen, status})
+                        const [_id, nama, kelas, nomorKelas, nomorAbsen] = decryptObject(value)
+                        setQrAccount({_id, nama, kelas, nomorKelas, nomorAbsen})
                     }}
                     flipHorizontally={flipHorizontally}
                 />

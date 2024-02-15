@@ -5,6 +5,8 @@ import Modal from '../../utils/Modal'
 export function InfoCommonProblem({isOpen, onClose}) {
     return <Modal isOpen={isOpen} onClose={onClose} zIndex={'z-[1001]'}>
         <div className='text-neutral-500 p-2'>
+            <h3 className='font-semibold'>GPS</h3>
+            <p>Mungkin koordinat yang browser anda berikan tidak presisi. kamu bisa meminta teman untuk mengirimkannya dengan menunjukkan kode QR</p>
             <h3 className='font-semibold'>Masalah Umum</h3>
             <ol className='pl-4'>
                 <li><span className='font-medium'>Kondisi Cuaca atau Atmosfer:</span> Cuaca buruk atau kondisi atmosfer tertentu dapat memengaruhi sinyal GPS dan mengurangi akurasi.</li>

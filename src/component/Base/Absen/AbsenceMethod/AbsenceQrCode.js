@@ -5,7 +5,6 @@ import { useEffect, useState } from "react"
 
 export default function AbsenceQrCode() {
     const account = useSelector(state => state.source.account)
-    const status = useSelector(state => state.source.status)
 
     const [value, setValue] = useState('')
 
@@ -16,9 +15,8 @@ export default function AbsenceQrCode() {
             account.kelas,
             account.nomorKelas,
             account.nomorAbsen,
-            Boolean(status)
         ]))
-    }, [account._id, account.kelas, account.nama, account.nomorAbsen, account.nomorKelas, status])
+    }, [account._id, account.kelas, account.nama, account.nomorAbsen, account.nomorKelas])
     // useEffect(() => {
     //     setValue(encryptObject({
     //         _id: account._id,

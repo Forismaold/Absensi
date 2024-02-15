@@ -21,11 +21,11 @@ const source = createSlice({
         setIsWatchPosition: (state, action) => {
             state.isWatchPosition = action.payload
         },
-        setShowAbsenceForm: (state, action) => {
-            state.showAbsenceForm = action.payload
+        setShowAbsence: (state, action) => {
+            state.showAbsence = action.payload
         },
         toggleShowAbsence: (state, action) => {
-            state.showAbsence = !state.showAbsenceForm
+            state.showAbsence = !state.showAbsence
         },
         toggleShowMap: (state, action) => {
             state.showMap = action.payload || !state.showMap
@@ -39,5 +39,5 @@ const source = createSlice({
         }
     }
 })
-export const { setAccount, refreshAccount, setStatus, setRiwayats, setAbsensi, setAdminRiwayats, toggleShowAbsenceForm, setIsWatchPosition, toggleShowMap, setShowAbsence, setShowMap } = source.actions
+export const { setAccount, refreshAccount, setStatus, setRiwayats, setAbsensi, setAdminRiwayats, toggleShowAbsence, setIsWatchPosition, toggleShowMap, setShowAbsence, setShowMap } = source.actions
 export default source.reducer

@@ -29,7 +29,6 @@ export default function AbsenceMethod() {
             kelas: account.kelas,
             nomorKelas: account.nomorKelas,
             nomorAbsen: account.nomorAbsen,
-            status
         }
 
         const promise = loadingToast('Mengirim...')
@@ -40,21 +39,21 @@ export default function AbsenceMethod() {
         try {
             await axios.post(API + '/absen/hadir/' + absensi?._id, dataToSend)
             .then(res => {
-                promise.onSuccess(res.data.msg)
-                setIsLoading(false)
+                promise.onSuccess(res?.data?.msg)
                 dispatch(setShowAbsence(false))
                 dispatch(setShowMap(false))
-                dispatch(setAbsensi(res.data.data))
-                console.log(res.data.data);
+                dispatch(setAbsensi(res?.data?.data))
+                console.log(res?.data);
+                setIsLoading(false)
             }).catch(err => {
-                promise.onError(err.response.data.msg)
+                promise.onError(err?.response?.data?.msg)
                 throw new Error(err)
             })
         } catch (error) {
             setIsLoading(false)
             promise.onError('Server error')
         }
-    }, [absensi, account, dispatch, userCoordinate, status])
+    }, [absensi, account, dispatch, userCoordinate])
 
     useEffect(() => {
         if (!status && absensi?.status === true && isUserWithinBounds(userCoordinate)) {
@@ -63,7 +62,8 @@ export default function AbsenceMethod() {
             handleHadir()
             dispatch(setIsWatchPosition(false))
         }
-    },[absensi, dispatch, handleHadir, isLoading, status, userCoordinate])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    },[absensi, dispatch, handleHadir, status, userCoordinate])
 
     if (!account || !absensi) return
 
@@ -72,15 +72,12 @@ export default function AbsenceMethod() {
             <div className={`flex flex-1 px-4 items-center py-2 gap-2 click-animation border-b-2 ${methodSelected === 'gps' ? 'border-secondary text-secondary bg-quaternary' : 'border-transparent'}`} onClick={() => setMethodSelected('gps')}>Lokasi</div>
             <div className={`flex flex-1 px-4 items-center py-2 gap-2 click-animation border-b-2 ${methodSelected === 'form' ? 'border-secondary text-secondary bg-quaternary' : 'border-transparent'}`} onClick={() => setMethodSelected('form')}>Form</div>
             <div className={`flex flex-1 px-4 items-center py-2 gap-2 click-animation border-b-2 ${methodSelected === 'scan' ? 'border-secondary text-secondary bg-quaternary' : 'border-transparent'}`} onClick={() => setMethodSelected('scan')}>Pindai</div>
-            <div className={`flex flex-1 px-4 items-center py-2 gap-2 click-animation border-b-2 ${methodSelected === 'qecode' ? 'border-secondary text-secondary bg-quaternary' : 'border-transparent'}`} onClick={() => setMethodSelected('qrcode')}>kode</div>
+            <div className={`flex flex-1 px-4 items-center py-2 gap-2 click-animation border-b-2 ${methodSelected === 'qrcode' ? 'border-secondary text-secondary bg-quaternary' : 'border-transparent'}`} onClick={() => setMethodSelected('qrcode')}>kode</div>
         </div>
         <div className={`${isLoading && 'opacity-50'}`}>
             {methodSelected === 'gps' && <AbsenceLocation/>}
             {methodSelected === 'form' && <AbsenceForm/>}
-            {methodSelected === 'scan' && <div className="flex flex-col gap-2">
-                <AbsenceScan/>
-                <AbsenceLocation/>
-            </div>}
+            {methodSelected === 'scan' && <AbsenceScan/>}
             {methodSelected === 'qrcode' && <AbsenceQrCode/>}
         </div>
     </div>
