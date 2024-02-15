@@ -9,7 +9,7 @@ import { createSlice } from "@reduxjs/toolkit";
 // second: [-7.482209927696517, 110.22228020994946],
 
 // Koordinat aula smanaga
-
+// const developerArea = process.env.REACT_DEVELOPER_AREA
 
 const coordinates = createSlice({
     name: 'coordinates',
