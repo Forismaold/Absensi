@@ -15,8 +15,8 @@ import { createSlice } from "@reduxjs/toolkit";
 // first: [-7.4821931, 110.2223684],
 // second: [-7.4826406, 110.2221829],
 
-const developerArea = JSON.parse(process.env.REACT_APP_DEVELOPER_AREA)
-console.log(developerArea);
+// const developerArea = JSON.parse(process.env.REACT_APP_DEVELOPER_AREA)
+// console.log(developerArea);
 
 const coordinates = createSlice({
     name: 'coordinates',
