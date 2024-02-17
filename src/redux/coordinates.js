@@ -24,9 +24,9 @@ const coordinates = createSlice({
         // first: developerArea[0],
         // second: developerArea[1],
         // center: developerArea[1],
-        first: [-7,4823544, 110,2228273],
+        first: [-7.4823544, 110.2228273],
         second: [-7.482062, 110.222529],
-        center: [-7,4822669, 110,2226735],
+        center: [-7.4822669, 110.2226735],
         user: null,
         focusOnLocation: null
     },
