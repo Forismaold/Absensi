@@ -1,46 +1,47 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faInfo, faLocationCrosshairs } from '@fortawesome/free-solid-svg-icons'
-import { useState } from 'react'
+import { faBolt, faInfo, faLocationCrosshairs } from '@fortawesome/free-solid-svg-icons'
+import { useCallback, useState } from 'react'
 // import LoadingIcon from '../../utils/LoadingIcon'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { InfoCommonProblem } from '../InfoModals'
+import { setUserCoordinate } from '../../../../redux/coordinates'
+import LoadingIcon from '../../../utils/LoadingIcon'
 
 export default function UserLocation({focusUserLocation, focusOnLocation}) {
     const showMap = useSelector(state => state.source.showMap)
     const userCoordinate = useSelector(state => state.coordinates.user)
 
-    // const [loadingUserCoor, setLoadingUserCoor] = useState(false)
-    // const [toggleHighAccuracy, setToggleHighAccuracy] = useState(true)
+    const [loadingUserCoor, setLoadingUserCoor] = useState(false)
+    const [toggleHighAccuracy, setToggleHighAccuracy] = useState(true)
     const [showCommonProblem, setShowCommonProblem] = useState(false)
 
-    // const dispatch = useDispatch()
+    const dispatch = useDispatch()
 
-    // const getCurrentLocation = useCallback(() => {
-    //     if (isWatchPosition) return null
-    //     if (navigator.geolocation) {
-    //         setLoadingUserCoor(true)
-    //         navigator.geolocation.getCurrentPosition(
-    //             (position) => {
-    //                 const { latitude, longitude } = position.coords
-    //                 const value = [latitude, longitude]
-    //                 dispatch(setUserCoordinate(value))
-    //                 setLoadingUserCoor(false)
-    //                 focusOnLocation(value)
-    //             },
-    //             (error) => {
-    //                 console.error('Error getting location:', error)
-    //                 setLoadingUserCoor(false)
-    //             },
-    //             {
-    //                 enableHighAccuracy: toggleHighAccuracy,
-    //                 maximumAge: 0,
-    //             }
-    //         )
-    //     } else {
-    //         alert('Geolocation tidak didukung browsermu.')
-    //         setLoadingUserCoor(false)
-    //     }
-    // },[dispatch, focusOnLocation, isWatchPosition])
+    const getCurrentLocation = useCallback(() => {
+        if (navigator.geolocation) {
+            setLoadingUserCoor(true)
+            navigator.geolocation.getCurrentPosition(
+                (position) => {
+                    const { latitude, longitude } = position.coords
+                    const value = [latitude, longitude]
+                    dispatch(setUserCoordinate(value))
+                    setLoadingUserCoor(false)
+                    focusOnLocation(value)
+                },
+                (error) => {
+                    console.error('Error getting location:', error)
+                    setLoadingUserCoor(false)
+                },
+                {
+                    enableHighAccuracy: toggleHighAccuracy,
+                    maximumAge: 0,
+                }
+            )
+        } else {
+            alert('Geolocation tidak didukung browsermu.')
+            setLoadingUserCoor(false)
+        }
+    },[dispatch, focusOnLocation, toggleHighAccuracy])
 
     // useEffect(() => {
     //     if (!userCoordinate) getCurrentLocation()
@@ -69,6 +70,19 @@ export default function UserLocation({focusUserLocation, focusOnLocation}) {
                 <FontAwesomeIcon icon={faBolt}/>
             </button>
         </div> */}
+        <div className='flex gap-2'>
+            <div onClick={getCurrentLocation} className='flex flex-1 shadow-lg shadow-primary/50 items-center justify-center rounded text-neutral-100 px-2 click-animation bg-secondary min-h-[32px] mt-auto'>
+                {loadingUserCoor ?
+                    <LoadingIcon/>
+                :
+                    <span>Dapatkan koordinat</span>
+                    
+                }
+            </div>
+            <div className={`flex shadow-lg px-2 shadow-accent/50 justify-center items-center rounded ${toggleHighAccuracy ? 'text-neutral-700 bg-accent' : 'text-neutral-500 bg-neutral-200'} click-animation min-h-[32px] mt-auto cursor-pointer`} onClick={() => setToggleHighAccuracy(prev => !prev)} title='Akurasi tinggi'>
+                <FontAwesomeIcon icon={faBolt}/>
+            </div>
+        </div>
         <InfoCommonProblem isOpen={showCommonProblem} onClose={() => setShowCommonProblem(false)}/>
     </div>
 }

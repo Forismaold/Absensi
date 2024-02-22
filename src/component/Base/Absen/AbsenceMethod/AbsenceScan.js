@@ -5,7 +5,7 @@ import {QrScanner} from "react-qrcode-scanner";
 import { InfoScanSubmit } from '../InfoModals';
 import { API, decryptObject, isUserWithinBounds } from '../../../../utils';
 import { useSelector } from 'react-redux';
-import { blankToast, loadingToast } from '../../../utils/myToast';
+import { loadingToast } from '../../../utils/myToast';
 import axios from 'axios';
 import LoadingIcon from '../../../utils/LoadingIcon';
 
@@ -51,6 +51,7 @@ function SubmitScan({qrAccount, setQrAccount}) {
         if (navigator.geolocation) {
             setIsLoading(true)
             navigator.geolocation.getCurrentPosition(async (position) => {
+                    const promise = loadingToast('Mencari posisi...')
                     const { latitude, longitude } = position.coords
                     const value = [latitude, longitude]
 
@@ -64,12 +65,12 @@ function SubmitScan({qrAccount, setQrAccount}) {
                     }
             
                     if (!isUserWithinBounds(value)) {
-                        blankToast('Pemindai berada diluar area, harap pergi ke area')
+                        promise.onError('Pemindai berada diluar area, harap pergi ke area')
                         setIsLoading(false)
                         return
                     }
                     
-                    const promise = loadingToast('Mengirim absen teman...')
+                    promise.updateText('Mengirim absen teman...')
             
                     try {
                         await axios.post(API + '/absen/hadir/' + absensi?._id, dataToSend)

@@ -22,12 +22,16 @@ export function loadingToast(text = 'Loading...', timeout = 90000) {
     
     const onSuccess = (msg = 'Success') => updateToast(toast.TYPE.SUCCESS, msg)
 
+    const updateText = (msg) => {
+        toast.update(promise, { render: <p>{msg}</p> })
+    }
+
     const onError = (msg = 'Error') => updateToast(toast.TYPE.ERROR, msg)
 
     const close = () => toast.dismiss(promise)
 
 
-    return { element: promise, onSuccess, onError, close }
+    return { element: promise, onSuccess, onError, close, updateText }
 }
 
 export function blankToast(text = 'Ok') {
