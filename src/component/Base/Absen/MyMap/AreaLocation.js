@@ -4,8 +4,8 @@ import { useState } from 'react'
 import { useSelector } from 'react-redux'
 
 export default function AreaLocation({focusOnLocation}) {
-    const firstCoordinate = useSelector(state => state.coordinates.first)
-    const secondCoordinate = useSelector(state => state.coordinates.second)
+    const firstCoordinate = useSelector(state => state.source.absensi?.coordinates?.first) ?? [0, 0]
+    const secondCoordinate = useSelector(state => state.source.absensi?.coordinates?.second) ?? [0, 0]
     const showMap = useSelector(state => state.source.showMap)
 
     const [showLocation, setShowLocation] = useState(false)

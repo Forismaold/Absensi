@@ -115,12 +115,13 @@ function ManageAbsence() {
         }
     }, [])
 
-    async function createAbsence(title, note) {
+    async function createAbsence(title, note, coordinates) {
         const promise = loadingToast('Membuat absensi baru')
         try {
             await axios.post(API + '/absensi', {
                 title,
                 note,
+                coordinates,
                 openedBy: account?.panggilan || account.nama
             }).then(res => {
                 promise.onSuccess('berhasil menambahkan absensi')
@@ -212,10 +213,10 @@ function DashboardActionButton({ item }) {
             promise.onError('Internal server error')
         }
     }
-    async function editAbsensi(title, note) {
+    async function editAbsensi(title, note, coordinates) {
         const promise = loadingToast('Mengedit Absensi')
         try {
-            await axios.put(API + '/absensi/' + absensi?._id, {title, note, openedBy: account?.panggilan || account.nama})
+            await axios.put(API + '/absensi/' + absensi?._id, {title, note, coordinates, openedBy: account?.panggilan || account.nama})
             .then(res => {
                 promise.onSuccess(res.data.msg)
                 setOpenEdit(false)
@@ -369,7 +370,7 @@ function DashboardActionButton({ item }) {
         <Confirm isOpen={showSaveConfirm} title='Tutup dan simpan' subTitle={`Menutup absensi ${absensi?.title} dan menyimpannya sekarang?`} onClose={() => setShowSaveConfirm(false)} callBack={saveAbsensi} textConfirm='Simpan'/>
         {/* <Confirm isOpen={showSaveConfirm} title='Tutup dan simpan' subTitle='Menutup absensi dan menyimpannya sekarang?' onClose={() => setShowSaveConfirm(false)} callBack={tutupAbsensi} textConfirm='Simpan'/> */}
         <Confirm isOpen={showBuangConfirm} title='Buang' subTitle={`Menutup absensi ${absensi?.title} dan membuang perubahan absensi?`} onClose={() => setShowBuangConfirm(false)} callBack={buangAbsensi} textConfirm='Buang'/>
-        <AbsensiEditor isOpen={openEdit} onClose={() => setOpenEdit(false)} callBack={editAbsensi} submitText='Simpan' title={absensi?.title} note={absensi?.note}/>
+        <AbsensiEditor isOpen={openEdit} onClose={() => setOpenEdit(false)} callBack={editAbsensi} submitText='Simpan' title={absensi?.title} note={absensi?.note} coordinates={absensi?.coordinates || {}}/>
         <Modal isOpen={showUsers} onClose={() => setShowUsers(false)}>
             <div className="flex flex-col p-2">
                 <div className='flex flex-wrap flex-col sm:flex-row'>

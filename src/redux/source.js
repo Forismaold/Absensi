@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { getDecryptObjectLocalStorage } from "../utils";
+import { getDecryptObjectLocalStorage, getDefaultCoordinates } from "../utils";
 
 const source = createSlice({
     name: 'source',
@@ -35,6 +35,13 @@ const source = createSlice({
         },
         setAbsensi: (state, action) => {
             state.absensi = action.payload
+            let absence = action.payload
+
+            if (!absence?.coordinates?.first || !absence?.coordinates?.first) {
+                let {first, second} = getDefaultCoordinates()
+                if (!absence?.coordinates?.first) absence.coordinates.first = first
+                if (!absence?.coordinates?.second) absence.coordinates.first = second
+            }
             state.status = action.payload?.users?.find(item => item._id === state.account?._id) || undefined
         }
     }

@@ -95,10 +95,19 @@ export function getPermission() {
 // const userWithin = (coordinate[0] >= first[0] && coordinate[0] <= second[0]) && (coordinate[1] >= first[1] && coordinate[1] <= second[1])
 // return userWithin
 
+export function getDefaultCoordinates() {
+    let {first, second} = store.getState().coordinates || {}
+    return {first, second}
+}
+
 export function isUserWithinBounds (userCoordinate = [0, 0]) {
     // dapatkan data dari parameter dan redux
     const coordinate = userCoordinate || [0, 0]
-    const {first, second} = store.getState().coordinates || {}
+    let {first, second} = store.getState().source.absensi.coordinates || {}
+    if (!first || !second) {
+        console.log('cannot check within bounds before set');
+        return false
+    }
 
     // buat variable sendiri 
     const [userLat, userLng] = coordinate

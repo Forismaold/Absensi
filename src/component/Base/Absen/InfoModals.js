@@ -1,6 +1,7 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faBinoculars, faBolt, faChevronRight, faRefresh } from '@fortawesome/free-solid-svg-icons'
 import Modal from '../../utils/Modal'
+import { useSelector } from 'react-redux'
 
 export function InfoCommonProblem({isOpen, onClose}) {
     return <Modal isOpen={isOpen} onClose={onClose} zIndex={'z-[1001]'}>
@@ -72,6 +73,27 @@ export function InfoScanSubmit({isOpen, onClose}) {
             <ol className='pl-4'>
                 <li>Pemindai harus terhubung dengan gps dan berada didalam area</li>
             </ol>
+        </div>
+    </Modal>
+}
+
+export function InfoCostumCoordinate({isOpen, onClose}) {
+    const coordinates = useSelector(state => state.coordinates)
+
+    return <Modal isOpen={isOpen} onClose={onClose} zIndex={'z-[1001]'} portalName='portalDeeper'>
+        <div className='text-neutral-500 p-2'>
+            <h3 className='font-semibold mt-2'>Cara Menyetel Koordinat</h3>
+            <h3 className='font-semibold mt-2'>Format</h3>
+            <p>Gunakan latitude(Garis Lintang) dan longitude(Garis bujur).</p>
+            <p>Gunakan format dengan <span className="font-semibold">urutan garis lintang kemudian garis bujur</span> yang <span className="font-semibold">dipisah dengan tanda koma</span>.</p>
+            <p>Gunakan titik sebagai desimal contoh jika <span className="font-semibold">dua koma empat puluh lima</span> maka <span className="font-semibold">2.45</span></p>
+            <p>Gunakan koma sebagai pemisah antara nilai garis lintang dan garis bujur contoh jika garis lintang adalah <span className="font-semibold">dua koma empat puluh lima</span> dan garis bujur adalah <span className="font-semibold">lima koma dua puluh lima</span> maka <span className="font-semibold">2.45, 5.25</span></p>
+            <h3 className='font-semibold mt-2'>Catatan</h3>
+            <p>Nilai koordinat jika tidak diisi maka akan menyediakan nilai bawaan yang tersedia.</p>
+            <p>Koordinat petama <span className='font-semibold'>{coordinates?.first.join(', ')}</span></p>
+            <p>Koordinat Kedua <span className='font-semibold'>{coordinates?.second.join(', ')}</span></p>
+            <h3 className='font-semibold mt-2'>Fun fact</h3>
+            <p>Di negara orang yang membuat bahasa javascript (Amerika, Brendan Eich), mereka menggunakan tanda titik sebagai tanda desimal pada angka, tidak seperti di indonesia yang menggunakan tanda koma. Itulah kenapa developer menggunakan format diatas :)</p>
         </div>
     </Modal>
 }

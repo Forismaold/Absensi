@@ -9,9 +9,10 @@ import { toggleShowMap } from '../../../../redux/source'
 import { setFocusOnLocation } from '../../../../redux/map'
 
 export default function MyMap() {
-    const firstCoordinate = useSelector(state => state.coordinates.first)
-    const secondCoordinate = useSelector(state => state.coordinates.second)
-    const centerCoordinate = useSelector(state => state.coordinates.center)
+    const absensi = useSelector(state => state.source.absensi)
+    const firstCoordinate = useSelector(state => state.source.absensi?.coordinates?.first) ?? [0, 0]
+    const secondCoordinate = useSelector(state => state.source.absensi?.coordinates?.second) ?? [0, 0]
+    const centerCoordinate = useSelector(state => state.source.absensi?.coordinates?.first) ?? [0, 0]
     const userCoordinate = useSelector(state => state.coordinates.user)
     const showMap = useSelector(state => state.source.showMap)
 
@@ -38,6 +39,8 @@ export default function MyMap() {
 
     return (
         <div className='flex flex-col gap-2'>
+            {absensi ? 
+            <>
             <div className='flex flex-col bg-neutral-300/50 rounded-xl overflow-hidden'>
                 <div className='flex gap-2 p-2 rounded-lg text-neutral-500'>
                     <button className='flex flex-1 items-center click-animation justify-between px-2' onClick={() => dispatch(toggleShowMap())}>
@@ -74,6 +77,10 @@ export default function MyMap() {
             <div className='flex gap-2 flex-wrap mt-2 flex-col md:flex-row'>
                 <UserLocation focusOnLocation={focusOnLocation} focusUserLocation={focusUserLocation}/>
             </div>
+            </>
+            :
+            <p>Mengambil data absensi sebelum memuat peta</p>
+            }
         </div>
     )
 }

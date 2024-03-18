@@ -1,7 +1,25 @@
 import { useEffect } from "react"
 import { createPortal } from "react-dom"
 
-export default function Modal({isOpen, children, onClose, zIndex}) {
+function MyOverlay({onClose, children, zIndex = 'z-[1]'}) {
+    function handleOnClose(e) {
+        console.log(onClose);
+        if (e.target.classList.contains('overlay') && e.target.classList.contains(zIndex)) onClose()
+    }
+
+    useEffect(() => {
+        document.body.style.overflow = "hidden"
+        return () => {
+            document.body.style.overflow = "auto"
+        }
+    }, [])    
+
+    return <div onClick={handleOnClose} className={`${zIndex} overlay fixed top-0 b-0 r-0 l-0 h-full w-full bg-neutral-900/[.5] p-4 flex justify-center items-center`}>
+        {children}
+    </div>
+}
+
+export default function Modal({isOpen, children, onClose, zIndex, portalName = 'portal'}) {
     if (!isOpen) return null
     
     return createPortal(
@@ -10,7 +28,7 @@ export default function Modal({isOpen, children, onClose, zIndex}) {
                 {children}
             </div>
         </MyOverlay>
-    , document.getElementById('portal'))
+    , document.getElementById(portalName))
 }
 
 export function Confirm({isOpen = false, title = 'Lanjutkan operasi', subTitle = 'Kamu yakin?', textCancel = 'Batal', textConfirm = 'Ya', onClose, zIndex, callBack}) {
@@ -28,21 +46,4 @@ export function Confirm({isOpen = false, title = 'Lanjutkan operasi', subTitle =
             </div>
         </MyOverlay>
     , document.getElementById('confirm'))
-}
-
-function MyOverlay({onClose, children, zIndex = 'z-[1]'}) {
-    function handleOnClose(e) {
-        if (e.target.classList.contains('overlay')) onClose()
-    }
-
-    useEffect(() => {
-        document.body.style.overflow = "hidden"
-        return () => {
-            document.body.style.overflow = "auto"
-        }
-    }, [])    
-
-    return <div onClick={handleOnClose} className={`${zIndex} overlay fixed top-0 b-0 r-0 l-0 h-full w-full bg-neutral-900/[.5] p-4 flex justify-center items-center`}>
-        {children}
-    </div>
 }
