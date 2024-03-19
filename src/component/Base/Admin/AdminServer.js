@@ -307,11 +307,11 @@ function DashboardActionButton({ item }) {
             </div>
             <div className='flex flex-wrap flex-col sm:flex-row'>
                 <p className='sm:w-2/6 font-semibold'>Koordinat Pertama</p>
-                <p className='w-fit overflow-auto'>{absensi?.coordinates?.first?.join(',') || '-'}</p>
+                <p className='max-w-full overflow-auto'>{absensi?.coordinates?.first?.join(',') || '-'}</p>
             </div>
             <div className='flex flex-wrap flex-col sm:flex-row'>
                 <p className='sm:w-2/6 font-semibold'>Koordinat Kedua</p>
-                <p className='w-fit overflow-auto'>{absensi?.coordinates?.second?.join(',') || '-'}</p>
+                <p className='max-w-full overflow-auto'>{absensi?.coordinates?.second?.join(',') || '-'}</p>
             </div>
             <div className='flex flex-wrap flex-col sm:flex-row'>
                 <p className='sm:w-2/6 font-semibold'>Catatan</p>
