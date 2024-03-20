@@ -123,3 +123,28 @@ export function isUserWithinBounds (userCoordinate = [0, 0]) {
     // Jika kedua koordinat (latitude dan longitude) berada dalam jangkauan, maka user berada dalam jangkauan
     return isLatInRange && isLngInRange
 }
+
+export function isUserWithinBoundsCSV (bounds = {}, userCoordinate = [0, 0]) {
+    // dapatkan data dari parameter dan redux
+    if (!userCoordinate[0] || !userCoordinate[1] || !bounds) {
+        console.log('requirement not complete');
+        return false
+    }
+
+    const coordinate = userCoordinate
+    let {first, second} = bounds
+
+    // buat variable sendiri 
+    const [userLat, userLng] = coordinate
+    const [firstLat, firstLng] = first
+    const [secondLat, secondLng] = second
+    
+    // Mengecek apakah userLat berada di antara firstLat dan secondLat
+    const isLatInRange = userLat >= Math.min(firstLat, secondLat) && userLat <= Math.max(firstLat, secondLat)
+
+    // Mengecek apakah userLng berada di antara firstLng dan secondLng
+    const isLngInRange = userLng >= Math.min(firstLng, secondLng) && userLng <= Math.max(firstLng, secondLng)
+
+    // Jika kedua koordinat (latitude dan longitude) berada dalam jangkauan, maka user berada dalam jangkauan
+    return isLatInRange && isLngInRange
+}

@@ -2,7 +2,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faEllipsis, faFilter, faSearch, faTable, faTrash } from '@fortawesome/free-solid-svg-icons'
 import { useCallback, useEffect, useState } from "react"
 import axios from "axios"
-import { API, formatBeautyDate, formatDate, isUserWithinBounds } from "../../../utils"
+import { API, formatBeautyDate, formatDate, isUserWithinBoundsCSV } from "../../../utils"
 import UsersGroup from './UsersGroup'
 import Modal, { Confirm } from '../../utils/Modal'
 import { loadingToast } from '../../utils/myToast'
@@ -98,7 +98,7 @@ function DownloadCSVButton({onClose, data}) {
                     { label: "Absen", value: 'absen' },
                     { label: "Kode", value: 'kode' },
                     { label: "Keterangan", value: 'keterangan' },
-                    { label: "Lokasi", value: row => `${isUserWithinBounds(row.koordinat)}` },
+                    { label: "Lokasi", value: row => `${isUserWithinBoundsCSV(data?.coordinates, row.koordinat)}` },
                     { label: "Latitude", value: row => row.koordinat[0] || 0 },
                     { label: "Longitude", value: row => row.koordinat[1] || 0 },
                     { label: "Waktu", value: row => formatDate(row.waktuAbsen) },
