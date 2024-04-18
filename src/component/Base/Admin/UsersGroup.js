@@ -2,20 +2,20 @@ import { useState } from "react"
 import Modal from "../../utils/Modal"
 import { formatTime, isUserWithinBounds } from "../../../utils"
 
-export default function UsersGroup({title, data}) {
+export default function UsersGroup({title, data, absenceData}) {
     return <div className='flex flex-col flex-1 shadow-md p-2 rounded-md overflow-hidden'>
         <p className="text-neutral-600 font-medium py-2 flex items-center justify-between">
             <span>{title}</span>
             <span>{data.length}</span>
         </p>
         <div className="flex flex-col items-center flex-1">
-            {data.map(x => <UserGroupModel key={x._id} data={x}/>)}
+            {data.map(x => <UserGroupModel key={x._id} data={x} absenceData={absenceData}/>)}
             {!data.length && <p className="text-center m-auto">Kosong</p>}
         </div>
     </div>
 }
 
-function UserGroupModel({data}) {
+function UserGroupModel({data, absenceData}) {
     const [isOpenModal, setIsOpenModal] = useState(false)
     return <>
         <div className="odd:bg-neutral-200 p-2 rounded w-full cursor-pointer" onClick={() => setIsOpenModal(true)}>
@@ -25,7 +25,7 @@ function UserGroupModel({data}) {
             <p>{data.nama}{data?.NIS && `#${data.NIS}`} ({data.absen ? 'Absen' : 'Tidak absen'})</p>
             <AbsenceCell prop={'Kode'} value={data.kode}/>
             <AbsenceCell prop={'Keterangan'} value={data.keterangan}/>
-            <AbsenceCell prop={'Lokasi'} value={isUserWithinBounds(data.koordinat)? 'Di dalam area' : 'Di luar area'}/>
+            <AbsenceCell prop={'Lokasi'} value={isUserWithinBounds(data.koordinat, absenceData?.coordinates)? 'Di dalam area' : 'Di luar area'}/>
             <AbsenceCell prop={'Koordinat'} value={`${data?.koordinat ? data.koordinat[0] : 'defaultX'}, ${data?.koordinat ? data.koordinat[1] : 'defaultY'}`}/>
             <AbsenceCell prop={'Waktu Absen'} value={formatTime(data.waktuAbsen)}/>
         </Modal>

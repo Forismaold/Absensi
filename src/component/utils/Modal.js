@@ -3,7 +3,6 @@ import { createPortal } from "react-dom"
 
 function MyOverlay({onClose, children, zIndex = 'z-[1]'}) {
     function handleOnClose(e) {
-        console.log(onClose);
         if (e.target.classList.contains('overlay') && e.target.classList.contains(zIndex)) onClose()
     }
 

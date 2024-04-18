@@ -100,14 +100,21 @@ export function getDefaultCoordinates() {
     return {first, second}
 }
 
-export function isUserWithinBounds (userCoordinate = [0, 0]) {
+export function isUserWithinBounds (userCoordinate = [0, 0], absenceCoordinates = {}) {
     // dapatkan data dari parameter dan redux
     const coordinate = userCoordinate || [0, 0]
-    let {first, second} = store.getState().source.absensi.coordinates || {}
+    let {first, second} = absenceCoordinates; // Mengambil dari parameter pertama
+    const reduxCoordinates = store?.getState()?.source?.absensi?.coordinates
     if (!first || !second) {
-        console.log('cannot check within bounds before set');
-        return false
+        if(reduxCoordinates) {
+            // Jika absenceCoordinates kosong dan terdapat data Redux
+            ({first, second} = reduxCoordinates) // Mengambil dari Redux
+        } else {
+            console.log('cannot check within bounds before set')
+            return false
+        }
     }
+
 
     // buat variable sendiri 
     const [userLat, userLng] = coordinate
@@ -147,4 +154,17 @@ export function isUserWithinBoundsCSV (bounds = {}, userCoordinate = [0, 0]) {
 
     // Jika kedua koordinat (latitude dan longitude) berada dalam jangkauan, maka user berada dalam jangkauan
     return isLatInRange && isLngInRange
+}
+
+export function getCenterCoordinates(coordinates = {}) {
+    const {first, second} = coordinates
+    if (!first || !second) {
+        console.log('cannot check within bounds before set')
+        return [0,0]
+    }
+
+    const centerX = (first[0] + second[0]) / 2
+    const centerY = (first[1] + second[1]) / 2
+    
+    return [centerX, centerY]
 }

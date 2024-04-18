@@ -87,7 +87,7 @@ function DetailAbsence() {
         </div>
         {isLoading && <LoadingSkeleton/>}
         <DashboardActionButton item={absensi}/>
-        <UsersList users={absensi?.users}/>
+        <UsersList users={absensi?.users} absenceData={absensi}/>
     </div>
 }
 function ManageAbsence() {
@@ -194,7 +194,7 @@ function DashboardActionButton({ item }) {
 
     useEffect(() => {
         setAbsensi(item)
-        console.log(item)
+        console.log('item absence', item)
     },[item])
 
     async function bukaAbsensi() {
@@ -402,7 +402,7 @@ function DashboardActionButton({ item }) {
                     <p>{absensi?.note || '-'}</p>
                 </div>
             </div>
-            <UsersList users={absensi?.users}/>
+            <UsersList users={absensi?.users} absenceData={item}/>
         </Modal>
     </div>
 }
