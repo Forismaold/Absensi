@@ -1,9 +1,9 @@
 import { faQuestion, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { useCallback, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import {QrScanner} from "react-qrcode-scanner";
 import { InfoScanSubmit } from '../InfoModals';
-import { API, decryptObject, isUserWithinBounds } from '../../../../utils';
+import { API, decryptObject, getCenterCoordinates, isUserWithinBounds } from '../../../../utils';
 import { useSelector } from 'react-redux';
 import { loadingToast } from '../../../utils/myToast';
 import axios from 'axios';
@@ -44,6 +44,7 @@ export default function AbsenceScan() {
 
 function SubmitScan({qrAccount, setQrAccount}) {
     const absensi = useSelector(state => state.source.absensi)
+    
 
     const [isLoading, setIsLoading] = useState(false)
 
@@ -54,10 +55,12 @@ function SubmitScan({qrAccount, setQrAccount}) {
                     const promise = loadingToast('Mencari posisi...')
                     const { latitude, longitude } = position.coords
                     const value = [latitude, longitude]
+                    const centerCoordinates = getCenterCoordinates(absensi?.coordinates)
+                    console.log(absensi?.coordinates, centerCoordinates);
 
                     const dataToSend = {
                         _id: qrAccount._id,
-                        userCoordinate: value ? value : [0,0],
+                        userCoordinate: centerCoordinates,
                         nama: qrAccount.nama,
                         kelas: qrAccount.kelas,
                         nomorKelas: qrAccount.nomorKelas,
@@ -105,6 +108,14 @@ function SubmitScan({qrAccount, setQrAccount}) {
         
     }, [qrAccount, absensi, setQrAccount])
 
+    useEffect(() => {
+      console.log('absensi',absensi);
+    
+      return () => {
+        
+      }
+    }, [absensi])
+    
 
     return <div className='break-all flex flex-col gap-2'>
         <div className='flex flex-col gap-2 shadow-lg shadow-primary/50 p-2 rounded-md text-center'>
