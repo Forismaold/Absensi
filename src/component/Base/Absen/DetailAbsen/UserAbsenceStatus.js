@@ -68,8 +68,16 @@ export default function UserAbsenceStatus() {
         setErrorMsg('')
     },[absensi])
     useEffect(() => {
+        
         if (!absensi) fetchData()
     },[absensi, fetchData])
+
+    useEffect(() => {
+        if (absensi && absensi?._id !== param.absenceId) {
+            dispatch(setAbsensi(null))
+        }
+    }, [absensi, dispatch, param.absenceId])
+    
 
     // if (!absensi === null) return <div>
     //     <button className='flex ml-auto items-center justify-center rounded text-neutral-100 bg-secondary p-2 shadow-lg shadow-primary/50 click-animation' onClick={() => fetchStatus()}>{isFetchLoading ? <LoadingIcon/> : <><FontAwesomeIcon icon={faRotate} className='p-0.5 pr-2'/> Segarkan status absensi</>}</button>
