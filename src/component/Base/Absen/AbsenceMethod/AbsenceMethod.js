@@ -57,6 +57,10 @@ export default function AbsenceMethod() {
     }, [absensi, account, dispatch, userCoordinate])
 
     useEffect(() => {
+        console.log('status:',status);
+    },[status])
+
+    useEffect(() => {
         if (!status && absensi?.status === true && isUserWithinBounds(userCoordinate)) {
             if (isLoading) return
             blankToast('Lokasi tercapai!')
@@ -66,7 +70,10 @@ export default function AbsenceMethod() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     },[absensi, dispatch, handleHadir, status, userCoordinate])
 
-    if (!account || !absensi || !showAbsence) return
+    if (!account || !absensi) return
+
+    if (!showAbsence && (status !== null)) return
+
 
     return <div className="bg-neutral-200 flex flex-col gap-2 p-2 rounded">
         <div className='flex items-center rounded shadow text-neutral-500 overflow-auto w-full'>

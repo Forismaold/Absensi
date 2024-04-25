@@ -43,7 +43,7 @@ const source = createSlice({
                 if (!absence?.coordinates?.first.length) absence.coordinates.first = [-7.482044510981448, 110.22200388577714]
                 if (!absence?.coordinates?.second.length) absence.coordinates.second = [-7.482209927696517, 110.22228020994946]
                 state.absensi = absence
-                state.status = action.payload?.users?.find(item => item._id === state.account?._id) || undefined
+                state.status = action.payload?.users?.find(item => item._id === state.account?._id) || null
             } catch (error) {
                 console.log(error);
             }
