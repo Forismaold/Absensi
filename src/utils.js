@@ -3,8 +3,8 @@ import store from "./redux/store"
 import moment from "moment-timezone"
 import 'moment/locale/id'
 
-export const API = 'http://blablablabal.cyclic.app'
-// export const API = process.env.REACT_APP_API
+// export const API = 'http://blablablabal.cyclic.app'
+export const API = process.env.REACT_APP_API
 
 export function encryptObject(object) {
     const jsonString = JSON.stringify(object)
