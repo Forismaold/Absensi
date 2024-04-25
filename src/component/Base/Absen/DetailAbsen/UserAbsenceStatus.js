@@ -54,9 +54,8 @@ export default function UserAbsenceStatus() {
             await axios.get(API + '/absensi/' + param.absenceId)
             .then(res => {
                 dispatch(setAbsensi(res.data.data))
-                console.log(res.data.data);
             }).catch(err => {
-                setErrorMsg(err.response.data.msg)
+                setErrorMsg(err?.response?.data?.msg || err?.message || 'Error: Gagal mendapatkan data! periksa kembali jaringan anda dan coba lagi. atau hubungi admin')
             })
         } catch (error) {
             
@@ -204,7 +203,7 @@ function StatusAbsensi({ absensi, msg }) {
     //     if (!status && account) fetchStatus()
     // },[account, fetchStatus, status])
 
-    if (absensi?.status || !absensi) return
+    if (absensi?.status) return
 
     if (absensi?.status === false) return <div className='bg-neutral-300 shadow-lg shadow-primary/50 text-neutral-500 rounded-xl p-4 flex gap-2 items-center relative'>
         <p>Absensi {absensi?.title} belum dibuka</p>
