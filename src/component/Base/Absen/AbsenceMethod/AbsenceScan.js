@@ -68,7 +68,7 @@ function SubmitScan({qrAccount, setQrAccount}) {
                     }
             
                     if (!isUserWithinBounds(value)) {
-                        promise.onError('Pemindai berada diluar area, harap pergi ke area')
+                        promise.onError('Pemindai belum berada di area, pergi ke area dan coba lagi')
                         setIsLoading(false)
                         return
                     }
