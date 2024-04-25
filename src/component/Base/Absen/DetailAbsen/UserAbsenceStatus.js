@@ -4,7 +4,7 @@ import { useCallback, useEffect, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import axios from "axios"
 import { API, formatTime, isUserWithinBounds } from "../../../../utils"
-import { setAbsensi, toggleShowAbsence } from '../../../../redux/source'
+import { clearAbsensi, setAbsensi, toggleShowAbsence } from '../../../../redux/source'
 import { useParams } from 'react-router-dom'
 import Note from '../Note'
 import AbsenceMethod from '../AbsenceMethod/AbsenceMethod'
@@ -84,7 +84,7 @@ export default function UserAbsenceStatus() {
     if (!absensi === null) return null
 
     return <>
-        <div className='flex items-center justify-end' onClick={fetchData}>
+        <div className='flex items-center justify-end' onClick={() => dispatch(clearAbsensi())}>
             <div className='flex gap-2 items-center bg-secondary p-2 shadow-lg shadow-primary/50 click-animation rounded-lg text-neutral-100 cursor-pointer'>
                 <FontAwesomeIcon icon={faRefresh} className={`${isFetchLoading && 'animate-spin'}`}/> Segarkan Absensi
             </div>
@@ -100,10 +100,14 @@ export default function UserAbsenceStatus() {
 
 function StatusUser({ status }) {
     const account = useSelector(state => state.source.account)
-    const showAbsenceForm = useSelector(state => state.source.showAbsenceForm)
+    const showAbsence = useSelector(state => state.source.showAbsence)
     const [showAbsenceDetail, setShowAbsenceDetail] = useState(false)
 
     const dispatch = useDispatch()
+
+    useEffect(() => {
+        if (status?.absen === true || status?.absen === false) setShowAbsenceDetail(true)
+    },[status])
 
     if (!status|| !account) return null
 
@@ -125,7 +129,7 @@ function StatusUser({ status }) {
             </div>
         }
     </div>
-    {status?.absen !== null && account && <span onClick={() => dispatch(toggleShowAbsence())} className='click-animation text-primary text-right underline cursor-pointer text-secondary'>{showAbsenceForm ? 'Batal perbarui' : 'Perbarui absensi'}</span>}
+    {status?.absen !== null && account && <span onClick={() => dispatch(toggleShowAbsence())} className='click-animation text-primary text-right underline cursor-pointer text-secondary'>{showAbsence ? 'Batal perbarui' : 'Perbarui absensi'}</span>}
     <DetailUserAbsence isOpen={showAbsenceDetail} onClose={() => setShowAbsenceDetail(false)} status={status}/>
     </>
 }
@@ -200,10 +204,10 @@ function StatusAbsensi({ absensi, msg }) {
     //     if (!status && account) fetchStatus()
     // },[account, fetchStatus, status])
 
-    if (absensi?.status) return
+    if (absensi?.status || !absensi) return
 
     if (absensi?.status === false) return <div className='bg-neutral-300 shadow-lg shadow-primary/50 text-neutral-500 rounded-xl p-4 flex gap-2 items-center relative'>
-        <p>Absensi {absensi?.title} belum ditutup</p>
+        <p>Absensi {absensi?.title} belum dibuka</p>
     </div>
 
     return <div className='bg-neutral-300 shadow-lg shadow-primary/50 text-neutral-500 rounded-xl p-4 flex gap-2 items-center relative'>

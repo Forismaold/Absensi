@@ -18,5 +18,4 @@ export default configureStore({
             ignoredActions: ['map/setFocusOnLocation'],
         },
     }),
-
 });

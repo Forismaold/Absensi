@@ -33,6 +33,10 @@ const source = createSlice({
         setShowMap: (state, action) => {
             state.showMap = action.payload
         },
+        clearAbsensi: (state, action) => {
+            state.absensi = null
+            state.status = null
+        },
         setAbsensi: (state, action) => {
             try {
                 let absence = action.payload
@@ -46,5 +50,5 @@ const source = createSlice({
         }
     }
 })
-export const { setAccount, refreshAccount, setStatus, setRiwayats, setAbsensi, setAdminRiwayats, toggleShowAbsence, setIsWatchPosition, toggleShowMap, setShowAbsence, setShowMap } = source.actions
+export const { setAccount, refreshAccount, setStatus, setRiwayats, setAbsensi, setAdminRiwayats, toggleShowAbsence, setIsWatchPosition, toggleShowMap, setShowAbsence, setShowMap, clearAbsensi } = source.actions
 export default source.reducer

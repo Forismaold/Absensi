@@ -14,6 +14,7 @@ export default function AbsenceMethod() {
     const userCoordinate = useSelector(state => state.coordinates.user)
     const absensi = useSelector(state => state.source.absensi)
     const status = useSelector(state => state.source.status)
+    const showAbsence = useSelector(state => state.source.showAbsence)
 
     const [isLoading, setIsLoading] = useState(false)
     const [methodSelected, setMethodSelected] = useState('gps')
@@ -65,7 +66,7 @@ export default function AbsenceMethod() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     },[absensi, dispatch, handleHadir, status, userCoordinate])
 
-    if (!account || !absensi) return
+    if (!account || !absensi || !showAbsence) return
 
     return <div className="bg-neutral-200 flex flex-col gap-2 p-2 rounded">
         <div className='flex items-center rounded shadow text-neutral-500 overflow-auto w-full'>

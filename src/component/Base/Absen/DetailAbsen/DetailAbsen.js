@@ -1,11 +1,21 @@
 import { faUserSlash } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { useSelector } from "react-redux"
+import { useDispatch, useSelector } from "react-redux"
 import Auth from "../../Akun/Auth"
 import MyMap from "../MyMap/MyMap"
 import UserAbsenceStatus from "./UserAbsenceStatus"
+import { useEffect } from "react"
+import { clearAbsensi } from "../../../../redux/source"
 
 export default function DetailAbsen() {
+    const dispatch = useDispatch()
+
+    useEffect(() => {
+        return () => {
+            dispatch(clearAbsensi())
+        }
+    }, [dispatch])
+    
     const account = useSelector(state => state.source.account)
     return <div className='flex flex-col gap-2'>
         <CheckAccountExist/>

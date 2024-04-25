@@ -16,9 +16,10 @@ export default function Note({absensi}) {
             </div>
             <span>{formatBeautyDate(absensi?.date)}</span>
         </div>
-        <div>
-            <FontAwesomeIcon icon={faNoteSticky} className="pr-2"/>
-            <span>{absensi?.note}</span>
-        </div>
+        {absensi?.note && <div>
+                <FontAwesomeIcon icon={faNoteSticky} className="pr-2"/>
+                <span>{absensi?.note}</span>
+            </div>
+        }
     </div>
 }
