@@ -73,7 +73,7 @@ function SubmitScan({qrAccount, setQrAccount}) {
                         return
                     }
                     
-                    promise.updateText('Mengirim absen teman...')
+                    promise.updateText('Mengirim absen teman')
             
                     try {
                         await axios.post(API + '/absen/hadir/' + absensi?._id, dataToSend)

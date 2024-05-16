@@ -1,8 +1,10 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import Modal from "../../utils/Modal"
-import { formatTime, isUserWithinBounds } from "../../../utils"
+import { API, formatTime, getCenterCoordinates, isUserWithinBounds } from "../../../utils"
+import axios from "axios"
 
 export default function UsersGroup({title, data, absenceData}) {
+    
     return <div className='flex flex-col flex-1 shadow-md p-2 rounded-md overflow-hidden'>
         <p className="text-neutral-600 font-medium py-2 flex items-center justify-between">
             <span>{title}</span>
@@ -17,6 +19,30 @@ export default function UsersGroup({title, data, absenceData}) {
 
 function UserGroupModel({data, absenceData}) {
     const [isOpenModal, setIsOpenModal] = useState(false)
+    const [isLoading, setIsLoading] = useState(false)
+    const [msg, setMsg] = useState('')
+
+    function setUserInBounds() {
+        setIsLoading(true)
+        try {
+            axios.put(API + '/absen/force/hadir/' + absenceData._id, {koordinat: getCenterCoordinates(absenceData?.coordinates), userId: data._id})
+            .then(res => {
+                if (res.data.success) {
+                    setMsg('berhasil diperbarui')
+                } else {
+                    setMsg('something error')
+                }
+            })
+        } catch (error) {
+            setMsg('error, try again')
+        } finally {
+            setIsLoading(false)
+        }
+    }
+
+    useEffect(() => {
+        console.log(data, absenceData);
+    },[absenceData, data, isOpenModal])
     return <>
         <div className="odd:bg-neutral-200 p-2 rounded w-full cursor-pointer" onClick={() => setIsOpenModal(true)}>
             <p className="truncate text-neutral-600">{data.nama}<span>{data?.NIS && `#${data.NIS}`}</span></p>
@@ -28,6 +54,10 @@ function UserGroupModel({data, absenceData}) {
             <AbsenceCell prop={'Lokasi'} value={isUserWithinBounds(data.koordinat, absenceData?.coordinates)? 'Di dalam area' : 'Di luar area'}/>
             <AbsenceCell prop={'Koordinat'} value={`${data?.koordinat ? data.koordinat[0] : 'defaultX'}, ${data?.koordinat ? data.koordinat[1] : 'defaultY'}`}/>
             <AbsenceCell prop={'Waktu Absen'} value={formatTime(data.waktuAbsen)}/>
+            {isUserWithinBounds(data.koordinat, absenceData?.coordinates) ? '' : 
+                isLoading ? <div className='flex gap-2 bg-primary shadow-lg shadow-primary/50 cursor-pointer items-center p-2 rounded text-neutral-200 click-animation'>Loading</div> :
+                <div onClick={setUserInBounds} className='flex gap-2 bg-primary shadow-lg shadow-primary/50 cursor-pointer items-center p-2 rounded text-neutral-200 click-animation'>{msg ? msg : 'Ubah koordinat di dalam area'}</div>
+            }
         </Modal>
     </>
 }
