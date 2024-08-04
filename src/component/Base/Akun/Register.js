@@ -90,8 +90,7 @@ function RegisterForm() {
                 <select value={kelas} onChange={(e) => setKelas(e.target.value)} className='min-h-[40px] shadow p-2 rounded' required>
                     <option value="X.E" defaultValue>X.E</option>
                     <option value="XI.F">XI.F</option>
-                    <option value="XII MIPA">XII MIPA</option>
-                    <option value="XII IPS">XII IPS</option>
+                    <option value="XII.F">XII.F</option>
                 </select>
                 <span>-</span>
                 <input className='p-2 rounded shadow w-full' type="number" value={nomorKelas} onChange={e => setNomorKelas(e.target.value)} placeholder='Kelas' autoComplete='off' required/>

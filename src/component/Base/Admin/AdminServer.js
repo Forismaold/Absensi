@@ -10,6 +10,7 @@ import Modal, { Confirm } from '../../utils/Modal'
 import { Link, Route, Routes, useNavigate, useSearchParams } from 'react-router-dom'
 import LoadingSkeleton from '../../utils/LoadingSkeleton'
 import AbsensiEditor from './AbsensiEditor'
+import DisplayTableUsers from './DisplayTableUsers'
 
 export default function AdminServer() {
     const [permission, setPermission] = useState(false)
@@ -402,7 +403,8 @@ function DashboardActionButton({ item }) {
                     <p>{absensi?.note || '-'}</p>
                 </div>
             </div>
-            <UsersList users={absensi?.users} absenceData={item}/>
+            {/* <UsersList users={absensi?.tickets} absenceData={item}/> */}
+            <DisplayTableUsers/>
         </Modal>
     </div>
 }
