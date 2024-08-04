@@ -282,7 +282,7 @@ function DashboardActionButton({ item }) {
         }
     }
 
-    if (!absensi) return null
+    if (!absensi) return <p className='bg-neutral-200 p-2 text-center rounded'>Berhasil dihapus!</p>
     
     return <div className="relative flex py-2 gap-2 flex-col shadow-lg p-2 rounded my-2 bg-neutral-200">
         <div className='absolute top-2 right-2 cursor-pointer click-animation grid items-center px-4 py-2' onClick={() => setIsOpenMore(true)}>
@@ -319,7 +319,7 @@ function DashboardActionButton({ item }) {
             </div>
             <div className='flex flex-wrap flex-col sm:flex-row'>
                 <p className='sm:w-2/6 font-semibold'>Jumlah Peserta</p>
-                <p>{absensi?.users?.length || '-'}</p>
+                <p>{absensi?.tickets?.length || '-'}</p>
             </div>
         </div>}
         <div className='flex gap-2 justify-end flex-wrap'>

@@ -14,7 +14,7 @@ export default function AbsenceScan() {
     const [qrAccount, setQrAccount] = useState(null)
     const [turnOnOnCam, setTurnOnOnCam] = useState(false)
     const [showInfo, setShowInfo] = useState(false)
-    const [flipHorizontally, setFlipHorizontally] = useState(false)
+    const [flipHorizontally, setFlipHorizontally] = useState(true)
 
     return <div className="flex flex-col gap-2 shadow rounded-xl">
         <div className='flex gap-2 items-center justify-between'>
@@ -59,7 +59,7 @@ function SubmitScan({qrAccount, setQrAccount}) {
                     console.log(absensi?.coordinates, centerCoordinates);
 
                     const dataToSend = {
-                        _id: qrAccount._id,
+                        user: qrAccount._id,
                         userCoordinate: centerCoordinates,
                     }
             
