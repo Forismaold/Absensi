@@ -24,12 +24,8 @@ export default function AbsenceMethod() {
     const handleHadir = useCallback(async () => {
 
         const dataToSend = {
-            _id: account._id,
+            user: account._id,
             userCoordinate: userCoordinate ? userCoordinate : [0,0],
-            nama: account.nama,
-            kelas: account.kelas,
-            nomorKelas: account.nomorKelas,
-            nomorAbsen: account.nomorAbsen,
         }
 
         const promise = loadingToast('Mengirim...')
@@ -55,10 +51,6 @@ export default function AbsenceMethod() {
             promise.onError('Server error')
         }
     }, [absensi, account, dispatch, userCoordinate])
-
-    useEffect(() => {
-        console.log('status:',status);
-    },[status])
 
     useEffect(() => {
         if (!status && absensi?.status === true && isUserWithinBounds(userCoordinate)) {

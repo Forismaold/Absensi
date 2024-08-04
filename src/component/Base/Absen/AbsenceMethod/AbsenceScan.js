@@ -61,10 +61,6 @@ function SubmitScan({qrAccount, setQrAccount}) {
                     const dataToSend = {
                         _id: qrAccount._id,
                         userCoordinate: centerCoordinates,
-                        nama: qrAccount.nama,
-                        kelas: qrAccount.kelas,
-                        nomorKelas: qrAccount.nomorKelas,
-                        nomorAbsen: qrAccount.nomorAbsen,
                     }
             
                     if (!isUserWithinBounds(value)) {

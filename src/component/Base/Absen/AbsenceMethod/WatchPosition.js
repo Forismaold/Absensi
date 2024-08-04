@@ -20,7 +20,7 @@ export default function WatchPosition({onClose, toggleHighAccuracy}) {
         }
     
         const errorCallback = (error) => {
-            console.error(`Error getting geolocation: ${error.message}`)
+            console.log('Error getting geolocation', error)
         }
     
         const options = {

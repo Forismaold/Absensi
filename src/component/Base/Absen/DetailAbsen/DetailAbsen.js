@@ -1,11 +1,14 @@
-import { faUserSlash } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import { faUserSlash } from "@fortawesome/free-solid-svg-icons"
 import { useDispatch, useSelector } from "react-redux"
 import Auth from "../../Akun/Auth"
 import MyMap from "../MyMap/MyMap"
-import UserAbsenceStatus from "./UserAbsenceStatus"
 import { useEffect } from "react"
 import { clearAbsensi } from "../../../../redux/source"
+import MuatUlangAbsensi from "./MuatUlangAbsensi"
+import Note from "../Note"
+import DisplayStatusAbsenceUser from "./DisplayStatusAbsenceUser"
+import AbsenceMethod from "../AbsenceMethod/AbsenceMethod"
 
 export default function DetailAbsen() {
     const dispatch = useDispatch()
@@ -18,10 +21,13 @@ export default function DetailAbsen() {
     
     const account = useSelector(state => state.source.account)
     return <div className='flex flex-col gap-2'>
+        <MuatUlangAbsensi/>
+        <Note/>
+        <DisplayStatusAbsenceUser/>
         <CheckAccountExist/>
         <div className={`${!account && 'opacity-50'} flex flex-col gap-2`}>
             <MyMap/>
-            <UserAbsenceStatus/>
+            <AbsenceMethod/>
         </div>
     </div>
 }
@@ -39,3 +45,4 @@ function CheckAccountExist() {
     </div>
     return null
 }
+

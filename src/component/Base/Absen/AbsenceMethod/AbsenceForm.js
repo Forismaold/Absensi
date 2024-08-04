@@ -42,10 +42,6 @@ export default function AbsenceForm() {
         e.preventDefault()
         const dataToSend = {
             _id: account._id,
-            nama: account.nama,
-            kelas: account.kelas,
-            nomorKelas: account.nomorKelas,
-            nomorAbsen: account.nomorAbsen,
             status,
             kode,
             keterangan,
@@ -81,12 +77,8 @@ export default function AbsenceForm() {
 
         setShowForceNext(false)
         const dataToSend = {
-            _id: account._id,
+            user: account._id,
             userCoordinate: userCoordinate ? userCoordinate : [0,0],
-            nama: account.nama,
-            kelas: account.kelas,
-            nomorKelas: account.nomorKelas,
-            nomorAbsen: account.nomorAbsen,
             status
         }
 

@@ -101,7 +101,6 @@ function ManageAbsence() {
         setIsLoading(true)
         setFetchError(false)
         try {
-            console.log(API + '/absensi')
             await axios.get(API + '/absensi').then(res => {
                 setAbcenceList(res.data.data)
             }).catch(err => {
@@ -118,6 +117,7 @@ function ManageAbsence() {
     async function createAbsence(title, note, coordinates) {
         const promise = loadingToast('Membuat absensi baru')
         try {
+            console.log('absensi api:',API + '/absensi');
             await axios.post(API + '/absensi', {
                 title,
                 note,

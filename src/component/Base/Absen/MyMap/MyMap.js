@@ -7,6 +7,7 @@ import UserLocation from './UserLocation'
 import AreaLocation from './AreaLocation'
 import { toggleShowMap } from '../../../../redux/source'
 import { setFocusOnLocation } from '../../../../redux/map'
+import { formatBeautyDate } from '../../../../utils'
 
 export default function MyMap() {
     const absensi = useSelector(state => state.source.absensi)
@@ -15,6 +16,7 @@ export default function MyMap() {
     const centerCoordinate = useSelector(state => state.source.absensi?.coordinates?.first) ?? [0, 0]
     const userCoordinate = useSelector(state => state.coordinates.user)
     const showMap = useSelector(state => state.source.showMap)
+    const status = useSelector(state => state.source.status)
 
     const mapRef = useRef(null)
     const dispatch = useDispatch()
@@ -39,11 +41,10 @@ export default function MyMap() {
 
     return (
         <div className='flex flex-col gap-2'>
-            {absensi ? 
-            <>
+            {absensi && <>
             <div className='flex flex-col bg-neutral-300/50 rounded-xl overflow-hidden'>
-                <div className='flex gap-2 p-2 rounded-lg text-neutral-500'>
-                    <button className='flex flex-1 items-center click-animation justify-between px-2' onClick={() => dispatch(toggleShowMap())}>
+                <div className='flex gap-2 p-2 text-neutral-500' onClick={() => dispatch(toggleShowMap())}>
+                    <button className='flex flex-1 items-center justify-between px-2'>
                         <div className='flex items-center gap-2'>
                             <FontAwesomeIcon icon={faMap}/>
                             <span>Peta</span> 
@@ -64,6 +65,13 @@ export default function MyMap() {
                                 Lokasi Absen disini
                             </Tooltip>
                         </Rectangle>
+                        {status &&
+                            <Marker position={status?.koordinat ? status.koordinat : [0,0]}>
+                                <Tooltip permanent>
+                                    {status.user.nama} absen pada {formatBeautyDate(status.waktuAbsen)}
+                                </Tooltip>
+                            </Marker>
+                        }
                         <Marker position={userCoordinate? userCoordinate : [0,0]}>
                             <Tooltip>
                                 Lokasi kamu disini
@@ -74,13 +82,12 @@ export default function MyMap() {
                     </>
                 }
             </div>
-            <div className='flex gap-2 flex-wrap mt-2 flex-col md:flex-row'>
-                <UserLocation focusOnLocation={focusOnLocation} focusUserLocation={focusUserLocation}/>
-            </div>
-            </>
-            :
-            <p>Mengambil data absensi sebelum memuat peta</p>
+            {status?.absen === true || status?.absen === false ? null : 
+                <div className='flex gap-2 flex-wrap mt-2 flex-col md:flex-row'>
+                    <UserLocation focusOnLocation={focusOnLocation} focusUserLocation={focusUserLocation}/>
+                </div>
             }
+            </>}
         </div>
     )
 }

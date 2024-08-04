@@ -10,6 +10,7 @@ const source = createSlice({
         showMap: true,
         absensi: null,
         status: null,
+        isFetchLocation: false,
     },
     reducers: {
         setAccount: (state, action) => {
@@ -43,12 +44,17 @@ const source = createSlice({
                 if (!absence?.coordinates?.first.length) absence.coordinates.first = [-7.482044510981448, 110.22200388577714]
                 if (!absence?.coordinates?.second.length) absence.coordinates.second = [-7.482209927696517, 110.22228020994946]
                 state.absensi = absence
-                state.status = action.payload?.users?.find(item => item._id === state.account?._id) || null
+                const userTicket = action.payload?.tickets?.find(ticket => ticket.user._id === state.account?._id) || null
+                if (userTicket) state.showMap = false
+                state.status = userTicket
             } catch (error) {
                 console.log(error);
             }
+        },
+        setIsFetchLocation: (state, action) => {
+            state.isFetchLocation = action.payload
         }
     }
 })
-export const { setAccount, refreshAccount, setStatus, setRiwayats, setAbsensi, setAdminRiwayats, toggleShowAbsence, setIsWatchPosition, toggleShowMap, setShowAbsence, setShowMap, clearAbsensi } = source.actions
+export const { setAccount, refreshAccount, setStatus, setRiwayats, setAbsensi, setAdminRiwayats, toggleShowAbsence, setIsWatchPosition, toggleShowMap, setShowAbsence, setShowMap, clearAbsensi, setIsFetchLocation } = source.actions
 export default source.reducer
