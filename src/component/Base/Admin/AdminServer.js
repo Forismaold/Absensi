@@ -4,7 +4,6 @@ import { useSelector } from "react-redux"
 import { API, formatBeautyDate, getPermission } from "../../../utils"
 import axios from "axios"
 import { blankToast, loadingToast } from '../../utils/myToast'
-import UsersList from './UsersList'
 import { useCallback, useEffect, useState } from 'react'
 import Modal, { Confirm } from '../../utils/Modal'
 import { Link, Route, Routes, useNavigate, useSearchParams } from 'react-router-dom'
@@ -88,7 +87,7 @@ function DetailAbsence() {
         </div>
         {isLoading && <LoadingSkeleton/>}
         <DashboardActionButton item={absensi}/>
-        <UsersList users={absensi?.users} absenceData={absensi}/>
+        <DisplayTableUsers usersTicket={absensi?.tickets} absensi={absensi}/>
     </div>
 }
 function ManageAbsence() {
@@ -283,7 +282,7 @@ function DashboardActionButton({ item }) {
         }
     }
 
-    if (!absensi) return <p className='bg-neutral-200 p-2 text-center rounded'>Berhasil dihapus!</p>
+    if (!absensi) return <p className='bg-neutral-200 p-2 text-center rounded'>Absensi belum di load atau sudah dihapus!</p>
     
     return <div className="relative flex py-2 gap-2 flex-col shadow-lg p-2 rounded my-2 bg-neutral-200">
         <div className='absolute top-2 right-2 cursor-pointer click-animation grid items-center px-4 py-2' onClick={() => setIsOpenMore(true)}>
@@ -404,7 +403,7 @@ function DashboardActionButton({ item }) {
                 </div>
             </div>
             {/* <UsersList users={absensi?.tickets} absenceData={item}/> */}
-            <DisplayTableUsers/>
+            <DisplayTableUsers usersTicket={absensi?.tickets} absensi={absensi}/>
         </Modal>
     </div>
 }
