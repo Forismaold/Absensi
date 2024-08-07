@@ -77,10 +77,11 @@ function UserRowModel({data, tickets, absensiData}) {
     function setUserInBounds() {
         setIsLoading(true)
         try {
-            axios.put(API + '/absen/force/hadir/' + absensi._id, {koordinat: getCenterCoordinates(absensi?.coordinates), userId: data._id})
+            axios.put(API + '/absen/force/hadir/' + absensi._id, {koordinat: getCenterCoordinates(absensi?.coordinates), user: data._id})
             .then(res => {
                 if (res.data.success) {
                     setMsg('berhasil diperbarui')
+                    setTicket(res.data.ticket)
                 } else {
                     setMsg('something error')
                 }
