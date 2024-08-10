@@ -17,9 +17,9 @@ export default function DisplayTableUsers({usersTicket, absensi}) {
 
     function changeSelectedClass(item) {
         if (isFetch) {
-            setUsers(null)
             return
         }
+        setUsers(null)
         setSelectedClass(item)
     }
 
@@ -46,7 +46,6 @@ export default function DisplayTableUsers({usersTicket, absensi}) {
     }, [fetchData, selectedClass])
 
     useEffect(() => {
-        console.log(usersTicket)
         setTickets(usersTicket)
     }, [usersTicket])
     
@@ -56,7 +55,7 @@ export default function DisplayTableUsers({usersTicket, absensi}) {
         <div className="flex flex-wrap">
             <div className={`p-2 cursor-pointer click-animation border-b-2 ${!selectedClass && 'border-secondary text-secondary bg-quaternary'}`} onClick={()=>changeSelectedClass(null)}>null</div>
             {classList.map((item, i) => Array.from({ length: item.classCount }, (_, index) => (
-                    <div key={index + 1} className={`p-2 cursor-pointer click-animation border-b-2 ${selectedClass === `${item.classNumberRank}-${index + 1}` && 'border-secondary text-secondary bg-quaternary'} ${isFetch && 'opacity-95'}`} onClick={()=>changeSelectedClass(`${item.classNumberRank}-${index + 1}`)}>{item.classNumberRank}-{index + 1}</div>
+                    <div key={index + 1} className={`p-2 cursor-pointer click-animation border-b-2 ${selectedClass === `${item.classNumberRank}-${index + 1}` && 'border-secondary text-secondary bg-quaternary'} ${isFetch && 'opacity-50'}`} onClick={()=>changeSelectedClass(`${item.classNumberRank}-${index + 1}`)}>{item.classNumberRank}-{index + 1}</div>
                 ))
             )}
         </div>
