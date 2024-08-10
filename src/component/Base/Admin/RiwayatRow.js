@@ -3,10 +3,10 @@ import { faEllipsis, faFilter, faSearch, faTable, faTrash } from '@fortawesome/f
 import { useCallback, useEffect, useState } from "react"
 import axios from "axios"
 import { API, formatBeautyDate, formatDate, isUserWithinBoundsCSV } from "../../../utils"
-import UsersGroup from './UsersGroup'
 import Modal, { Confirm } from '../../utils/Modal'
 import { loadingToast } from '../../utils/myToast'
 import xlsx from 'json-as-xlsx'
+import DisplayTableUsers from './DisplayTableUsers'
 
 export default function RiwayatRow({data, setRiwayats}) {
     const [showSearch, setShowSearch] = useState(false)
@@ -42,10 +42,7 @@ export default function RiwayatRow({data, setRiwayats}) {
                 <FontAwesomeIcon icon={faEllipsis} className='shadow p-2 rounded text-neutral-600 cursor-pointer click-animation self-end' onClick={() => setShowOption(true)}/>
             </div>
         </div>
-        <div className='flex gap-2'>
-            <UsersGroup title={'Tidak absen'} data={data.users?.filter(x => x.absen === false) || []}/>
-            <UsersGroup title={'Sudah absen'} data={data.users?.filter(x => x.absen === true) || []}/>
-        </div>
+        <DisplayTableUsers usersTicket={data?.tickets} absensi={data}/>
         <SearchUser isOpen={showSearch} onClose={() => setShowSearch(false)} users={data.users} title={data.title} date={formatBeautyDate(data.date)}/>
         <Modal isOpen={showOption} onClose={() => setShowOption(false)}>
             <div className='flex flex-col gap-2'>

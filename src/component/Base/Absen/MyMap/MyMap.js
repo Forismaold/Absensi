@@ -68,7 +68,7 @@ export default function MyMap() {
                         {status &&
                             <Marker position={status?.koordinat ? status.koordinat : [0,0]}>
                                 <Tooltip permanent>
-                                    {status.user.nama} absen pada {formatBeautyDate(status.waktuAbsen)}
+                                    {status?.user?.nama} absen pada {formatBeautyDate(status?.waktuAbsen)}
                                 </Tooltip>
                             </Marker>
                         }

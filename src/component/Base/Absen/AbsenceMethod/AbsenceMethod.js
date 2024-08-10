@@ -24,7 +24,7 @@ export default function AbsenceMethod() {
     const handleHadir = useCallback(async () => {
 
         const dataToSend = {
-            user: account._id,
+            user: account?._id,
             userCoordinate: userCoordinate ? userCoordinate : [0,0],
         }
 
@@ -53,7 +53,7 @@ export default function AbsenceMethod() {
     }, [absensi, account, dispatch, userCoordinate])
 
     useEffect(() => {
-        if (!status && absensi?.status === true && isUserWithinBounds(userCoordinate)) {
+        if (!status && absensi?.status === true && isUserWithinBounds(userCoordinate) && account) {
             if (isLoading) return
             blankToast('Lokasi tercapai!')
             handleHadir()

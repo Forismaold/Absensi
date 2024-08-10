@@ -101,9 +101,6 @@ function UserRowModel({data, tickets, absensiData}) {
         }
     },[absensi, data, ticket, tickets])
 
-    // useEffect(() => {
-    //     console.log(data, absensi);
-    // },[absensi, data, isOpenModal])
     return <>
         <div className={`p-2 rounded w-full cursor-pointer ${ticket ? 'bg-tertiary' : 'odd:bg-neutral-200'}`} onClick={() => setIsOpenModal(true)}>
             <p className="truncate text-neutral-600">{data.nomorAbsen} {data.nama}<span>{data?.NIS && `#${data.NIS}`}</span></p>
@@ -113,7 +110,7 @@ function UserRowModel({data, tickets, absensiData}) {
             <AbsenceCell prop={'Kode'} value={ticket?.kode}/>
             <AbsenceCell prop={'Keterangan'} value={ticket?.keterangan}/>
             <AbsenceCell prop={'Lokasi'} value={isUserWithinBounds(ticket?.koordinat || [0,0], absensi?.coordinates)? 'Di dalam area' : 'Di luar area'}/>
-            <AbsenceCell prop={'Koordinat'} value={`${data?.koordinat ? data.koordinat[0] : 'defaultX'}, ${ticket?.koordinat ? ticket.koordinat[1] : 'defaultY'}`}/>
+            <AbsenceCell prop={'Koordinat'} value={`${ticket?.koordinat ? ticket.koordinat[0] : 'defaultX'}, ${ticket?.koordinat ? ticket.koordinat[1] : 'defaultY'}`}/>
             <AbsenceCell prop={'Waktu Absen'} value={formatTime(ticket?.waktuAbsen)}/>
             {isUserWithinBounds(ticket?.koordinat || [0,0], absensi?.coordinates) ? '' : 
                 isLoading ? <div className='flex gap-2 bg-primary shadow-lg shadow-primary/50 cursor-pointer items-center p-2 rounded text-neutral-200 click-animation'>Loading</div> :

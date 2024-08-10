@@ -124,13 +124,13 @@ export default function AbsenceForm() {
                 {showFormTidak &&
                     <form className='flex flex-col gap-2 w-full' onSubmit={handleSubmitTidakHadir}>
                         <div className='flex flex-col sm:flex-row gap-2 flex-1'>
-                            <select value={kode} onChange={(e) => setKode(e.target.value)} className='min-h-[40px] shadow px-2 rounded bg-primary border-2 border-solid border-neutral-200 shadow' placeholder='Kode keterangan'>
+                            <select value={kode} onChange={(e) => setKode(e.target.value)} className='min-h-[40px] px-2 rounded bg-primary border-2 border-solid border-neutral-200 shadow' placeholder='Kode keterangan'>
                                 <option value="-" disable='true'>Kode</option>
                                 <option value="I">Izin</option>
                                 <option value="S">Sakit</option>
                                 <option value="A">Alpa</option>
                             </select>
-                            <textarea value={keterangan} onChange={(e) => setKeterangan(e.target.value)} className='shadow border-2 border-solid border-neutral-200 bg-primary p-2 flex-[5] rounded placeholder:text-neutral-300 shadow' placeholder='Tambahkan keterangan'></textarea>
+                            <textarea value={keterangan} onChange={(e) => setKeterangan(e.target.value)} className='border-2 border-solid border-neutral-200 bg-primary p-2 flex-[5] rounded placeholder:text-neutral-300 shadow' placeholder='Tambahkan keterangan'></textarea>
                         </div>
                         <div className='flex gap-2'>
                             <div className='border-2 border-solid border-neutral-200 bg-inherit text-neutral-200 px-3 rounded flex justify-center items-center shadow cursor-pointer' onClick={handleTidakHadir}>

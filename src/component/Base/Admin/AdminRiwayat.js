@@ -1,11 +1,16 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faClockRotateLeft, faRotate, faServer } from '@fortawesome/free-solid-svg-icons'
+import { faClockRotateLeft, faRotate, faServer, faEllipsisV, faTrash } from '@fortawesome/free-solid-svg-icons'
 import { useCallback, useEffect, useState } from "react"
 import axios from "axios"
-import { API, getPermission } from "../../../utils"
+// import { API, formatBeautyDate, formatDate, getPermission, isUserWithinBoundsCSV } from "../../../utils"
+import { API, formatBeautyDate, getPermission } from "../../../utils"
 import LoadingIcon from '../../utils/LoadingIcon'
-import RiwayatRow from './RiwayatRow'
 import { Link } from 'react-router-dom'
+import Modal, { Confirm } from '../../utils/Modal'
+import { loadingToast } from '../../utils/myToast'
+import DisplayTableUsers from './DisplayTableUsers'
+// import xlsx from 'json-as-xlsx'
+
 
 export default function AdminRiwayat() {
     const [riwayats, setRiwayats] = useState(null)
@@ -55,8 +60,140 @@ export default function AdminRiwayat() {
         <button className='flex gap-2 items-center self-end justify-center rounded text-neutral-100 bg-secondary p-2 shadow-lg shadow-primary/50 click-animation' onClick={() => fetchRiwayats()}>{isLoading?<LoadingIcon/>:<FontAwesomeIcon icon={faRotate} className='p-0.5'/>} Segarkan riwayat</button>
         <div className="flex flex-col gap-2">
             {riwayats?.length === 0 && <span className='text-center'>Tidak ada riwayat</span>}
-            {riwayats?.map(x => <RiwayatRow data={x} key={x._id} setRiwayats={setRiwayats}/>)}
+            {/* {riwayats?.map(x => <RiwayatRow data={x} key={x._id} setRiwayats={setRiwayats}/>)} */}
+            {riwayats?.map(x => <RiwayatControlDashboard riwayat={x} key={x._id} setRiwayats={setRiwayats}/>)}
         </div>
     </div>
 }
 
+function RiwayatControlDashboard({riwayat, setRiwayats}) {
+    const [showOption, setShowOption] = useState(false)
+    const [showDeleteConfirm, setShowDeleteConfirm] = useState(false)
+
+    async function deleteRiwayat() {
+        const promise = loadingToast('Menghapus Riwayat')
+        try {
+            await axios.delete(API+'/riwayats/'+riwayat._id)
+            .then(res => {
+                setShowDeleteConfirm(false)
+                setShowOption(false)
+                promise.onSuccess(res.data.msg)
+                setRiwayats(res.data.riwayats)
+            })
+            .catch(res => {
+                promise.onError(res.response.data.msg)
+            })
+        } catch (error) {
+            console.log(error)
+            promise.onError('Internal server error')
+        }
+    }
+
+    return <div className="relative flex py-2 gap-2 flex-col shadow-lg p-2 rounded my-2 bg-neutral-200">
+        <div className='absolute top-2 right-2 cursor-pointer click-animation grid items-center px-4 py-2' onClick={() => setShowOption(true)}>
+            <FontAwesomeIcon icon={faEllipsisV}/>
+        </div>
+        {riwayat && <div className='flex flex-col'>
+            <div className='flex flex-wrap flex-col sm:flex-row'>
+                <p className='sm:w-2/6 font-semibold'>Judul</p>
+                <p>{riwayat?.title}</p>
+            </div>
+            <div className='flex flex-wrap flex-col sm:flex-row'>
+                <p className='sm:w-2/6 font-semibold'>Status</p>
+                <p>{riwayat?.status ? "Buka" : "Tutup"}</p>
+            </div>
+            <div className='flex flex-wrap flex-col sm:flex-row'>
+                <p className='sm:w-2/6 font-semibold'>{riwayat?.status ? 'Dibuka oleh': 'Ditutup oleh'}</p>
+                <p>{riwayat?.openedBy || 'Anon'}</p>
+            </div>
+            <div className='flex flex-wrap flex-col sm:flex-row'>
+                <p className='sm:w-2/6 font-semibold'>Pada</p>
+                <p>{formatBeautyDate(riwayat?.date)}</p>
+            </div>
+            <div className='flex flex-wrap flex-col sm:flex-row'>
+                <p className='sm:w-2/6 font-semibold'>Koordinat Pertama</p>
+                <p className='max-w-full overflow-auto'>{riwayat?.coordinates?.first?.join(',') || '-'}</p>
+            </div>
+            <div className='flex flex-wrap flex-col sm:flex-row'>
+                <p className='sm:w-2/6 font-semibold'>Koordinat Kedua</p>
+                <p className='max-w-full overflow-auto'>{riwayat?.coordinates?.second?.join(',') || '-'}</p>
+            </div>
+            <div className='flex flex-wrap flex-col sm:flex-row'>
+                <p className='sm:w-2/6 font-semibold'>Catatan</p>
+                <p>{riwayat?.note || '-'}</p>
+            </div>
+            <div className='flex flex-wrap flex-col sm:flex-row'>
+                <p className='sm:w-2/6 font-semibold'>Jumlah Peserta</p>
+                <p>{riwayat?.tickets?.length || '-'}</p>
+            </div>
+        </div>}
+        <DisplayTableUsers usersTicket={riwayat?.tickets} absensi={riwayat}/>
+        <Modal isOpen={showOption} onClose={() => setShowOption(false)}>
+            <div className='flex flex-col gap-2'>
+                {/* <DownloadCSVButton onClose={() => setShowOption(false)} data={riwayat}/> */}
+                <p className='hover:bg-neutral-300 rounded p-2 cursor-pointer' onClick={() => {
+                    setShowDeleteConfirm(true)
+                }}><FontAwesomeIcon icon={faTrash}/> Hapus Riwayat</p>
+            </div>
+        </Modal>
+        <Confirm isOpen={showDeleteConfirm} title='Hapus riwayat' subTitle={`Hapus riwayat ${riwayat.title} pada ${formatBeautyDate(riwayat.date)}`} textConfirm='Hapus' callBack={deleteRiwayat} onClose={() => setShowDeleteConfirm(false)}/>
+    </div>
+}
+
+// function DownloadCSVButton({onClose, data}) {
+
+//     function handleDownload() {
+//         const sortedData = [...data.users]?.sort((a, b) => {
+//             const classOrder = { 'X.E': 1, 'XI.F': 2, 'XII MIPA': 3, 'XII IPS': 4 }
+        
+//             try {
+//                 const classComparison = classOrder[a.kelas] - classOrder[b.kelas]
+//                 if (classComparison !== 0) {
+//                     return classComparison
+//                 }
+//             } catch (error) {
+//                 console.log('error at class comparison')
+//             }
+        
+//         try {
+//             const sectionComparison = a.nomorKelas - b.nomorKelas
+//             if (sectionComparison !== 0) {
+//                 return sectionComparison
+//             }
+//         } catch (error) {
+//             console.log('error at section comparison')
+//         }
+        
+//             return 1
+//         }) || []
+//         let dataToXLSX = [
+//             {
+//                 sheet: data.title,
+//                 columns: [
+//                     { label: "Kelas", value: row => `${row.kelas}-${row.nomorKelas}` },
+//                     { label: "Nama", value: 'nama' },
+//                     { label: "Absen", value: 'absen' },
+//                     { label: "Kode", value: 'kode' },
+//                     { label: "Keterangan", value: 'keterangan' },
+//                     { label: "Lokasi", value: row => `${isUserWithinBoundsCSV(data?.coordinates, row.koordinat)}` },
+//                     { label: "Latitude", value: row => row.koordinat[0] || 0 },
+//                     { label: "Longitude", value: row => row.koordinat[1] || 0 },
+//                     { label: "Waktu", value: row => formatDate(row.waktuAbsen) },
+//                 ],
+//                 content: sortedData
+//             }
+//         ]
+            
+//         let settings = {
+//             fileName: `${data.title} ${formatDate(data.date)}`,
+//             extraLength: 3,
+//         }
+
+//         xlsx(dataToXLSX, settings)
+//     }
+
+//     return <p className='hover:bg-neutral-300 rounded p-2 cursor-pointer' onClick={() => {
+//         handleDownload()
+//         onClose()
+//     }}><FontAwesomeIcon icon={faTable}/> Download sebagai XLSX</p>
+// }
