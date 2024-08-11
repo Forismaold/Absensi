@@ -1,15 +1,14 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faClockRotateLeft, faRotate, faServer, faEllipsisV, faTrash } from '@fortawesome/free-solid-svg-icons'
+import { faClockRotateLeft, faRotate, faServer, faEllipsisV, faTrash, faTable } from '@fortawesome/free-solid-svg-icons'
 import { useCallback, useEffect, useState } from "react"
 import axios from "axios"
-// import { API, formatBeautyDate, formatDate, getPermission, isUserWithinBoundsCSV } from "../../../utils"
-import { API, formatBeautyDate, getPermission } from "../../../utils"
+import { API, formatBeautyDate, formatDate, getPermission, isUserWithinBoundsCSV } from "../../../utils"
 import LoadingIcon from '../../utils/LoadingIcon'
 import { Link } from 'react-router-dom'
 import Modal, { Confirm } from '../../utils/Modal'
 import { loadingToast } from '../../utils/myToast'
 import DisplayTableUsers from './DisplayTableUsers'
-// import xlsx from 'json-as-xlsx'
+import xlsx from 'json-as-xlsx'
 
 
 export default function AdminRiwayat() {
@@ -130,7 +129,7 @@ function RiwayatControlDashboard({riwayat, setRiwayats}) {
         <DisplayTableUsers usersTicket={riwayat?.tickets} absensi={riwayat}/>
         <Modal isOpen={showOption} onClose={() => setShowOption(false)}>
             <div className='flex flex-col gap-2'>
-                {/* <DownloadCSVButton onClose={() => setShowOption(false)} data={riwayat}/> */}
+                <DownloadCSVButton onClose={() => setShowOption(false)} riwayat={riwayat}/>
                 <p className='hover:bg-neutral-300 rounded p-2 cursor-pointer' onClick={() => {
                     setShowDeleteConfirm(true)
                 }}><FontAwesomeIcon icon={faTrash}/> Hapus Riwayat</p>
@@ -140,60 +139,82 @@ function RiwayatControlDashboard({riwayat, setRiwayats}) {
     </div>
 }
 
-// function DownloadCSVButton({onClose, data}) {
+function DownloadCSVButton({onClose, riwayat}) {
 
-//     function handleDownload() {
-//         const sortedData = [...data.users]?.sort((a, b) => {
-//             const classOrder = { 'X.E': 1, 'XI.F': 2, 'XII MIPA': 3, 'XII IPS': 4 }
-        
-//             try {
-//                 const classComparison = classOrder[a.kelas] - classOrder[b.kelas]
-//                 if (classComparison !== 0) {
-//                     return classComparison
-//                 }
-//             } catch (error) {
-//                 console.log('error at class comparison')
-//             }
-        
-//         try {
-//             const sectionComparison = a.nomorKelas - b.nomorKelas
-//             if (sectionComparison !== 0) {
-//                 return sectionComparison
-//             }
-//         } catch (error) {
-//             console.log('error at section comparison')
-//         }
-        
-//             return 1
-//         }) || []
-//         let dataToXLSX = [
-//             {
-//                 sheet: data.title,
-//                 columns: [
-//                     { label: "Kelas", value: row => `${row.kelas}-${row.nomorKelas}` },
-//                     { label: "Nama", value: 'nama' },
-//                     { label: "Absen", value: 'absen' },
-//                     { label: "Kode", value: 'kode' },
-//                     { label: "Keterangan", value: 'keterangan' },
-//                     { label: "Lokasi", value: row => `${isUserWithinBoundsCSV(data?.coordinates, row.koordinat)}` },
-//                     { label: "Latitude", value: row => row.koordinat[0] || 0 },
-//                     { label: "Longitude", value: row => row.koordinat[1] || 0 },
-//                     { label: "Waktu", value: row => formatDate(row.waktuAbsen) },
-//                 ],
-//                 content: sortedData
-//             }
-//         ]
+    async function handleDownload() {
+        let usersWithTicketsAndTheTickets = []
+        try {
+            await axios.get(API + '/users/all').then(res => {
+                const users = res.data
+                usersWithTicketsAndTheTickets = riwayat.tickets.map(ticket => {
+                    const getUser = users.find(u => u._id === ticket.user?._id);
+                    const { user, _id, ...ticketDetails } = ticket
+                    const returnTicketAndUser = {
+                        ...getUser,
+                        ...ticketDetails
+                    }
+                    console.log(returnTicketAndUser)
+                    return returnTicketAndUser;
+                });
+            })
+            .catch(err => {
+                console.log(err)
+                throw new Error(err);
+            });
+            const sortedData = [...usersWithTicketsAndTheTickets]?.sort((a, b) => {
+                const classOrder = { 'X.E': 1, 'XI.F': 2, 'XII.F': 3}
             
-//         let settings = {
-//             fileName: `${data.title} ${formatDate(data.date)}`,
-//             extraLength: 3,
-//         }
+                try {
+                    const classComparison = classOrder[a.kelas] - classOrder[b.kelas]
+                    if (classComparison !== 0) {
+                        return classComparison
+                    }
+                } catch (error) {
+                    console.log('error at class comparison')
+                }
+            
+            try {
+                const sectionComparison = a.nomorKelas - b.nomorKelas
+                if (sectionComparison !== 0) {
+                    return sectionComparison
+                }
+            } catch (error) {
+                console.log('error at section comparison')
+            }
+            
+                return 1
+            }) || []
+            console.log('riwayat?.coordinates', riwayat?.coordinates)
+            let dataToXLSX = [
+                {
+                    sheet: riwayat.title,
+                    columns: [
+                        { label: "Kelas", value: row => `${row.kelas}-${row.nomorKelas}` },
+                        { label: "Nama", value: 'nama' },
+                        { label: "Absen", value: 'absen' },
+                        { label: "Kode", value: 'kode' },
+                        { label: "Keterangan", value: 'keterangan' },
+                        { label: "Lokasi", value: row => `${isUserWithinBoundsCSV(riwayat?.coordinates, row.koordinat)}` },
+                        { label: "Latitude", value: row => row.koordinat[0] || 0 },
+                        { label: "Longitude", value: row => row.koordinat[1] || 0 },
+                        { label: "Waktu", value: row => formatDate(row.waktuAbsen) },
+                    ],
+                    content: sortedData
+                }
+            ]
+                
+            let settings = {
+                fileName: `${riwayat.title} ${formatDate(riwayat.date)} - ${riwayat.openedBy}`,
+                extraLength: 3,
+            }
+            xlsx(dataToXLSX, settings)
+        } catch (error) {
+            console.log('Error at find all users:', error);
+        }
+    }
 
-//         xlsx(dataToXLSX, settings)
-//     }
-
-//     return <p className='hover:bg-neutral-300 rounded p-2 cursor-pointer' onClick={() => {
-//         handleDownload()
-//         onClose()
-//     }}><FontAwesomeIcon icon={faTable}/> Download sebagai XLSX</p>
-// }
+    return <p className='hover:bg-neutral-300 rounded p-2 cursor-pointer' onClick={() => {
+        handleDownload()
+        onClose()
+    }}><FontAwesomeIcon icon={faTable}/> Download sebagai XLSX</p>
+}

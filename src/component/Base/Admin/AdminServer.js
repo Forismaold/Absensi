@@ -234,7 +234,7 @@ function DashboardActionButton({ item }) {
     async function saveAbsensi() {
         const promise = loadingToast('Menutup absensi')
         try {
-            await axios.post(API + '/absensi/simpan/' + absensi?._id, {status: absensi.status})
+            await axios.post(API + '/absensi/simpan/' + absensi?._id, {status: absensi.status, closedBy: account?.nama})
             .then(res => {
                 // promise.onSuccess(`${res.data.msg}, Tidak absen: ${res.data.tidak}, Sudah absen: ${res.data.sudah}`)
                 console.log(res.data)
