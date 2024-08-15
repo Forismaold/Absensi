@@ -1,10 +1,9 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faChevronDown, faChevronRight, faMap } from '@fortawesome/free-solid-svg-icons'
+import { faChevronDown, faChevronRight, faLocationCrosshairs, faMap } from '@fortawesome/free-solid-svg-icons'
 import { useEffect, useRef } from 'react'
 import { MapContainer, Marker, Rectangle, TileLayer, Tooltip } from 'react-leaflet'
 import { useDispatch, useSelector } from 'react-redux'
 import UserLocation from './UserLocation'
-import AreaLocation from './AreaLocation'
 import { toggleShowMap } from '../../../../redux/source'
 import { setFocusOnLocation } from '../../../../redux/map'
 import { formatBeautyDate } from '../../../../utils'
@@ -53,7 +52,9 @@ export default function MyMap() {
                     </button>
                 </div>
                 {showMap && 
-                    <>
+                    <div className='relative'>
+                    {/* <AreaLocation focusOnLocation={() => focusOnLocation(firstCoordinate)}/> */}
+                    <button className='absolute bottom-6 right-1 z-[1001] flex items-center justify-center rounded-lg text-neutral-200 bg-secondary p-2 shadow-lg shadow-primary/50 click-animation' onClick={() => focusOnLocation(centerCoordinate)}><FontAwesomeIcon icon={faLocationCrosshairs}/></button>
                     <MapContainer ref={mapRef} center={centerCoordinate} style={{ height: '20rem', width: '100%' }} zoom={18} scrollWheelZoom={false}>
                         <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" className='rounded-md'/>
                             <Rectangle
@@ -78,8 +79,7 @@ export default function MyMap() {
                             </Tooltip>
                         </Marker>
                     </MapContainer>
-                    <AreaLocation focusOnLocation={() => focusOnLocation(firstCoordinate)}/>
-                    </>
+                    </div>
                 }
             </div>
             {status?.absen === true || status?.absen === false ? null : 

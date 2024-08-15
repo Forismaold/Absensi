@@ -20,7 +20,7 @@ export default function DetailAbsen() {
     }, [dispatch])
     
     const account = useSelector(state => state.source.account)
-    return <div className='flex flex-col gap-2'>
+    return <div className='flex flex-col'>
         <MuatUlangAbsensi/>
         <Note/>
         <DisplayStatusAbsenceUser/>

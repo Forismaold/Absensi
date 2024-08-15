@@ -15,6 +15,7 @@ export default function AbsenceMethod() {
     const absensi = useSelector(state => state.source.absensi)
     const status = useSelector(state => state.source.status)
     const showAbsence = useSelector(state => state.source.showAbsence)
+    const [tampilkan, setTampilkan] = useState(false)
 
     const [isLoading, setIsLoading] = useState(false)
     const [methodSelected, setMethodSelected] = useState('gps')
@@ -66,19 +67,23 @@ export default function AbsenceMethod() {
 
     if (!showAbsence && (status !== null)) return
 
-
     return <div className="bg-neutral-200 flex flex-col gap-2 p-2 rounded">
-        <div className='flex items-center rounded shadow text-neutral-500 overflow-auto w-full'>
-            <div className={`flex flex-1 px-4 items-center py-2 gap-2 click-animation border-b-2 ${methodSelected === 'gps' ? 'border-secondary text-secondary bg-quaternary' : 'border-transparent'}`} onClick={() => setMethodSelected('gps')}>Lokasi</div>
-            <div className={`flex flex-1 px-4 items-center py-2 gap-2 click-animation border-b-2 ${methodSelected === 'form' ? 'border-secondary text-secondary bg-quaternary' : 'border-transparent'}`} onClick={() => setMethodSelected('form')}>Form</div>
-            <div className={`flex flex-1 px-4 items-center py-2 gap-2 click-animation border-b-2 ${methodSelected === 'scan' ? 'border-secondary text-secondary bg-quaternary' : 'border-transparent'}`} onClick={() => setMethodSelected('scan')}>Pindai</div>
-            <div className={`flex flex-1 px-4 items-center py-2 gap-2 click-animation border-b-2 ${methodSelected === 'qrcode' ? 'border-secondary text-secondary bg-quaternary' : 'border-transparent'}`} onClick={() => setMethodSelected('qrcode')}>kode</div>
+        <div className="flex gap-2 justify-between cursor-pointer" onClick={() => setTampilkan(prev => !prev)}>
+            <span>{tampilkan? 'Sembunyikan' : 'Tampilkan Lebih banyak'}</span>
         </div>
-        <div className={`${isLoading && 'opacity-50'}`}>
-            {methodSelected === 'gps' && <AbsenceLocation/>}
-            {methodSelected === 'form' && <AbsenceForm/>}
-            {methodSelected === 'scan' && <AbsenceScan/>}
-            {methodSelected === 'qrcode' && <AbsenceQrCode/>}
-        </div>
+        {tampilkan && <>
+            <div className='flex items-center rounded shadow text-neutral-500 overflow-auto w-full'>
+                <div className={`flex flex-1 px-4 items-center py-2 gap-2 click-animation border-b-2 ${methodSelected === 'gps' ? 'border-secondary text-secondary bg-quaternary' : 'border-transparent'}`} onClick={() => setMethodSelected('gps')}>Lokasi</div>
+                <div className={`flex flex-1 px-4 items-center py-2 gap-2 click-animation border-b-2 ${methodSelected === 'form' ? 'border-secondary text-secondary bg-quaternary' : 'border-transparent'}`} onClick={() => setMethodSelected('form')}>Form</div>
+                <div className={`flex flex-1 px-4 items-center py-2 gap-2 click-animation border-b-2 ${methodSelected === 'scan' ? 'border-secondary text-secondary bg-quaternary' : 'border-transparent'}`} onClick={() => setMethodSelected('scan')}>Pindai</div>
+                <div className={`flex flex-1 px-4 items-center py-2 gap-2 click-animation border-b-2 ${methodSelected === 'qrcode' ? 'border-secondary text-secondary bg-quaternary' : 'border-transparent'}`} onClick={() => setMethodSelected('qrcode')}>kode</div>
+            </div>
+            <div className={`${isLoading && 'opacity-50'}`}>
+                {methodSelected === 'gps' && <AbsenceLocation/>}
+                {methodSelected === 'form' && <AbsenceForm/>}
+                {methodSelected === 'scan' && <AbsenceScan/>}
+                {methodSelected === 'qrcode' && <AbsenceQrCode/>}
+            </div>
+        </>}
     </div>
 }
