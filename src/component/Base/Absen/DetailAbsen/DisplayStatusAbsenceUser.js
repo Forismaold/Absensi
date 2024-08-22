@@ -15,7 +15,6 @@ export default function DisplayStatusAbsenceUser() {
     const dispatch = useDispatch()
 
     useEffect(() => {
-        console.log('status user', status)
         if (status?.absen === true || status?.absen === false) setShowAbsenceDetail(true)
     },[status])
 

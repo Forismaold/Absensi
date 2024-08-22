@@ -49,7 +49,7 @@ export default function UserLocation({focusUserLocation, focusOnLocation}) {
 
     return <div className='relative flex flex-1 flex-col shadow-md bg-neutral-300/50 rounded-xl p-2 gap-2'>
         <div className='flex gap-2 items-center'>
-            <p className='flex flex-1'>Lokasi kamu</p>
+            <p className='flex flex-1'>Kirim lokasi kamu saat ini</p>
             <button className='flex items-center justify-center px-3 text-neutral-500 p-2 click-animation' onClick={() => setShowCommonProblem(true)}><FontAwesomeIcon icon={faInfo}/></button>
             {showMap && <button className={`flex items-center justify-center rounded-lg ${userCoordinate ? ' bg-secondary shadow-primary/50 shadow-lg text-neutral-100' : ' bg-primary-quarternary text-transparent'} p-2 click-animation`} onClick={focusUserLocation}><FontAwesomeIcon icon={faLocationCrosshairs}/></button>}
         </div>

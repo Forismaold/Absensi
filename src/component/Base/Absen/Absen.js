@@ -2,7 +2,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faExternalLink, faRefresh } from '@fortawesome/free-solid-svg-icons'
 import { useCallback, useEffect, useState } from 'react'
 import axios from 'axios'
-import { API, formatDate } from '../../../utils'
+import { API, formatBeautyDate } from '../../../utils'
 import { Route, Routes, useNavigate } from 'react-router-dom'
 import DetailAbsen from './DetailAbsen/DetailAbsen'
 
@@ -55,18 +55,17 @@ function ListAbsen() {
 }
 
 function AbsenCard ({data}) {
+    const [isOpened, setIsOpened] = useState(false)
     const navigate = useNavigate()
-    return <div className='relative flex py-2 gap-2 flex-col shadow-lg p-2 rounded my-2 bg-neutral-200'>
+    useEffect(() => {
+        setIsOpened(data.status)
+    },[data])
+    return <div className={`relative flex p-2 py-4 pt-5 gap-2 flex-col shadow-lg rounded my-2 cursor-pointer ${isOpened ? 'bg-secondary text-neutral-200' : 'bg-neutral-200'}`} onClick={() => navigate('/absen/' + data?._id)}>
         <div className='flex flex-col'>
-            <p className='font-medium text-lg'>{data?.title}</p>
-            <p>{data?.note} - {data.openedBy}</p>
-        </div>
-        <div className='flex flex-col sm:flex-row sm:items-center justify-between'>
-            <p className=''>{data.status ? 'Dibuka' : 'Ditutup'} sejak {formatDate(data?.date)}</p>
-            <div onClick={() => navigate('/absen/' + data?._id)} className={`flex justify-center gap-2 shadow-lg shadow-secondary/50 cursor-pointer items-center p-2 px-4 rounded ${data.status ? 'bg-secondary text-neutral-200' : 'text-secondary border-2 border-secondary'} click-animation`}>
-                <FontAwesomeIcon icon={faExternalLink}/>
-                <p>Lihat</p>
-            </div>
+            <p className='text-lg font-semibold'>{data?.title} <span className='text-xs font-normal'>oleh {data.openedBy}</span></p>
+            <p className='text-sm'>{data?.note}</p>
+            <p className='text-sm'>{isOpened ? 'Dibuka' : 'Ditutup'} {formatBeautyDate(data?.date)}</p>
+            <FontAwesomeIcon icon={faExternalLink} className='absolute top-2 right-2'/>
         </div>
     </div>
 }

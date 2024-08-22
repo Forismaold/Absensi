@@ -15,7 +15,7 @@ export default function Note() {
                 <div className='flex gap-2'>
                     <FontAwesomeIcon icon={absensi?.status ? faDoorOpen : faDoorClosed}/>
                     {absensi?.status ?
-                        <p>{absensi?.title} dibuka sejak</p>
+                        <p>dibuka sejak</p>
                         :
                         <p>Terakhir ditutup</p>
                     }

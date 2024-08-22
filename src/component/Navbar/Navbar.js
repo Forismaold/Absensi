@@ -1,9 +1,9 @@
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faBarsStaggered, faHouse, faPenRuler } from '@fortawesome/free-solid-svg-icons'
 import { useEffect, useState } from "react"
 import { useSelector } from "react-redux"
 import { Link, useLocation } from "react-router-dom"
 import { getPermission } from "../../utils"
-// import revIcon from '../../assets/rev4.jpeg'
-import revIcon from '../../assets/forisma.webp'
 
 export default function Navbar() {
     const akun = useSelector(state => state.source.account)
@@ -22,42 +22,37 @@ export default function Navbar() {
         setPermission(getPermission())
     }, [akun])
 
-    return <nav className="flex px-3 py-2 gap-2 flex-col w-full">
-        <div className="flex gap-2 items-center">
-            <img src={revIcon} alt="aaa" className="w-16 h-16 shadow rounded"/>
-            <div className="flex flex-col">
-                <h4 className="font-montserrat text-neutral-100 font-extrabold text-3xl">For IS MA.</h4>
-                <span className="text-neutral-200 text-[8px]">(untuk presensi siswa muslim SMA 3 Magelang)</span>
-            </div>
-        </div>
-        <div className="flex gap-2">
-            <div className="flex justify-between w-full text-neutral-200">
-                <div className="flex gap-2">
-                    <Link to={'/absen'}>
-                    <div className={`${routeName === 'ABSEN' ? 'border-tertiary' : 'border-transparent'} h-full flex place-items-center pointer border-b-2 border-solid click-animation`}>
-                        <span>Absen</span>
-                    </div>
-                    </Link>
-                    <Link to={'/dashboard'}>
-                    <div className={`${routeName === 'DASHBOARD' && !isAdminRoute ? 'border-tertiary' : 'border-transparent'} h-full flex place-items-center pointer border-b-2 border-solid click-animation`}>
-                        <span>Dashboard</span>
-                    </div>
-                    </Link>
-                    {permission && 
-                        <Link to={'/admin/server'}>
-                            <div className={`${isAdminRoute ? 'border-tertiary' : 'border-transparent'} h-full flex place-items-center pointer border-b-2 border-solid click-animation`}>
-                                <span>Admin</span>
-                            </div>
-                        </Link>
-                    }
+    return <nav className="flex px-3 py-2 gap-2 flex-col w-full mt-auto border-t fixed bottom-0 bg-neutral-200 z-[1001]">
+        <div className="flex justify-between w-full text-neutral-700">
+            <div className="flex gap-4">
+                <Link to={'/absen'}>
+                <div className={`${routeName === 'ABSEN' ? 'bg-tertiary rounded text-neutral-600 shadow-tertiary' : 'text-neutral-500'} flex pt-1 px-4 flex-col items-center pointer border border-solid click-animation`}>
+                    <FontAwesomeIcon className='text-xl' icon={faHouse}/>
+                    <span className="text-[8px] pt-1">Absen</span>
                 </div>
-                <div className="flex gap-2">
-                    <Link to={'/akun'}>
-                        <div className="h-full flex place-items-center pointer">
-                            {akun ? <img src={akun?.avatar} alt={akun?.nickname || akun?.nama} referrerPolicy="no-referrer" className="w-[32px] h-[32px] rounded-full shadow click-animation"/>: <span className="click-animation">Akun</span>}
+                </Link>
+                <Link to={'/dashboard'}>
+                <div className={`${routeName === 'DASHBOARD' && !isAdminRoute ? 'bg-tertiary rounded text-neutral-600 shadow-tertiary' : 'text-neutral-500'} flex pt-1 px-4 flex-col items-center pointer border border-solid click-animation`}>
+                    <FontAwesomeIcon className='text-xl' icon={faBarsStaggered}/>
+                    <span className="text-[8px] pt-1">Dashboard</span>
+                </div>
+                </Link>
+                {permission && 
+                    <Link to={'/admin/server'}>
+                        <div className={`${isAdminRoute ? 'bg-tertiary rounded text-neutral-600 shadow-tertiary' : 'text-neutral-500'} flex pt-1 px-4 flex-col items-center pointer border border-solid click-animation`}>
+                            <FontAwesomeIcon className='text-xl' icon={faPenRuler}/>
+                            <span className="text-[8px] pt-1">Admin</span>
                         </div>
                     </Link>
-                </div>
+                }
+            </div>
+            <div className="flex gap-2">
+                <Link to={'/akun'}>
+                    <div className={`${routeName === 'AKUN' ? 'bg-tertiary rounded text-neutral-600 shadow-tertiary' : 'text-neutral-500'} h-full flex place-items-center pointer p-1 px-4 flex-col`}>
+                        {akun ? <img src={akun?.avatar} alt={akun?.nickname || akun?.nama} referrerPolicy="no-referrer" className="w-[20px] h-[20px] rounded-full shadow click-animation"/>: <span className="click-animation">Akun</span>}
+                        <span className="text-[8px] pt-1">Profil</span>
+                    </div>
+                </Link>
             </div>
         </div>
     </nav>
