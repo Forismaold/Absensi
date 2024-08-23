@@ -22,26 +22,26 @@ export default function Navbar() {
         setPermission(getPermission())
     }, [akun])
 
-    return <nav className="flex px-3 py-2 gap-2 flex-col w-full mt-auto border-t fixed bottom-0 bg-neutral-200 z-[1001]">
+    return <nav className="flex px-3 py-1 gap-2 flex-col w-full mt-auto border-t fixed bottom-0 bg-neutral-200 z-[1001]">
         <div className="flex justify-between w-full text-neutral-700">
             <div className="flex gap-4">
                 <Link to={'/absen'}>
                 <div className={`${routeName === 'ABSEN' ? 'text-primary shadow-tertiary' : 'text-neutral-500'} flex p-1 px-4 flex-col items-center pointer click-animation`}>
                     <FontAwesomeIcon className='text-xl' icon={faHouse}/>
-                    <span className="text-[5px] pt-1">Beranda</span>
+                    <span className="text-[7px] pt-1">Beranda</span>
                 </div>
                 </Link>
                 <Link to={'/dashboard'}>
                 <div className={`${routeName === 'DASHBOARD' && !isAdminRoute ? 'text-primary shadow-tertiary' : 'text-neutral-500'} flex p-1 px-4 flex-col items-center pointer click-animation`}>
                     <FontAwesomeIcon className='text-xl' icon={faBarsStaggered}/>
-                    <span className="text-[5px] pt-1">Dashboard</span>
+                    <span className="text-[7px] pt-1">Dashboard</span>
                 </div>
                 </Link>
                 {permission && 
                     <Link to={'/admin/server'}>
                         <div className={`${isAdminRoute ? 'text-primary shadow-tertiary' : 'text-neutral-500'} flex p-1 px-4 flex-col items-center pointer click-animation`}>
                             <FontAwesomeIcon className='text-xl' icon={faPenRuler}/>
-                            <span className="text-[5px] pt-1">Admin</span>
+                            <span className="text-[7px] pt-1">Admin</span>
                         </div>
                     </Link>
                 }
@@ -50,7 +50,7 @@ export default function Navbar() {
                 <Link to={'/akun'}>
                     <div className={`${routeName === 'AKUN' ? 'text-primary shadow-tertiary' : 'text-neutral-500'} h-full flex place-items-center pointer p-1 px-4 flex-col click-animation`}>
                         {akun ? <img src={akun?.avatar} alt={akun?.nickname || akun?.nama} referrerPolicy="no-referrer" className="w-[20px] h-[20px] rounded-full shadow"/>: <FontAwesomeIcon icon={faUser} className='text-xl'/>}
-                        <span className="text-[5px] pt-1">Profil</span>
+                        <span className="text-[7px] pt-1">Profil</span>
                     </div>
                 </Link>
             </div>
