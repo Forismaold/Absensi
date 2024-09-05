@@ -8,6 +8,7 @@ import Register from "./Akun/Register"
 import Dahsboard from './Dashboard/Dashboard'
 import AdminRiwayat from './Admin/AdminRiwayat'
 import AdminServer from './Admin/AdminServer'
+import AdminUsers from './Admin/AdminUsers'
 
 export default function Base() {
     // const location = useLocation()
@@ -25,6 +26,7 @@ export default function Base() {
                     <Route path={'/dashboard'} element={<Dahsboard/>}></Route>
                     <Route path={'/admin/server/*'} element={<AdminServer/>}></Route>
                     <Route path={'/admin/riwayat'} element={<AdminRiwayat/>}></Route>
+                    <Route path={'/admin/users'} element={<AdminUsers/>}></Route>
                     <Route path={'/akun'} element={<Akun/>}></Route>
                     <Route path={'/akun/masuk'} element={<Login/>}></Route>
                     <Route path={'/akun/daftar'} element={<Register/>}></Route>

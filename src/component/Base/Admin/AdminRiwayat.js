@@ -1,5 +1,5 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faClockRotateLeft, faRotate, faServer, faEllipsisV, faTrash, faTable } from '@fortawesome/free-solid-svg-icons'
+import { faClockRotateLeft, faRotate, faServer, faEllipsisV, faTrash, faTable, faUserGroup } from '@fortawesome/free-solid-svg-icons'
 import { useCallback, useEffect, useState } from "react"
 import axios from "axios"
 import { API, formatBeautyDate, formatDate, getPermission, isUserWithinBoundsCSV } from "../../../utils"
@@ -54,6 +54,9 @@ export default function AdminRiwayat() {
             </Link>
             <Link to={'/admin/riwayat'} className='flex flex-1 px-4 items-center py-2 gap-2 click-animation border-b-2 border-secondary text-secondary bg-quaternary'>
                 <FontAwesomeIcon icon={faClockRotateLeft}/> Riwayat
+            </Link>
+            <Link to={'/admin/users'} className='flex flex-1 px-4 items-center py-2 gap-2 click-animation border-b-2 border-transparent  text-neutral-500 bg-neutral-200'>
+                <FontAwesomeIcon icon={faUserGroup}/> User
             </Link>
         </div>
         <button className='flex gap-2 items-center self-end justify-center rounded text-neutral-100 bg-secondary p-2 shadow-lg shadow-primary/50 click-animation' onClick={() => fetchRiwayats()}>{isLoading?<LoadingIcon/>:<FontAwesomeIcon icon={faRotate} className='p-0.5'/>} Segarkan riwayat</button>

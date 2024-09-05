@@ -1,5 +1,5 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faBoxOpen, faClockRotateLeft, faDoorClosed, faEllipsisV, faExternalLink, faFloppyDisk, faLink, faPenToSquare, faPlus, faRefresh, faSearch, faServer, faTable, faTrash } from '@fortawesome/free-solid-svg-icons'
+import { faBoxOpen, faClockRotateLeft, faDoorClosed, faEllipsisV, faExternalLink, faFloppyDisk, faLink, faPenToSquare, faPlus, faRefresh, faSearch, faServer, faTable, faTrash, faUserGroup } from '@fortawesome/free-solid-svg-icons'
 import { useSelector } from "react-redux"
 import { API, formatBeautyDate, getPermission } from "../../../utils"
 import axios from "axios"
@@ -29,6 +29,9 @@ export default function AdminServer() {
             </Link>
             <Link to={'/admin/riwayat'} className='flex flex-1 px-4 items-center py-2 gap-2 click-animation border-b-2 border-transparent text-neutral-500 bg-neutral-200'>
                 <FontAwesomeIcon icon={faClockRotateLeft}/> Riwayat
+            </Link>
+            <Link to={'/admin/users'} className='flex flex-1 px-4 items-center py-2 gap-2 click-animation border-b-2 border-transparent  text-neutral-500 bg-neutral-200'>
+                <FontAwesomeIcon icon={faUserGroup}/> User
             </Link>
         </div>
         {/* <DashboardActionButton/> */}
