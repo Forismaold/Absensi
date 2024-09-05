@@ -13,7 +13,7 @@ export default function Base() {
     // const location = useLocation()
     // const pathSegments = location.pathname.split('/')
     return (
-        <div className="w-full flex justify-center p-4 max-w-[1440px]">
+        <div className="w-full flex justify-center p-4 max-w-[1440px] mx-auto">
             <div className="bg-neutral-100 rounded-3xl shadow-2xl h-full p-4 self-stretch flex-1 max-w-full">
                 <Routes>
                     <Route path={'/akun/masuk'} element={<BackTo to={'/akun'}/>}/>

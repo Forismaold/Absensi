@@ -57,7 +57,7 @@ export default function AbsenceMethod() {
             if (isLoading) return
             blankToast('Lokasi tercapai!')
             handleHadir()
-            dispatch(setIsWatchPosition(false))
+            dispatch(setIsWatchPosition(false)) // disable watch position status if require
         }
     // eslint-disable-next-line react-hooks/exhaustive-deps
     },[absensi, dispatch, handleHadir, status, userCoordinate])
