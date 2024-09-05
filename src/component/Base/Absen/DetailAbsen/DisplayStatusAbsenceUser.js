@@ -1,19 +1,18 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCheck, faCheckDouble, faXmark } from '@fortawesome/free-solid-svg-icons'
 // import { useEffect, useState } from "react"
-import { useDispatch, useSelector } from "react-redux"
+import { useSelector } from "react-redux"
 import { formatTime, isUserWithinBounds } from "../../../../utils"
-import { toggleShowAbsence } from '../../../../redux/source'
+// import { toggleShowAbsence } from '../../../../redux/source'
 // import Modal from '../../../utils/Modal'
 
 export default function DisplayStatusAbsenceUser() {    
     const account = useSelector(state => state.source.account)
-    const absensi = useSelector(state => state.source.absensi)
-    const showAbsence = useSelector(state => state.source.showAbsence)
+    // const showAbsence = useSelector(state => state.source.showAbsence)
     const status = useSelector(state => state.source.status)
     // const [showAbsenceDetail, setShowAbsenceDetail] = useState(false)
 
-    const dispatch = useDispatch()
+    // const dispatch = useDispatch()
 
     // useEffect(() => {
     //     if (status?.absen === true || status?.absen === false) setShowAbsenceDetail(true)
@@ -23,9 +22,9 @@ export default function DisplayStatusAbsenceUser() {
 
     return <>    
     {/* <div className='flex flex-col gap-2 bg-secondary shadow-lg shadow-primary/50 text-neutral-100 rounded p-4 items-center relative click-animation cursor-pointer' onClick={() => setShowAbsenceDetail(true)}> */}
-    <div className='flex flex-col gap-2 bg-secondary shadow-lg shadow-primary/50 text-neutral-100 rounded p-4 items-center relative click-animation cursor-pointer'>
+    <div className='flex flex-col gap-2 bg-secondary shadow-lg shadow-primary/50 text-neutral-100 rounded p-4 items-center relative click-animation cursor-pointer my-2'>
         <div className='w-full flex gap-2 justify-between'>
-            <p>Terimakasih, kamu sudah <span className='bg-tertiary'>{absensi.title}</span></p>
+            <p>Terimakasih, kamu sudah</p>
             <FontAwesomeIcon icon={isUserWithinBounds(status?.koordinat) ? faCheckDouble : faCheck}/>
         </div>
         <div className='w-full'>
@@ -44,9 +43,8 @@ export default function DisplayStatusAbsenceUser() {
                 </div>
             }
         </div>
-        
     </div>
-    {status?.absen !== null && account && <span onClick={() => dispatch(toggleShowAbsence())} className='click-animation text-primary text-right underline cursor-pointe'>{showAbsence ? 'Batal perbarui' : 'Perbarui absensi'}</span>}
+    {/* {status?.absen !== null && account && <span onClick={() => dispatch(toggleShowAbsence())} className='click-animation text-primary text-right underline cursor-pointe'>{showAbsence ? 'Batal perbarui' : 'Perbarui absensi'}</span>} */}
     {/* <DetailUserAbsence isOpen={showAbsenceDetail} onClose={() => setShowAbsenceDetail(false)} status={status}/> */}
     </>
 }
