@@ -61,7 +61,7 @@ export default function AbsensiEditor({isOpen, onClose, callBack, submitText = '
                 </div>
                 }
             </div>
-            <div onClick={handleCallback} className={`flex-1 bg-secondary shadow-lg shadow-secondary/50 text-neutral-200 p-2 click-animation rounded flex justify-center shadow cursor-pointer hover:shadow-xl duration-300 hover:-translate-y-1`}>
+            <div onClick={handleCallback} className={`flex-1 bg-secondary shadow-secondary/50 text-neutral-200 p-2 click-animation rounded flex justify-center shadow cursor-pointer hover:shadow-xl duration-300 hover:-translate-y-1`}>
                 <span>{submitText}</span>
             </div>
         </div>
