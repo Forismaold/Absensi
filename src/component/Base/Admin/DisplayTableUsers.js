@@ -2,6 +2,7 @@ import axios from "axios"
 import { useCallback, useEffect, useState } from "react"
 import { API, formatTime, getCenterCoordinates, isUserWithinBounds } from "../../../utils"
 import Modal from "../../utils/Modal"
+import Cell from "../../utils/Cell"
 
 const classList = [
     {classNumberRank: 'X.E', classCount: 9},
@@ -106,22 +107,15 @@ function UserRowModel({data, tickets, absensiData}) {
         </div>
         <Modal isOpen={isOpenModal} onClose={() => setIsOpenModal(false)} zIndex={'z-[2]'}>
             <p>{data.nama}{data?.NIS && `#${data.NIS}`} ({ticket?.absen ? 'Absen' : 'Tidak absen'})</p>
-            <AbsenceCell prop={'Kode'} value={ticket?.kode}/>
-            <AbsenceCell prop={'Keterangan'} value={ticket?.keterangan}/>
-            <AbsenceCell prop={'Lokasi'} value={isUserWithinBounds(ticket?.koordinat || [0,0], absensi?.coordinates)? 'Di dalam area' : 'Di luar area'}/>
-            <AbsenceCell prop={'Koordinat'} value={`${ticket?.koordinat ? ticket.koordinat[0] : 'defaultX'}, ${ticket?.koordinat ? ticket.koordinat[1] : 'defaultY'}`}/>
-            <AbsenceCell prop={'Waktu Absen'} value={formatTime(ticket?.waktuAbsen)}/>
+            <Cell prop={'Kode'} value={ticket?.kode}/>
+            <Cell prop={'Keterangan'} value={ticket?.keterangan}/>
+            <Cell prop={'Lokasi'} value={isUserWithinBounds(ticket?.koordinat || [0,0], absensi?.coordinates)? 'Di dalam area' : 'Di luar area'}/>
+            <Cell prop={'Koordinat'} value={`${ticket?.koordinat ? ticket.koordinat[0] : 'defaultX'}, ${ticket?.koordinat ? ticket.koordinat[1] : 'defaultY'}`}/>
+            <Cell prop={'Waktu Absen'} value={formatTime(ticket?.waktuAbsen)}/>
             {isUserWithinBounds(ticket?.koordinat || [0,0], absensi?.coordinates) ? '' : 
                 isLoading ? <div className='flex gap-2 bg-primary shadow-lg shadow-primary/50 cursor-pointer items-center p-2 rounded text-neutral-200 click-animation'>Loading</div> :
                 <div onClick={setUserInBounds} className='flex gap-2 bg-primary shadow-lg shadow-primary/50 cursor-pointer items-center p-2 rounded text-neutral-200 click-animation'>{msg ? msg : 'Ubah koordinat di dalam area'}</div>
             }
         </Modal>
     </>
-}
-
-function AbsenceCell({prop, value}) {
-    return <div className='flex flex-col sm:flex-row border-b-[1px] border-solid border-neutral-300 last:border-transparent py-2'>
-        <p className='sm:w-2/6 font-medium'>{prop}</p>
-        <p>{value}</p>
-    </div>
 }

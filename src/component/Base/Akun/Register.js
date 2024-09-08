@@ -21,7 +21,7 @@ function RegisterForm() {
     const [nama, setNama] = useState('')
     const [panggilan, setPanggilan] = useState('')
     const [nomorKelas, setNomorKelas] = useState('')
-    const [kelas, setKelas] = useState('X')
+    const [kelas, setKelas] = useState('X.E')
     const [nomorAbsen, setNomorAbsen] = useState('')
     const [NIS, setNIS] = useState('')
     const [jenisKelamin, setJenisKelamin] = useState('-')
@@ -60,8 +60,6 @@ function RegisterForm() {
                 setLocalStorage('account', res.data.user)
                 dispatch(refreshAccount())
                 navigate('/akun')
-                // dispatch(setStatus())
-                // dispatch(setAbsensi())
                 promise.onSuccess('Berhasil membuat akun')
             })
             .catch(err => {
@@ -88,7 +86,7 @@ function RegisterForm() {
             <input className='p-2 rounded shadow w-full' type="text" value={nama} onChange={handleChangeName} placeholder='Nama' autoComplete='off' required/>
             <div className='flex gap-2 items-center'>
                 <select value={kelas} onChange={(e) => setKelas(e.target.value)} className='min-h-[40px] shadow p-2 rounded' required>
-                    <option value="X.E" defaultValue>X.E</option>
+                    <option value="X.E">X.E</option>
                     <option value="XI.F">XI.F</option>
                     <option value="XII.F">XII.F</option>
                 </select>

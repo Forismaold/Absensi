@@ -176,14 +176,14 @@ function DownloadCSVButton({onClose, riwayat}) {
                     console.log('error at class comparison')
                 }
             
-            try {
-                const sectionComparison = a.nomorKelas - b.nomorKelas
-                if (sectionComparison !== 0) {
-                    return sectionComparison
+                try {
+                    const sectionComparison = a.nomorKelas - b.nomorKelas
+                    if (sectionComparison !== 0) {
+                        return sectionComparison
+                    }
+                } catch (error) {
+                    console.log('error at section comparison')
                 }
-            } catch (error) {
-                console.log('error at section comparison')
-            }
             
                 return 1
             }) || []

@@ -22,7 +22,7 @@ export default function Navbar() {
         setPermission(getPermission())
     }, [akun])
 
-    return <nav className="flex px-3 py-1 gap-2 flex-col w-full mt-auto border-t fixed bottom-0 bg-neutral-200 z-[1001]">
+    return <nav className="flex px-3 py-1 gap-2 flex-col w-full mt-auto border-t fixed bottom-0 bg-neutral-200 z-[1001] shadow-inner">
         <div className="flex justify-between w-full text-neutral-700">
             <div className="flex gap-4">
                 <Link to={'/absen'}>

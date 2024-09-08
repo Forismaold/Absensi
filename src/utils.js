@@ -169,3 +169,25 @@ export function getCenterCoordinates(coordinates = {}) {
     
     return [centerX, centerY]
 }
+
+export function GroupedUsersByClass(users) {
+    const groupedData = {}
+
+    users?.forEach(user => {
+        const classKey = `${user.kelas}${user.nomorKelas}`
+
+        if (!groupedData[classKey]) {
+            groupedData[classKey] = []
+        }
+
+        groupedData[classKey].push(user)
+    })
+
+    Object.keys(groupedData).forEach(classKey => {
+        groupedData[classKey].sort((a, b) => {
+            return a.nomorAbsen - b.nomorAbsen
+        })
+    })
+
+    return groupedData
+}
