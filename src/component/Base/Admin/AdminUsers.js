@@ -6,6 +6,7 @@ import { API } from '../../../utils'
 import axios from 'axios'
 import Cell from '../../utils/Cell'
 import Modal from '../../utils/Modal'
+import { loadingToast } from '../../utils/myToast'
 
 export default function AdminUsers() {
     const [users, setUsers] = useState(null)
@@ -47,7 +48,8 @@ function DisplayUsers({users}) {
     return <div className='flex flex-col gap-4'>
         <div className='flex flex-col gap-2 p-2'>
             <h3 className='text-xl font-semibold pt-4'>Admin</h3>
-            {users.filter(user => user.peran.find(x => x === "admin")).map((user, i) => <UserRowModel user={user} key={i}/>)}
+            <p>Setelah seseorang dinaikkan atau diturunkan jabatannya seagai admin, pengguna perlu masuk ulang untuk memperbarui informasi akunnya</p>
+            {users.filter(user => user.peran.find(x => x === "admin")).map((user, i) => <UserRowModel user={user} key={i}/>).sort((a,b) => a.nama-b.nama)}
         </div>
         <div className='flex flex-col gap-2 p-2'>
             <h3 className='text-xl font-semibold pt-4'>Peserta</h3>
@@ -58,6 +60,29 @@ function DisplayUsers({users}) {
 
 function UserRowModel({user}) {
     const [isOpenModal, setIsOpenModal] = useState(false)
+    const [isAdmin, setIsAdmin] = useState(false)
+    const [isFetchLoading, setIsFetchLoading] = useState(false)
+    useEffect(() => {
+        if (user.peran.includes('admin')) {
+            setIsAdmin(true)
+        } else {
+            setIsAdmin(false)
+        }
+    },[user.peran])
+
+    async function admin() {
+        setIsFetchLoading(true)
+        const toast = loadingToast()
+        axios.put(API+`/akun/${isAdmin?'deop':'op'}/${user._id}`)
+        .then(res => {
+            toast.onSuccess(`Berhasil merubah pangkat`)
+            console.log(res.data)
+        }).catch(err => {
+            toast.onSuccess(`Gagal merubah pangkat`)
+        }).finally(() => {
+            setIsFetchLoading(false)
+        })
+    }
 
     return <div className='flex flex-col even:bg-neutral-200'>
         <div className={`p-2 rounded w-full cursor-pointer`} onClick={() => setIsOpenModal(true)}>
@@ -65,12 +90,14 @@ function UserRowModel({user}) {
                 <span className='w-1/6 text-center'>{user.kelas}-{user.nomorKelas}/{user.nomorAbsen}</span>
                 <div className='w-4/6'>{user.nama} <span>{user?.NIS && `#${user.NIS}`}</span></div>
                 <div className='w-1//6'>
-                    <FontAwesomeIcon icon={user.peran.find(x => x === "admin") ? faCrown : faUser}/>
+                    <FontAwesomeIcon icon={isAdmin ? faCrown : faUser}/>
                 </div>
             </div>
         </div>
         <Modal isOpen={isOpenModal} onClose={() => setIsOpenModal(false)} zIndex={'z-[2]'}>
-            <Cell prop={'Waktu Absen'} value={'huh'}/>
+            <div className='w-full click-animation cursor-pointer' onClick={admin}>
+                <Cell prop={isAdmin?'Berhentikan sebagai admin':'Tambahkan sebagai admin'} value={isFetchLoading?'Loading...':''}/>
+            </div>
         </Modal>
     </div>
 }
