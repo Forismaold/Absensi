@@ -44,65 +44,85 @@ export default function AbsenceScan() {
 
 function SubmitScan({qrAccount, setQrAccount}) {
     const absensi = useSelector(state => state.source.absensi)
-    
+    const account = useSelector(state => state.source.account)
 
     const [isLoading, setIsLoading] = useState(false)
 
     const handleHadir = useCallback(async () => {
-        if (navigator.geolocation) {
-            setIsLoading(true)
-            navigator.geolocation.getCurrentPosition(async (position) => {
-                    const promise = loadingToast('Mencari posisi...')
-                    const { latitude, longitude } = position.coords
-                    const value = [latitude, longitude]
-                    const centerCoordinates = getCenterCoordinates(absensi?.coordinates)
-                    console.log(absensi?.coordinates, centerCoordinates);
+        setIsLoading(true)
+        const centerCoordinates = getCenterCoordinates(absensi?.coordinates)
+        console.log(absensi?.coordinates, centerCoordinates);
 
-                    const dataToSend = {
-                        user: qrAccount._id,
-                        userCoordinate: centerCoordinates,
-                    }
-            
-                    if (!isUserWithinBounds(value)) {
-                        promise.onError('Pemindai belum berada di area, pergi ke area dan coba lagi')
-                        setIsLoading(false)
-                        return
-                    }
-                    
-                    promise.updateText('Mengirim absen teman')
-            
-                    try {
-                        await axios.post(API + '/absen/hadir/' + absensi?._id, dataToSend)
-                        .then(res => {
-                            promise.onSuccess(res?.data?.msg)
-                            setQrAccount(null)
-                            setIsLoading(false)
-                        }).catch(err => {
-                            console.log(err)
-                            promise.onError(err?.response?.data?.msg)
-                            throw new Error(err)
-                        })
-                    } catch (error) {
-                        setIsLoading(false)
-                        console.log(error)
-                        promise.onError('Server error')
-                    }
-                },
-                (error) => {
-                    console.error('Error getting location:', error)
+        const dataToSend = {
+            user: qrAccount._id,
+            userCoordinate: centerCoordinates,
+        }
+        if (account.peran.includes('admin')) {
+            const promise = loadingToast('Melakukan absensi sebagai admin')
+            try {
+                await axios.post(API + '/absen/hadir/' + absensi?._id, dataToSend)
+                .then(res => {
+                    promise.onSuccess(res?.data?.msg)
+                    setQrAccount(null)
                     setIsLoading(false)
-                },
-                {
-                    enableHighAccuracy: true,
-                    maximumAge: 0,
-                }
-            )
+                }).catch(err => {
+                    console.log(err)
+                    promise.onError(err?.response?.data?.msg)
+                    throw new Error(err)
+                })
+            } catch (error) {
+                setIsLoading(false)
+                console.log(error)
+                promise.onError('Server error')
+            }
         } else {
-            alert('Geolocation tidak didukung browsermu.')
-            setIsLoading(false)
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(async (position) => {
+                        const promise = loadingToast('Mencari posisi...')
+                        const { latitude, longitude } = position.coords
+                        const value = [latitude, longitude]
+                
+                        if (!isUserWithinBounds(value)) {
+                            promise.onError('Pemindai belum berada di area, pergi ke area dan coba lagi')
+                            setIsLoading(false)
+                            return
+                        }
+                        
+                        promise.updateText('Mengirim absen teman')
+                
+                        try {
+                            await axios.post(API + '/absen/hadir/' + absensi?._id, dataToSend)
+                            .then(res => {
+                                promise.onSuccess(res?.data?.msg)
+                                setQrAccount(null)
+                                setIsLoading(false)
+                            }).catch(err => {
+                                console.log(err)
+                                promise.onError(err?.response?.data?.msg)
+                                throw new Error(err)
+                            })
+                        } catch (error) {
+                            setIsLoading(false)
+                            console.log(error)
+                            promise.onError('Server error')
+                        }
+                    },
+                    (error) => {
+                        console.error('Error getting location:', error)
+                        setIsLoading(false)
+                    },
+                    {
+                        enableHighAccuracy: true,
+                        maximumAge: 0,
+                    }
+                )
+            } else {
+                alert('Geolocation tidak didukung browsermu.')
+                setIsLoading(false)
+            }
         }
         
-    }, [qrAccount, absensi, setQrAccount])
+    }, [absensi?.coordinates, absensi?._id, qrAccount._id, account.peran, setQrAccount])
 
     useEffect(() => {
       console.log('absensi',absensi);
