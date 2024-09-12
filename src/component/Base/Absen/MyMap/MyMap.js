@@ -39,7 +39,7 @@ export default function MyMap() {
     }
 
     return (
-        <div className='flex flex-col gap-2'>
+        <div className={`flex flex-col gap-2 ${!absensi?.status && 'opacity-50'}`}>
             {absensi && <>
             <div className='flex flex-col bg-neutral-300/50 rounded-xl overflow-hidden'>
                 <div className='flex gap-2 p-2 text-neutral-500' onClick={() => dispatch(toggleShowMap())}>
@@ -83,7 +83,7 @@ export default function MyMap() {
                 }
             </div>
             {status?.absen === true || status?.absen === false ? null : 
-                <div className='flex gap-2 flex-wrap mt-2 flex-col md:flex-row'>
+                <div className={`flex gap-2 flex-wrap mt-2 flex-col md:flex-row ${!absensi?.status && 'hidden'}`}>
                     <UserLocation focusOnLocation={focusOnLocation} focusUserLocation={focusUserLocation}/>
                 </div>
             }

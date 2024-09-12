@@ -87,11 +87,11 @@ function UserRowModel({user}) {
     return <div className='flex flex-col even:bg-neutral-200'>
         <div className={`p-2 rounded w-full cursor-pointer`} onClick={() => setIsOpenModal(true)}>
             <div className="flex gap-2 truncate text-neutral-600">
-                <span className='w-1/6 text-center'>{user.kelas}-{user.nomorKelas}/{user.nomorAbsen}</span>
-                <div className='w-4/6'>{user.nama} <span>{user?.NIS && `#${user.NIS}`}</span></div>
                 <div className='w-1//6'>
                     <FontAwesomeIcon icon={isAdmin ? faCrown : faUser}/>
                 </div>
+                <span className='w-1/6 text-center overflow-auto'>{user.kelas}-{user.nomorKelas}/{user.nomorAbsen}</span>
+                <div className='w-4/6 overflow-auto'>{user.nama} <span>{user?.NIS && `#${user.NIS}`}</span></div>
             </div>
         </div>
         <Modal isOpen={isOpenModal} onClose={() => setIsOpenModal(false)} zIndex={'z-[2]'}>

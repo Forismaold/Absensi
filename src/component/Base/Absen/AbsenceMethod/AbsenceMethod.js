@@ -66,7 +66,7 @@ export default function AbsenceMethod() {
 
     if (!showAbsence && (status !== null)) return
 
-    if (proMode) return <div className="flex flex-col gap-2 p-2 rounded">
+    if (proMode) return <div className={`flex flex-col gap-2 p-2 rounded ${!absensi?.status && 'hidden'}`}>
         <div className='flex items-center rounded shadow text-neutral-500 overflow-auto w-full'>
             <div className={`flex flex-1 px-4 items-center py-2 gap-2 click-animation border-b-2 ${methodSelected === 'gps' ? 'border-secondary text-secondary bg-quaternary' : 'border-transparent'}`} onClick={() => setMethodSelected('gps')}>Lokasi</div>
             <div className={`flex flex-1 px-4 items-center py-2 gap-2 click-animation border-b-2 ${methodSelected === 'form' ? 'border-secondary text-secondary bg-quaternary' : 'border-transparent'}`} onClick={() => setMethodSelected('form')}>Form</div>

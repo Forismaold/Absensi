@@ -10,6 +10,7 @@ export default function Note() {
         <div className='p-2'>
             <p className='text-xl font-semibold'>{absensi.title} <span className='text-sm font-normal'>oleh {absensi.openedBy}</span></p>
         </div>
+        {!absensi.status && <div className='p-2 rounded bg-red-300'>Absensi belum dibuka sama admin</div>}
         <div className="flex flex-col gap-2 p-2 text-neutral-500">
             <div className='flex flex-wrap justify-between'>
                 <div className='flex gap-2'>
