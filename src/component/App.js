@@ -1,5 +1,4 @@
 import React from 'react'
-import Navbar from './Navbar/Navbar'
 import Base from './Base/Base'
 import Header from './Header/Header'
 
@@ -10,7 +9,6 @@ function App() {
         <Header/>
         <Base/>
       </div>
-      <Navbar/>
     </div>
   )
 }
