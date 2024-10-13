@@ -29,7 +29,6 @@ export default function Akun() {
     }
 
     return <div>
-        <p>Ini halaman akun</p>
         {account?
         <>
             <Profile/>

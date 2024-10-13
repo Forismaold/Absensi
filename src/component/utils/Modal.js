@@ -18,12 +18,12 @@ function MyOverlay({onClose, children, zIndex = 'z-[1]'}) {
     </div>
 }
 
-export default function Modal({isOpen, children, onClose, zIndex, portalName = 'portal'}) {
+export default function Modal({isOpen, children, onClose, zIndex, portalName = 'portal', className = '', fluid = false}) {
     if (!isOpen) return null
     
     return createPortal(
         <MyOverlay onClose={onClose} zIndex={zIndex}>
-            <div className="bg-neutral-200 text-neutral-600 rounded-md p-2 w-full max-h-full overflow-auto">
+            <div className={`bg-neutral-200 text-neutral-600 rounded-md p-2 ${fluid ? 'w-fit' : 'w-full'} max-h-full overflow-auto ${className}`}>
                 {children}
             </div>
         </MyOverlay>
