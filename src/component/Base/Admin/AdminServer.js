@@ -1,5 +1,5 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faBoxOpen, faClockRotateLeft, faDoorClosed, faEllipsisV, faExternalLink, faFloppyDisk, faLink, faPenToSquare, faPlus, faRefresh, faSearch, faServer, faTable, faTrash, faUserGroup } from '@fortawesome/free-solid-svg-icons'
+import { faBoxOpen, faClockRotateLeft, faDoorClosed, faEllipsisV, faExternalLink, faFloppyDisk, faLink, faPenToSquare, faPlus, faRefresh, faSearch, faServer, faTable, faTrash, faUserGroup, faChevronDown, faChevronRight } from '@fortawesome/free-solid-svg-icons'
 import { useSelector } from "react-redux"
 import { API, formatBeautyDate, getPermission } from "../../../utils"
 import axios from "axios"
@@ -93,11 +93,13 @@ function DetailAbsence() {
         <DisplayTableUsers usersTicket={absensi?.tickets} absensi={absensi}/>
     </div>
 }
+
 function ManageAbsence() {
+    const [show, setShow] = useState(false)
     const account = useSelector(state => state.source.account)
     const [isLoading, setIsLoading] = useState(false)
     const [fetchError, setFetchError] = useState(false)
-    const [abcenceList, setAbcenceList] = useState(null)
+    const [absenceList, setAbsenceList] = useState(null)
     const [openCreateAbsence, setOpenCreateAbsence] = useState(false)
 
     const fetchAbsence = useCallback(async () => {
@@ -105,7 +107,7 @@ function ManageAbsence() {
         setFetchError(false)
         try {
             await axios.get(API + '/absensi').then(res => {
-                setAbcenceList(res.data.data)
+                setAbsenceList(res.data.data)
             }).catch(err => {
                 throw new Error(err)
             })
@@ -125,11 +127,12 @@ function ManageAbsence() {
                 title,
                 note,
                 coordinates,
-                openedBy: account?.panggilan || account.nama
+                openedBy: account?.panggilan || account.nama,
+                allowedGrades: openCreateAbsence || ''
             }).then(res => {
                 promise.onSuccess('berhasil menambahkan absensi')
                 setOpenCreateAbsence(false)
-                setAbcenceList(res.data.data)
+                setAbsenceList(res.data.data)
             }).catch(err => {
                 throw new Error(err)
             })
@@ -139,8 +142,8 @@ function ManageAbsence() {
     }
 
     useEffect(() => {
-        if (!abcenceList) fetchAbsence()
-    },[abcenceList, fetchAbsence])
+        if (!absenceList) fetchAbsence()
+    },[absenceList, fetchAbsence])
 
     return <div className='flex flex-col gap-2'>
         <div className='flex items-center justify-end' onClick={fetchAbsence}>
@@ -150,14 +153,18 @@ function ManageAbsence() {
         </div>
         {isLoading && <LoadingSkeleton/>}
         {fetchError && <span>Gagal mendapatkan data!</span>}
-        {abcenceList?.map(item => <DashboardActionButton item={item} key={item._id}/>) || []}
-        {abcenceList?.filter(Boolean)?.length === 0 && <span className='text-center'>Tidak ada absensi</span>}
-        <div className='flex items-center justify-end' onClick={() => setOpenCreateAbsence(true)}>
-            <div className='flex gap-2 items-center bg-primary p-2 shadow-lg shadow-primary/50 click-animation rounded-lg text-neutral-100 cursor-pointer'>
+        <div>
+            <AccordionGrades setOpenCreateAbsence={setOpenCreateAbsence} show={show} setShow={setShow} list={absenceList} grade='X.E'/>
+            <AccordionGrades setOpenCreateAbsence={setOpenCreateAbsence} show={show} setShow={setShow} list={absenceList} grade='XI.F'/>
+            <AccordionGrades setOpenCreateAbsence={setOpenCreateAbsence} show={show} setShow={setShow} list={absenceList} grade='XII.F'/>
+        </div>
+        {absenceList?.filter(Boolean)?.length === 0 && <span className='text-center'>Tidak ada absensi</span>}
+        {/* <div className='flex items-center justify-end' onClick={() => setOpenCreateAbsence(true)}>
+            <div className='flex items-center bg-primary p-2 shadow-lg shadow-primary/50 click-animation rounded-lg text-neutral-100 cursor-pointer'>
                 <FontAwesomeIcon icon={faPlus}/> Baru
             </div>
-        </div>
-        <AbsensiEditor isOpen={openCreateAbsence} onClose={() => setOpenCreateAbsence(false)} callBack={createAbsence}/>
+        </div> */}
+        <AbsensiEditor isOpen={openCreateAbsence} onClose={() => setOpenCreateAbsence(null)} callBack={createAbsence}/>
     </div>
 }
 
@@ -287,34 +294,17 @@ function DashboardActionButton({ item }) {
 
     if (!absensi) return <p className='bg-neutral-200 p-2 text-center rounded'>Absensi belum di load atau sudah dihapus!</p>
     
-    return <div className="relative flex py-2 gap-2 flex-col shadow-lg p-2 rounded my-2 bg-neutral-200">
-        <div className='absolute top-2 right-2 cursor-pointer click-animation grid items-center px-4 py-2' onClick={() => setIsOpenMore(true)}>
-            <FontAwesomeIcon icon={faEllipsisV}/>
+    return <div className="relative flex gap-2 flex-col shadow-lg p-2 rounded bg-neutral-200">
+        <div className='flex'>
+            <p className='flex-1 text-xl font-semibold'>{absensi.title} <span className='text-sm font-normal'>oleh {absensi.openedBy}</span></p>
+            <div className='cursor-pointer click-animation grid items-center px-4 py-2' onClick={() => setIsOpenMore(true)}>
+                <FontAwesomeIcon icon={faEllipsisV}/>
+            </div>
         </div>
-        {absensi && <div className='flex flex-col'>
+        <div className='flex flex-col'>
             <div className='flex flex-wrap flex-col sm:flex-row'>
-                <p className='sm:w-2/6 font-semibold'>Judul</p>
-                <p>{absensi?.title}</p>
-            </div>
-            <div className='flex flex-wrap flex-col sm:flex-row'>
-                <p className='sm:w-2/6 font-semibold'>Status</p>
-                <p>{absensi?.status ? "Buka" : "Tutup"}</p>
-            </div>
-            <div className='flex flex-wrap flex-col sm:flex-row'>
-                <p className='sm:w-2/6 font-semibold'>{absensi?.status ? 'Dibuka oleh': 'Ditutup oleh'}</p>
-                <p>{absensi?.openedBy || 'Anon'}</p>
-            </div>
-            <div className='flex flex-wrap flex-col sm:flex-row'>
-                <p className='sm:w-2/6 font-semibold'>Pada</p>
+                <p className='sm:w-2/6 font-semibold'>{absensi?.status ? "Buka" : "Tutup"}</p>
                 <p>{formatBeautyDate(absensi?.date)}</p>
-            </div>
-            <div className='flex flex-wrap flex-col sm:flex-row'>
-                <p className='sm:w-2/6 font-semibold'>Koordinat Pertama</p>
-                <p className='max-w-full overflow-auto'>{absensi?.coordinates?.first?.join(',') || '-'}</p>
-            </div>
-            <div className='flex flex-wrap flex-col sm:flex-row'>
-                <p className='sm:w-2/6 font-semibold'>Koordinat Kedua</p>
-                <p className='max-w-full overflow-auto'>{absensi?.coordinates?.second?.join(',') || '-'}</p>
             </div>
             <div className='flex flex-wrap flex-col sm:flex-row'>
                 <p className='sm:w-2/6 font-semibold'>Catatan</p>
@@ -324,7 +314,8 @@ function DashboardActionButton({ item }) {
                 <p className='sm:w-2/6 font-semibold'>Jumlah Peserta</p>
                 <p>{absensi?.tickets?.length || '-'}</p>
             </div>
-        </div>}
+        </div>
+
         <div className='flex gap-2 justify-end flex-wrap'>
             <div className='flex gap-2 shadow-lg shadow-primary/50 cursor-pointer text-primary items-center p-2 rounded border-primary border-2 border-solid click-animation' onClick={() => setShowSaveConfirm(true)}>
                 <FontAwesomeIcon icon={faFloppyDisk}/>
@@ -408,5 +399,23 @@ function DashboardActionButton({ item }) {
             {/* <UsersList users={absensi?.tickets} absenceData={item}/> */}
             <DisplayTableUsers usersTicket={absensi?.tickets} absensi={absensi}/>
         </Modal>
+    </div>
+}
+
+function AccordionGrades({grade = '', list = [], show = false, setShow, setOpenCreateAbsence, whichCreate}) {
+    return <div className='flex flex-col shadow p-2 rounded'>
+        <div className='flex gap-2 items-center'>
+            <h3 onClick={() => setShow(show === grade ? false : grade)} className='font-semibold text-3xl p-2 mt-2 flex-1 justify-between flex'>{grade} <FontAwesomeIcon className='text-2xl' icon={show === grade ? faChevronDown : faChevronRight}/></h3>
+            <FontAwesomeIcon className='text-2xl flex items-center bg-primary p-2 shadow-lg shadow-primary/50 click-animation rounded-lg text-neutral-100 cursor-pointer' icon={faPlus} onClick={() => {
+                setOpenCreateAbsence(grade)
+            }}/>
+        </div>
+        <div className={`grid transition-all duration-300 ease-in-out overflow-hidden 
+            ${show === grade ? 'grid-rows-[1fr]' : 'grid-rows-[0fr]'}
+            `}>
+            <div className='overflow-hidden'>
+                {list?.filter(i => i.allowedGrades.find(x => x === grade)).map(item => <DashboardActionButton item={item} key={item._id}/>) || []}
+            </div>
+        </div>
     </div>
 }

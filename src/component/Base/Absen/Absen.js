@@ -5,6 +5,7 @@ import axios from 'axios'
 import { API, formatBeautyDate } from '../../../utils'
 import { Route, Routes, useNavigate } from 'react-router-dom'
 import DetailAbsen from './DetailAbsen/DetailAbsen'
+import { useSelector } from 'react-redux'
 
 export default function Absen() {
     return <div className={'flex flex-col gap-2'}>
@@ -21,6 +22,7 @@ export default function Absen() {
 }
 
 function ListAbsen() {
+    const account = useSelector(state => state.source.account)
     const [list, setList] = useState(null)
     const [isLoading, setIsLoading] = useState(false)
     const fetchData = useCallback(async () => {
@@ -50,7 +52,7 @@ function ListAbsen() {
             </div>
         </div>
         {list?.length === 0 && <span className='text-center'>Tidak ada absensi</span>}
-        {list?.map(item => <AbsenCard data={item} key={item._id}/>)}
+        {list?.filter(i => i.allowedGrades.find(x => x === account?.kelas)).map(item => <AbsenCard data={item} key={item._id}/>)}
     </div>
 }
 
