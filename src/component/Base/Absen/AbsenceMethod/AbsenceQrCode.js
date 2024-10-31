@@ -31,6 +31,6 @@ export default function AbsenceQrCode() {
         <div className="bg-neutral-100">
             <QRCode value={value}/>
         </div>
-        <p className="break-all">{value}</p>
+        {/* <p className="break-all">{value}</p> */}
     </div>
 }

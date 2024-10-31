@@ -62,6 +62,14 @@ function AbsenCard ({data}) {
     useEffect(() => {
         setIsOpened(data.status)
     },[data])
+    useEffect(() => {
+      console.log(data)
+    
+      return () => {
+        
+      }
+    }, [data])
+    
     return <div className={`relative flex p-2 py-4 pt-5 gap-2 flex-col shadow-lg rounded my-2 cursor-pointer ${isOpened ? 'bg-secondary text-neutral-200' : 'bg-neutral-200'}`} onClick={() => navigate('/absen/' + data?._id)}>
         <div className='flex flex-col'>
             <p className='text-lg font-semibold'>{data?.title} <span className='text-xs font-normal'>oleh {data.openedBy}</span></p>

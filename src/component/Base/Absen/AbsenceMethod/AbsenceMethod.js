@@ -7,7 +7,6 @@ import { blankToast, loadingToast } from "../../../utils/myToast";
 import axios from "axios";
 import { setAbsensi, setIsWatchPosition, setShowAbsence, setShowMap } from "../../../../redux/source";
 import AbsenceScan from "./AbsenceScan";
-import AbsenceQrCode from "./AbsenceQrCode";
 
 export default function AbsenceMethod() {
     const account = useSelector(state => state.source.account)
@@ -71,13 +70,11 @@ export default function AbsenceMethod() {
             <div className={`flex flex-1 px-4 items-center py-2 gap-2 click-animation border-b-2 ${methodSelected === 'gps' ? 'border-secondary text-secondary bg-quaternary' : 'border-transparent'}`} onClick={() => setMethodSelected('gps')}>Lokasi</div>
             <div className={`flex flex-1 px-4 items-center py-2 gap-2 click-animation border-b-2 ${methodSelected === 'form' ? 'border-secondary text-secondary bg-quaternary' : 'border-transparent'}`} onClick={() => setMethodSelected('form')}>Form</div>
             <div className={`flex flex-1 px-4 items-center py-2 gap-2 click-animation border-b-2 ${methodSelected === 'scan' ? 'border-secondary text-secondary bg-quaternary' : 'border-transparent'}`} onClick={() => setMethodSelected('scan')}>Pindai</div>
-            <div className={`flex flex-1 px-4 items-center py-2 gap-2 click-animation border-b-2 ${methodSelected === 'qrcode' ? 'border-secondary text-secondary bg-quaternary' : 'border-transparent'}`} onClick={() => setMethodSelected('qrcode')}>kode</div>
         </div>
         <div className={`${isLoading && 'opacity-50'}`}>
             {methodSelected === 'gps' && <AbsenceLocation/>}
             {methodSelected === 'form' && <AbsenceForm/>}
             {methodSelected === 'scan' && <AbsenceScan/>}
-            {methodSelected === 'qrcode' && <AbsenceQrCode/>}
         </div>
     </div>
 }

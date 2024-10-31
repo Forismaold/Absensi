@@ -9,18 +9,19 @@ import axios from 'axios'
 import { refreshAccount } from '../../../redux/source'
 import { loadingToast } from '../../utils/myToast'
 import Auth from './Auth'
+import AbsenceQrCode from '../Absen/AbsenceMethod/AbsenceQrCode'
 
 
 export default function Akun() {
     const account = useSelector(state => state.source.account)
     const [openKeluarDialog, setOpenKeluarDialog] = useState(false)
+    const [showKeluarDialog, setShowKeluarDialog] = useState(false)
 
     const dispatch = useDispatch()
 
     function checkForAccount() {
-        console.log(account);
         if (!account.email) return setOpenKeluarDialog(true)
-        keluar()
+        setShowKeluarDialog(true)
     }
     
     function keluar() {
@@ -40,7 +41,8 @@ export default function Akun() {
                     <span>keluar</span>
                 </div>
             </div>
-            <Confirm isOpen={openKeluarDialog} onClose={() => setOpenKeluarDialog(false)} callBack={keluar} title='Lanjutkan keluar' subTitle='Untuk mempermudah saat masuk kembali, kami menyarankan untuk menautkan akun Google kamu sebelum keluar. Kamu tetap ingin lanjut keluar?'/>
+            <Confirm isOpen={openKeluarDialog} onClose={() => setOpenKeluarDialog(false)} callBack={keluar} title='Anda Belum mentautkan email' subTitle='Untuk mempermudah saat masuk kembali, kami menyarankan untuk menautkan akun Google kamu sebelum keluar. Kamu tetap ingin lanjut keluar?'/>
+            <Confirm isOpen={showKeluarDialog} onClose={() => setShowKeluarDialog(false)} callBack={keluar} title='Lanjutkan keluar' subTitle='Apakah kamu ingin keluar dari akun ini?'/>
         </>
         : <Auth/>}
     </div>
@@ -84,9 +86,12 @@ function Profile() {
             {editorMode ? 
                 <ProfileEditor closeEditor={() => setEditorMode(false)}/>
                 :
-                bioData.map(({ prop, value }) => (
-                    <ProfileBioCell key={prop} prop={prop} value={value} />
-                ))
+                <div className='flex flex-col gap-2'>
+                    {bioData.map(({ prop, value }) => (
+                        <ProfileBioCell key={prop} prop={prop} value={value} />
+                    ))}
+                    <AbsenceQrCode/>
+                </div>
             }
         </div>
     </div>
