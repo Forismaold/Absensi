@@ -25,19 +25,22 @@ export default function AbsenceScan() {
             if (turnOnOnCam) return window.location.reload()
             setTurnOnOnCam(true)
         }}>{turnOnOnCam ? 'Matikan' : 'Nyalakan'} kamera</div>
-        {turnOnOnCam && 
-            <>
-                <QrScanner onScan={value => {
-                        const [_id, nama, kelas, nomorKelas, nomorAbsen] = decryptObject(value)
-                        console.log(decryptObject(value))
-                        setQrAccount({_id, nama, kelas, nomorKelas, nomorAbsen})
-                    }}
-                    flipHorizontally={flipHorizontally}
-                />
-                <span className='click-animation text-primary text-xs p-2 underline' onClick={() => setFlipHorizontally(prev => !prev)}>Balikkan horizontal</span>
-            </>
-        }
-        {qrAccount && <SubmitScan setQrAccount={(value) => setQrAccount(value)} qrAccount={qrAccount}/>}
+        <div className='relative'>
+            {turnOnOnCam && 
+                <>
+                    <QrScanner onScan={value => {
+                            const [_id, nama, kelas, nomorKelas, nomorAbsen] = decryptObject(value)
+                            console.log(decryptObject(value))
+                            setQrAccount({_id, nama, kelas, nomorKelas, nomorAbsen})
+
+                        }}
+                        flipHorizontally={flipHorizontally}
+                    />
+                    <span className='click-animation text-primary text-xs p-2 underline' onClick={() => setFlipHorizontally(prev => !prev)}>Balikkan horizontal</span>
+                </>
+            }
+            {qrAccount && <SubmitScan setQrAccount={(value) => setQrAccount(value)} qrAccount={qrAccount}/>}
+        </div>
         <InfoScanSubmit isOpen={showInfo} onClose={() => setShowInfo(false)} setQrAccount={value => setQrAccount(value)}/>
     </div>
 }
@@ -133,8 +136,8 @@ function SubmitScan({qrAccount, setQrAccount}) {
     }, [absensi])
     
 
-    return <div className='break-all flex flex-col gap-2'>
-        <div className='flex flex-col gap-2 shadow-lg shadow-primary/50 p-2 rounded-md text-center'>
+    return <div className='break-all flex flex-col gap-2 absolute inset-0'>
+        <div className='flex flex-col gap-2 shadow-lg shadow-primary/50 p-2 rounded-md text-center justify-center items-center h-full bg-neutral-200 z-[100]'>
             <div className='flex flex-col'>
                 <p>{qrAccount.nama}</p>
                 <p>{qrAccount.kelas}{qrAccount.nomorKelas}/{qrAccount.nomorAbsen}</p>
@@ -149,7 +152,7 @@ function SubmitScan({qrAccount, setQrAccount}) {
                     </div>
                     :
                     <div className='flex flex-1 gap-2 items-center bg-secondary p-2 px-4 shadow-lg shadow-primary/50 click-animation rounded-lg text-neutral-100 cursor-pointer' onClick={handleHadir}>
-                        Kirimkan
+                        Kirim dan selanjutnya
                     </div>
                 }
             </div>
