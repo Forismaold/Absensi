@@ -1,5 +1,5 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faBars, faBarsStaggered, faHouse, faPenRuler, faUser } from '@fortawesome/free-solid-svg-icons'
+import { faBars, faBarsStaggered, faHouse, faPenRuler, faUser, faQrcode } from '@fortawesome/free-solid-svg-icons'
 import { useEffect, useState } from "react"
 import { Link, useLocation } from "react-router-dom"
 import { getPermission } from "../../utils"
@@ -37,6 +37,11 @@ export default function Navbar() {
                         <FontAwesomeIcon className='text-xl' icon={faHouse}/>
                     </div>
                     </Link>
+                    <Link to={'/absengoldenqr'} className='h-full flex items-center'>
+                    <div className={`${routeName === 'ABSENGOLDENQR' ? 'text-primary shadow-tertiary' : 'text-neutral-500'} flex p-1 px-4 gap-2 justify-center items-center pointer click-animation`}>
+                        <FontAwesomeIcon className='text-xl' icon={faQrcode}/>
+                    </div>
+                    </Link>
                     <Link to={'/dashboard'} className='h-full flex items-center'>
                     <div className={`${routeName === 'DASHBOARD' && !isAdminRoute ? 'text-primary shadow-tertiary' : 'text-neutral-500'} flex p-1 px-4 gap-2 justify-center items-center pointer click-animation`}>
                         <FontAwesomeIcon className='text-xl' icon={faBarsStaggered}/>
@@ -70,6 +75,12 @@ export default function Navbar() {
                             <div className={`${routeName === 'ABSEN' ? 'text-primary shadow-tertiary' : 'text-neutral-500'} flex p-1 px-4 gap-2 justify-center items-center pointer click-animation`}>
                                 <FontAwesomeIcon className='text-xl' icon={faHouse}/>
                                 <span className="w-12 text-[7px] pt-1">Beranda</span>
+                            </div>
+                            </Link>
+                            <Link to={'/absengoldenqr'}>
+                            <div className={`${routeName === 'ABSENGOLDENQR' ? 'text-primary shadow-tertiary' : 'text-neutral-500'} flex p-1 px-4 gap-2 justify-center items-center pointer click-animation`}>
+                                <FontAwesomeIcon className='text-xl' icon={faQrcode}/>
+                                <span className="w-12 text-[7px] pt-1">Golden QR</span>
                             </div>
                             </Link>
                             <Link to={'/dashboard'}>

@@ -9,7 +9,7 @@ import axios from 'axios'
 import { refreshAccount } from '../../../redux/source'
 import { loadingToast } from '../../utils/myToast'
 import Auth from './Auth'
-import AbsenceQrCode from '../Absen/AbsenceMethod/AbsenceQrCode'
+import AbsenceQrCode from './AbsenceQrCode'
 
 
 export default function Akun() {

@@ -52,7 +52,7 @@ function ListAbsen() {
             </div>
         </div>
         {list?.length === 0 && <span className='text-center'>Tidak ada absensi</span>}
-        {list?.filter(i => i.allowedGrades.find(x => x === account?.kelas)).map(item => <AbsenCard data={item} key={item._id}/>)}
+        {list?.filter(i => i.allowedGrades.includes(account?.kelas))?.map(item => <AbsenCard data={item} key={item._id}/>) || []}
     </div>
 }
 

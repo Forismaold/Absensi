@@ -9,6 +9,7 @@ import Dahsboard from './Dashboard/Dashboard'
 import AdminRiwayat from './Admin/AdminRiwayat'
 import AdminServer from './Admin/AdminServer'
 import AdminUsers from './Admin/AdminUsers'
+import GoldenQr from './GoldenQr/GoldenQr'
 
 export default function Base() {
     // const location = useLocation()
@@ -23,6 +24,7 @@ export default function Base() {
                 {/* <h5 className="text-3xl font-bold text-neutral-700 capitalize pt-4">{pathSegments[pathSegments.length - 1] || 'Absen'}</h5> */}
                 <Routes>
                     <Route path={'*'} element={<Absen/>}></Route>
+                    <Route path={'/absengoldenqr'} element={<GoldenQr/>}></Route>
                     <Route path={'/dashboard'} element={<Dahsboard/>}></Route>
                     <Route path={'/admin/server/*'} element={<AdminServer/>}></Route>
                     <Route path={'/admin/riwayat'} element={<AdminRiwayat/>}></Route>

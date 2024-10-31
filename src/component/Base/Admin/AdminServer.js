@@ -413,7 +413,7 @@ function AccordionGrades({grade = '', list = [], show = false, setShow, setOpenC
         <div className={`grid transition-all duration-300 ease-in-out overflow-hidden 
             ${show === grade ? 'grid-rows-[1fr]' : 'grid-rows-[0fr]'}
             `}>
-            <div className='overflow-hidden'>
+            <div className='overflow-hidden flex flex-col gap-2'>
                 {list?.filter(i => i.allowedGrades.find(x => x === grade)).map(item => <DashboardActionButton item={item} key={item._id}/>) || []}
             </div>
         </div>
