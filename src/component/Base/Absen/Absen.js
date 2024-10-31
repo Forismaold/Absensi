@@ -31,6 +31,7 @@ function ListAbsen() {
             await axios.get(API + '/absensi/short')
             .then(res => {
                 setList(res.data.data)
+                console.log(res.data.data)
             }).catch(err => {
                 console.log(err);
             })
