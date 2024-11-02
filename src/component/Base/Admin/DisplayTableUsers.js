@@ -3,6 +3,8 @@ import { useCallback, useEffect, useState } from "react"
 import { API, formatTime, getCenterCoordinates, isUserWithinBounds } from "../../../utils"
 import Modal from "../../utils/Modal"
 import Cell from "../../utils/Cell"
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import { faCircleXmark } from "@fortawesome/free-solid-svg-icons"
 
 const classList = [
     {classNumberRank: 'X.E', classCount: 9},
@@ -54,7 +56,7 @@ export default function DisplayTableUsers({usersTicket, absensi}) {
 
     return <div className="flex flex-col gap-2">
         <div className="flex flex-wrap">
-            <div className={`p-2 cursor-pointer click-animation border-b-2 ${!selectedClass && 'border-secondary text-secondary bg-quaternary'}`} onClick={()=>changeSelectedClass(null)}>null</div>
+            <div className={`p-2 cursor-pointer click-animation border-b-2 ${!selectedClass && 'border-secondary text-secondary bg-quaternary'}`} onClick={()=>changeSelectedClass(null)}><FontAwesomeIcon icon={faCircleXmark}/></div>
             {classList.filter(x => absensi.allowedGrades.includes(x.classNumberRank)).map((item, i) => Array.from({ length: item.classCount }, (_, index) => (
                     <div key={index + 1} className={`p-2 cursor-pointer click-animation border-b-2 ${selectedClass === `${item.classNumberRank}-${index + 1}` && 'border-secondary text-secondary bg-quaternary'} ${isFetch && 'opacity-50'}`} onClick={()=>changeSelectedClass(`${item.classNumberRank}-${index + 1}`)}>{item.classNumberRank}-{index + 1}</div>
                 ))
