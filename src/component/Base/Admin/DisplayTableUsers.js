@@ -55,7 +55,7 @@ export default function DisplayTableUsers({usersTicket, absensi}) {
     return <div className="flex flex-col gap-2">
         <div className="flex flex-wrap">
             <div className={`p-2 cursor-pointer click-animation border-b-2 ${!selectedClass && 'border-secondary text-secondary bg-quaternary'}`} onClick={()=>changeSelectedClass(null)}>null</div>
-            {classList.map((item, i) => Array.from({ length: item.classCount }, (_, index) => (
+            {classList.filter(x => absensi.allowedGrades.includes(x.classNumberRank)).map((item, i) => Array.from({ length: item.classCount }, (_, index) => (
                     <div key={index + 1} className={`p-2 cursor-pointer click-animation border-b-2 ${selectedClass === `${item.classNumberRank}-${index + 1}` && 'border-secondary text-secondary bg-quaternary'} ${isFetch && 'opacity-50'}`} onClick={()=>changeSelectedClass(`${item.classNumberRank}-${index + 1}`)}>{item.classNumberRank}-{index + 1}</div>
                 ))
             )}
@@ -97,7 +97,6 @@ function UserRowModel({data, tickets, absensiData}) {
         let userExist = tickets?.find(ticket => ticket.user._id === data._id)
         if (userExist) {
             setTicket(userExist)
-            console.log(userExist, data)
         }
     },[absensi, data, ticket, tickets])
 

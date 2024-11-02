@@ -73,27 +73,27 @@ export default function Navbar() {
                         <div className="flex flex-col gap-4">
                             <Link to={'/absen'}>
                             <div className={`${routeName === 'ABSEN' ? 'text-primary shadow-tertiary' : 'text-neutral-500'} flex p-1 px-4 gap-2 justify-center items-center pointer click-animation`}>
-                                <FontAwesomeIcon className='text-xl' icon={faHouse}/>
-                                <span className="w-12 text-[7px] pt-1">Beranda</span>
+                                <FontAwesomeIcon className='text-xl w-1/5' icon={faHouse}/>
+                                <span className="w-4/5 text-sm pt-1">Beranda</span>
                             </div>
                             </Link>
                             <Link to={'/absengoldenqr'}>
                             <div className={`${routeName === 'ABSENGOLDENQR' ? 'text-primary shadow-tertiary' : 'text-neutral-500'} flex p-1 px-4 gap-2 justify-center items-center pointer click-animation`}>
-                                <FontAwesomeIcon className='text-xl' icon={faQrcode}/>
-                                <span className="w-12 text-[7px] pt-1">Golden QR</span>
+                                <FontAwesomeIcon className='text-xl w-1/5' icon={faQrcode}/>
+                                <span className="w-4/5 text-sm pt-1">Golden QR</span>
                             </div>
                             </Link>
                             <Link to={'/dashboard'}>
                             <div className={`${routeName === 'DASHBOARD' && !isAdminRoute ? 'text-primary shadow-tertiary' : 'text-neutral-500'} flex p-1 px-4 gap-2 justify-center items-center pointer click-animation`}>
-                                <FontAwesomeIcon className='text-xl' icon={faBarsStaggered}/>
-                                <span className="w-12 text-[7px] pt-1">Dashboard</span>
+                                <FontAwesomeIcon className='text-xl w-1/5' icon={faBarsStaggered}/>
+                                <span className="w-4/5 text-sm pt-1">Dashboard</span>
                             </div>
                             </Link>
                             {permission && 
                                 <Link to={'/admin/server'}>
                                     <div className={`${isAdminRoute ? 'text-primary shadow-tertiary' : 'text-neutral-500'} flex p-1 px-4 gap-2 justify-center items-center pointer click-animation`}>
-                                        <FontAwesomeIcon className='text-xl' icon={faPenRuler}/>
-                                        <span className="w-12 text-[7px] pt-1">Admin</span>
+                                        <FontAwesomeIcon className='text-xl w-1/5' icon={faPenRuler}/>
+                                        <span className="w-4/5 text-sm pt-1">Admin</span>
                                     </div>
                                 </Link>
                             }
