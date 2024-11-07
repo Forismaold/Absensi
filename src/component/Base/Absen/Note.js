@@ -2,6 +2,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faDoorClosed, faDoorOpen, faNoteSticky } from '@fortawesome/free-solid-svg-icons'
 import { formatBeautyDate } from '../../../utils'
 import { useSelector } from 'react-redux'
+import ReminderWrongGrade from './DetailAbsen/ReminderWrongGrade'
 
 export default function Note() {
     const absensi = useSelector(state => state.source.absensi)
@@ -11,6 +12,7 @@ export default function Note() {
             <p className='text-xl font-semibold'>{absensi.title} <span className='text-sm font-normal'>oleh {absensi.openedBy}</span></p>
         </div>
         {!absensi.status && <div className='p-2 rounded bg-red-300'>Absensi belum dibuka sama admin</div>}
+        <ReminderWrongGrade/>
         <div className="flex flex-col gap-2 p-2 text-neutral-500">
             <div className='flex flex-wrap justify-between'>
                 <div className='flex gap-2'>

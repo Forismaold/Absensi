@@ -9,7 +9,6 @@ import MuatUlangAbsensi from "./MuatUlangAbsensi"
 import Note from "../Note"
 import DisplayStatusAbsenceUser from "./DisplayStatusAbsenceUser"
 import AbsenceMethod from "../AbsenceMethod/AbsenceMethod"
-import ReminderWrongGrade from "./ReminderWrongGrade"
 
 export default function DetailAbsen() {
     const dispatch = useDispatch()
@@ -23,7 +22,6 @@ export default function DetailAbsen() {
     
     return <div className='flex flex-col'>
         <MuatUlangAbsensi/>
-        <ReminderWrongGrade/>
         <Note/>
         <DisplayStatusAbsenceUser/>
         <CheckAccountExist/>

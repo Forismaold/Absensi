@@ -1,18 +1,11 @@
 import { faTriangleExclamation } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { useEffect } from "react"
 import { useSelector } from "react-redux"
 import { Link } from "react-router-dom"
 
 export default function ReminderWrongGrade() {
     const absensi = useSelector(state => state.source.absensi)
     const account = useSelector(state => state.source.account)
-
-    useEffect(() => {
-        console.log('====================================');
-        console.log(absensi, account);
-        console.log('====================================');
-    })
 
     if (!absensi) return
 
