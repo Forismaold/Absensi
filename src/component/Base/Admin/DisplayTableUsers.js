@@ -30,9 +30,14 @@ export default function DisplayTableUsers({usersTicket, absensi}) {
         if (!selectedClass) return
         setIsFetch(true)
         try {
-            await axios.get(API + `/users/class/${selectedClass?.split('-')?.join('/') || ''}`)
+            let path = selectedClass !== 'semua' ? `/users/class/${selectedClass?.split('-')?.join('/')}` : `/absensi/users/${absensi?._id || ''}`
+            await axios.get(API + path)
             .then(res => {
-                const userSorted = res.data.sort((a,b) => a.nomorAbsen - b.nomorAbsen)
+                // const userSorted = res.data.sort((a,b) => a.nomorAbsen - b.nomorAbsen)
+                const userSorted = res.data.filter((user, index, self) =>
+                    index === self.findIndex((u) => u._id === user._id)
+                ).sort((a, b) => a.nomorAbsen - b.nomorAbsen);
+
                 setUsers(userSorted)
                 setIsFetch(false)
             }).catch(err => {
@@ -42,7 +47,7 @@ export default function DisplayTableUsers({usersTicket, absensi}) {
         } catch (error) {
             setIsFetch(false)
         }
-    }, [selectedClass])
+    }, [absensi?._id, selectedClass])
 
     useEffect(() => {
         fetchData()
@@ -53,10 +58,12 @@ export default function DisplayTableUsers({usersTicket, absensi}) {
     }, [usersTicket])
     
     
+    if (!absensi) return <div><p>menungu absensi...</p></div>
 
     return <div className="flex flex-col gap-2">
         <div className="flex flex-wrap">
             <div className={`p-2 cursor-pointer click-animation border-b-2 ${!selectedClass && 'border-secondary text-secondary bg-quaternary'}`} onClick={()=>changeSelectedClass(null)}><FontAwesomeIcon icon={faCircleXmark}/></div>
+            <div className={`p-2 cursor-pointer click-animation border-b-2 ${selectedClass === 'semua' && 'border-secondary text-secondary bg-quaternary'}`} onClick={()=>changeSelectedClass('semua')}>semua</div>
             {classList.filter(x => absensi.allowedGrades.includes(x.classNumberRank)).map((item, i) => Array.from({ length: item.classCount }, (_, index) => (
                     <div key={index + 1} className={`p-2 cursor-pointer click-animation border-b-2 ${selectedClass === `${item.classNumberRank}-${index + 1}` && 'border-secondary text-secondary bg-quaternary'} ${isFetch && 'opacity-50'}`} onClick={()=>changeSelectedClass(`${item.classNumberRank}-${index + 1}`)}>{item.classNumberRank}-{index + 1}</div>
                 ))
@@ -104,7 +111,7 @@ function UserRowModel({data, tickets, absensiData}) {
 
     return <>
         <div className={`p-2 rounded w-full cursor-pointer ${ticket ? 'bg-tertiary' : 'odd:bg-neutral-200'}`} onClick={() => setIsOpenModal(true)}>
-            <p className="truncate text-neutral-600">{data.nomorAbsen} {data.nama}<span>{data?.NIS && `#${data.NIS}`}</span></p>
+            <p className="truncate text-neutral-600">{data.kelas}-{data.nomorKelas}/{data.nomorAbsen} {data.nama}<span>{data?.NIS && `#${data.NIS}`}</span></p>
         </div>
         <Modal isOpen={isOpenModal} onClose={() => setIsOpenModal(false)} zIndex={'z-[2]'}>
             <p>{data.nama}{data?.NIS && `#${data.NIS}`} ({ticket?.absen ? 'Absen' : 'Tidak absen'})</p>
