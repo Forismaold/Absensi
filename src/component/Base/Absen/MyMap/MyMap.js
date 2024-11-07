@@ -9,6 +9,7 @@ import { setFocusOnLocation } from '../../../../redux/map'
 import { formatBeautyDate } from '../../../../utils'
 
 export default function MyMap() {
+    const proMode = useSelector(state => state.source.proMode)
     const absensi = useSelector(state => state.source.absensi)
     const firstCoordinate = useSelector(state => state.source.absensi?.coordinates?.first) ?? [0, 0]
     const secondCoordinate = useSelector(state => state.source.absensi?.coordinates?.second) ?? [0, 0]
@@ -82,7 +83,7 @@ export default function MyMap() {
                     </div>
                 }
             </div>
-            {status?.absen === true || status?.absen === false ? null : 
+            {status?.absen === true || status?.absen === false || proMode ? null : 
                 <div className={`flex gap-2 flex-wrap mt-2 flex-col md:flex-row ${!absensi?.status && 'hidden'}`}>
                     <UserLocation focusOnLocation={focusOnLocation} focusUserLocation={focusUserLocation}/>
                 </div>

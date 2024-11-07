@@ -1,6 +1,6 @@
 import { faQuestion, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useState } from 'react'
 import {QrScanner} from "react-qrcode-scanner";
 import { InfoScanSubmit } from '../InfoModals';
 import { API, decryptObject, getCenterCoordinates, isUserWithinBounds } from '../../../../utils';
@@ -126,15 +126,6 @@ function SubmitScan({qrAccount, setQrAccount}) {
         }
         
     }, [absensi?.coordinates, absensi?._id, qrAccount._id, account.peran, setQrAccount])
-
-    useEffect(() => {
-      console.log('absensi',absensi);
-    
-      return () => {
-        
-      }
-    }, [absensi])
-    
 
     return <div className='break-all flex flex-col gap-2 absolute inset-0'>
         <div className='flex flex-col gap-2 shadow-lg shadow-primary/50 p-2 rounded-md text-center justify-center items-center h-full bg-neutral-200 z-[100]'>

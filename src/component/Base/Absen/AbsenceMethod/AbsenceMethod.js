@@ -61,9 +61,19 @@ export default function AbsenceMethod() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     },[absensi, dispatch, handleHadir, status, userCoordinate])
 
-    if (!account || !absensi) return
+    if (!account || !absensi) return 
 
-    if (!showAbsence && (status !== null)) return
+    if (!showAbsence && (status !== null)) {
+            if (proMode) return <div className={`flex flex-col gap-2 p-2 rounded`}>
+            <div className='flex items-center rounded shadow text-neutral-500 overflow-auto w-full'>
+                <div className={`flex flex-1 px-4 items-center py-2 gap-2 click-animation border-b-2 ${methodSelected === 'scan' ? 'border-secondary text-secondary bg-quaternary' : 'border-transparent'}`} onClick={() => setMethodSelected(prev => prev === 'scan' ? '' : 'scan')}>Pindai</div>
+            </div>
+            <div className={`${isLoading && 'opacity-50'}`}>
+                {methodSelected === 'scan' && <AbsenceScan/>}
+            </div>
+        </div>
+        return
+    }
 
     if (proMode) return <div className={`flex flex-col gap-2 p-2 rounded ${!absensi?.status && 'hidden'}`}>
         <div className='flex items-center rounded shadow text-neutral-500 overflow-auto w-full'>

@@ -51,7 +51,7 @@ export default function AbsenceLocation() {
     //     if (!userCoordinate) getCurrentLocation()
     // },[getCurrentLocation, userCoordinate])
 
-    return <div className="flex flex-col gap-2 gap-2 rounded-xl p-2 shadow-lg shadow-primary/50">
+    return <div className="flex flex-col gap-2 rounded-xl p-2 shadow-lg shadow-primary/50">
         <div className='flex gap-2 items-center justify-between'>
             <p>Kirim lokasi sebagai {account?.panggilan || account?.nama}</p>
             <button className='flex items-center justify-center px-3 text-neutral-500 p-2 click-animation' onClick={() => setShowHowToUseAutoAbsence(true)}><FontAwesomeIcon icon={faQuestion}/></button>
@@ -59,7 +59,7 @@ export default function AbsenceLocation() {
         <div className='flex gap-2 py-1 mt-auto'>
             {isWatchPosition ? <WatchPosition onClose={() => dispatch(setIsWatchPosition(false))} toggleHighAccuracy={toggleHighAccuracy} focusOnLocation={focusOnLocation}/> : 
                 <>
-                <button className={`flex flex-1 gap-2 shadow-lg px-2 shadow-primary/50 justify-center items-center rounded text-neutral-500 click-animation bg-neutral-200 min-h-[32px] mt-auto border-2 border-primary border-solid text-primary`} onClick={() => dispatch(setIsWatchPosition(true))} title='Mulai pemindaian lokasi'>
+                <button className={`flex flex-1 gap-2 shadow-lg px-2 shadow-primary/50 justify-center items-center rounded text-neutral-500 click-animation bg-neutral-200 min-h-[32px] mt-auto border-2 border-primary border-solid`} onClick={() => dispatch(setIsWatchPosition(true))} title='Mulai pemindaian lokasi'>
                     <FontAwesomeIcon icon={faBinoculars}/>
                     <span>Mulai</span>
                 </button>

@@ -69,7 +69,10 @@ export default function Navbar() {
             <Modal onClose={() => setShow(false)} zIndex={'z-[1001]'} isOpen={show} className='w-full max-w-sm'>
                 <div className="flex px-3 py-1 gap-2 flex-col mt-auto border-t bg-neutral-200 shadow-inner max-w-sm">
                     <div className="flex flex-col justify-between text-neutral-700 gap-4 max-w-sm">
-                    <span onClick={() => dispatch(setProMode(!proMode))} className="flex gap-2 items-center bg-secondary p-2 shadow-lg shadow-primary/50 click-animation rounded-lg text-neutral-100 cursor-pointer">{proMode ? 'Pro' : 'Lite'}</span>
+                    <span onClick={() => {
+                        dispatch(setProMode(!proMode))
+                        setShow(false)
+                    }} className="flex gap-2 items-center bg-secondary p-2 shadow-lg shadow-primary/50 click-animation rounded-lg text-neutral-100 cursor-pointer">{proMode ? 'Pro' : 'Lite'}</span>
                         <div className="flex flex-col gap-4">
                             <Link to={'/absen'} onClick={() => setShow(false)}>
                             <div className={`${routeName === 'ABSEN' ? 'text-primary shadow-tertiary' : 'text-neutral-500'} flex p-1 px-4 gap-2 justify-center items-center pointer click-animation`}>
