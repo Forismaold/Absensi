@@ -18,7 +18,7 @@ export default function ReminderWrongGrade() {
         </div>
         <div className="flex gap-2 items-center">
             <FontAwesomeIcon icon={faTriangleExclamation}/>
-            <p>Silahkan edit data info kamu di halaman <Link to={'/akun'} className="underline cursor-pointer">akun</Link></p>
+            <p>Silahkan edit untuk sesuaikan data info kamu saat ini di halaman <Link to={'/akun'} className="underline cursor-pointer">akun</Link></p>
         </div>
     </div>
 }
