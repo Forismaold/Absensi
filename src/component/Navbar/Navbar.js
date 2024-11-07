@@ -71,26 +71,26 @@ export default function Navbar() {
                     <div className="flex flex-col justify-between text-neutral-700 gap-4 max-w-sm">
                     <span onClick={() => dispatch(setProMode(!proMode))} className="flex gap-2 items-center bg-secondary p-2 shadow-lg shadow-primary/50 click-animation rounded-lg text-neutral-100 cursor-pointer">{proMode ? 'Pro' : 'Lite'}</span>
                         <div className="flex flex-col gap-4">
-                            <Link to={'/absen'}>
+                            <Link to={'/absen'} onClick={() => setShow(false)}>
                             <div className={`${routeName === 'ABSEN' ? 'text-primary shadow-tertiary' : 'text-neutral-500'} flex p-1 px-4 gap-2 justify-center items-center pointer click-animation`}>
                                 <FontAwesomeIcon className='text-xl w-1/5' icon={faHouse}/>
                                 <span className="w-4/5 text-sm pt-1">Beranda</span>
                             </div>
                             </Link>
-                            <Link to={'/absengoldenqr'}>
+                            <Link to={'/absengoldenqr'} onClick={() => setShow(false)}>
                             <div className={`${routeName === 'ABSENGOLDENQR' ? 'text-primary shadow-tertiary' : 'text-neutral-500'} flex p-1 px-4 gap-2 justify-center items-center pointer click-animation`}>
                                 <FontAwesomeIcon className='text-xl w-1/5' icon={faQrcode}/>
                                 <span className="w-4/5 text-sm pt-1">Golden QR</span>
                             </div>
                             </Link>
-                            <Link to={'/dashboard'}>
+                            <Link to={'/dashboard'} onClick={() => setShow(false)}>
                             <div className={`${routeName === 'DASHBOARD' && !isAdminRoute ? 'text-primary shadow-tertiary' : 'text-neutral-500'} flex p-1 px-4 gap-2 justify-center items-center pointer click-animation`}>
                                 <FontAwesomeIcon className='text-xl w-1/5' icon={faBarsStaggered}/>
                                 <span className="w-4/5 text-sm pt-1">Dashboard</span>
                             </div>
                             </Link>
                             {permission && 
-                                <Link to={'/admin/server'}>
+                                <Link to={'/admin/server'} onClick={() => setShow(false)}>
                                     <div className={`${isAdminRoute ? 'text-primary shadow-tertiary' : 'text-neutral-500'} flex p-1 px-4 gap-2 justify-center items-center pointer click-animation`}>
                                         <FontAwesomeIcon className='text-xl w-1/5' icon={faPenRuler}/>
                                         <span className="w-4/5 text-sm pt-1">Admin</span>
