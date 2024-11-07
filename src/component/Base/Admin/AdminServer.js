@@ -151,13 +151,12 @@ function ManageAbsence() {
                 <FontAwesomeIcon icon={faRefresh} className={`${isLoading && 'animate-spin'}`}/> Segarkan
             </div>
         </div>
-        {isLoading && <LoadingSkeleton/>}
         {fetchError && <span>Gagal mendapatkan data!</span>}
-        <div>
+        {isLoading ? <LoadingSkeleton/> : <div>
             <AccordionGrades setOpenCreateAbsence={setOpenCreateAbsence} show={show} setShow={setShow} list={absenceList} grade='X.E'/>
             <AccordionGrades setOpenCreateAbsence={setOpenCreateAbsence} show={show} setShow={setShow} list={absenceList} grade='XI.F'/>
             <AccordionGrades setOpenCreateAbsence={setOpenCreateAbsence} show={show} setShow={setShow} list={absenceList} grade='XII.F'/>
-        </div>
+        </div>}
         {absenceList?.filter(Boolean)?.length === 0 && <span className='text-center'>Tidak ada absensi</span>}
         {/* <div className='flex items-center justify-end' onClick={() => setOpenCreateAbsence(true)}>
             <div className='flex items-center bg-primary p-2 shadow-lg shadow-primary/50 click-animation rounded-lg text-neutral-100 cursor-pointer'>
