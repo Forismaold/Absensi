@@ -11,7 +11,6 @@ import { loadingToast } from '../../utils/myToast'
 import Auth from './Auth'
 import AbsenceQrCode from './AbsenceQrCode'
 
-
 export default function Akun() {
     const account = useSelector(state => state.source.account)
     const [openKeluarDialog, setOpenKeluarDialog] = useState(false)

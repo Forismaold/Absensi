@@ -4,8 +4,8 @@ import { useNavigate } from 'react-router-dom'
 // import { GoogleOAuthProvider, GoogleLogin } from "@react-oauth/google"
 import { API, setLocalStorage } from "../../../utils"
 import axios from "axios"
-import { useState } from 'react'
-import { useDispatch } from 'react-redux'
+import { useEffect, useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 import { refreshAccount } from '../../../redux/source'
 import { loadingToast } from '../../utils/myToast'
 import ReCAPTCHA from "react-google-recaptcha";
@@ -14,6 +14,11 @@ import { GoogleLogin, GoogleOAuthProvider } from '@react-oauth/google'
 
 
 export default function Login() {
+    const account = useSelector(state => state.source.account)
+    const navigate = useNavigate()
+    useEffect(() => {
+        if (account) navigate('/akun')
+    },[account, navigate])
     return <div className='flex flex-col'>
         <p>ini halaman login</p>
         <LoginForm/>

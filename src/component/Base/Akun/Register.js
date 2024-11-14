@@ -3,14 +3,19 @@ import { faChevronDown, faChevronRight, faEllipsisH, faUser } from '@fortawesome
 import { useNavigate } from 'react-router-dom'
 import { API, setLocalStorage } from "../../../utils"
 import axios from "axios"
-import { useState } from 'react'
-import { useDispatch } from 'react-redux'
+import { useEffect, useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 import { refreshAccount } from '../../../redux/source'
 import { toast } from 'react-toastify'
 import { loadingToast } from '../../utils/myToast'
 import ReCAPTCHA from "react-google-recaptcha";
 
 export default function Register() {
+    const account = useSelector(state => state.source.account)
+    const navigate = useNavigate()
+    useEffect(() => {
+        if (account) navigate('/akun')
+    },[account, navigate])
     return <div>
         <p>ini halaman daftar</p>
         <RegisterForm/>

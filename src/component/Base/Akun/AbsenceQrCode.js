@@ -17,16 +17,6 @@ export default function AbsenceQrCode() {
             account.nomorAbsen,
         ]))
     }, [account._id, account.kelas, account.nama, account.nomorAbsen, account.nomorKelas])
-    // useEffect(() => {
-    //     setValue(encryptObject({
-    //         _id: account._id,
-    //         nama: account.nama,
-    //         kelas: account.kelas,
-    //         nomorKelas: account.nomorKelas,
-    //         nomorAbsen: account.nomorAbsen,
-    //         status: Boolean(status)
-    //     }))
-    // }, [account._id, account.kelas, account.nama, account.nomorAbsen, account.nomorKelas, status])
     return <div className="flex flex-col gap-2 items-center">
         <div className="bg-neutral-100">
             {value? <QRCode value={value}/> : <p>Tidak dapat menampilkan value</p> }

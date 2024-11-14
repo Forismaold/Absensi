@@ -60,7 +60,7 @@ export default function AbsensiEditor({isOpen, onClose, callBack, submitText = '
         <div className='text-neutral-500 flex flex-col gap-2 p-2'>
             <div className='flex flex-col'>
                 <p className='flex-1'>Ketik judul absensi</p>
-                <input autoFocus ref={inputRef} type="text" placeholder='Bawaan: Dzuhur' className='shadow-lg shadow-primary/50 border-secondary rounded focus:ring-primary text-neutral-700' onChange={handleInput} value={inputTitle} maxLength={20}/>
+                <input autoFocus ref={inputRef} type="text" placeholder='Bawaan: Dzuhur' className='shadow-lg shadow-primary/50 border-secondary rounded focus:ring-primary text-neutral-700' onChange={handleInput} value={inputTitle} maxLength={50}/>
                 <p className='flex-1 mt-2 click-animation cursor-pointer' onClick={() => setShowDetail(prev => !prev)}>Lainnya <FontAwesomeIcon icon={showDetail ? faChevronDown : faChevronRight}/></p>
                 {showDetail && 
                 <div className='flex flex-col gap-2'>
