@@ -194,7 +194,10 @@ export default function TombolAksiAbsensi({ item }) {
         <AbsensiEditor isOpen={openEdit} onClose={() => setOpenEdit(false)} callBack={editAbsensi} submitText='Simpan' title={absensi?.title} note={absensi?.note} coordinates={absensi?.coordinates || {}}/>
         <Modal isOpen={showGoldenQr} onClose={() => setShowGoldenQr(false)} fluid={true}>
             <div className='bg-yellow-500 p-4'>
-                <QRCode value={absensi?._id}/> 
+                <QRCode value={{
+                    absensiId: absensi?._id,
+                    title: absensi?.title
+                }}/> 
             </div>
         </Modal>
         <Modal isOpen={showUsers} onClose={() => setShowUsers(false)}>

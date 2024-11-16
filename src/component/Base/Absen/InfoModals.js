@@ -77,6 +77,24 @@ export function InfoScanSubmit({isOpen, onClose}) {
     </Modal>
 }
 
+export function InfoGoldenQr({isOpen, onClose}) {
+    return <Modal isOpen={isOpen} onClose={onClose} zIndex={'z-[1001]'}>
+        <div className='text-neutral-500 p-2'>
+            <h3 className='font-semibold mt-2'>Cara Menggunakan Golden QR</h3>
+            <p>Memindai QR untuk melakukan absensi tanpa akses lokasi, dapatkan QR di setiap absensi dari admin.</p>
+            <p>Kode QR Emas memiliki garis tepi berwarna kekuningan.</p>
+            <h3 className='font-semibold mt-2'>Pindai</h3>
+            <ol className='pl-4'>
+                <li>Arahkan kamera pemindai ke Kode QR Emas</li>
+            </ol>
+            <h3 className='font-semibold mt-2'>Kirim</h3>
+            <ol className='pl-4'>
+                <li>Kirim absensi seperti biasa dan selamat, anda sudah absen</li>
+            </ol>
+        </div>
+    </Modal>
+}
+
 export function InfoCostumCoordinate({isOpen, onClose}) {
     const coordinates = useSelector(state => state.coordinates)
 
