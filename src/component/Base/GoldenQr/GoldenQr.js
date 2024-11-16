@@ -10,9 +10,9 @@ import { useSelector } from "react-redux";
 import { InfoGoldenQr } from "../Absen/InfoModals";
 
 export default function GoldenQr() {
-    // const [absence, setAbsence] = useState(null)
+    const [absence, setAbsence] = useState(null)
     const [showInfo, setShowInfo] = useState(false)
-    const [qrAccount, setQrAccount] = useState(null)
+    // const [qrAccount, setQrAccount] = useState(null)
     const [turnOnOnCam, setTurnOnOnCam] = useState(false)
     const [flipHorizontally, setFlipHorizontally] = useState(true)
 
@@ -32,16 +32,16 @@ export default function GoldenQr() {
                                 const [absensiId, title] = decryptObject(value)
                                 console.log("scan detected")
                                 console.log(decryptObject(value))
-                                setQrAccount({absensiId, title})
+                                setAbsence({absensiId, title})
                             }}
                             flipHorizontally={flipHorizontally}
                         />
                         <span className='click-animation text-primary text-xs p-2 underline' onClick={() => setFlipHorizontally(prev => !prev)}>Balikkan horizontal</span>
                     </>
                 }
-                {qrAccount && <SubmitScan setQrAccount={(value) => setQrAccount(value)} qrAccount={qrAccount}/>}
+                {absence && <SubmitScan setQrAccount={(value) => setAbsence(value)} qrAccount={absence}/>}
             </div>
-            <InfoGoldenQr isOpen={showInfo} onClose={() => setShowInfo(false)} setQrAccount={value => setQrAccount(value)}/>
+            <InfoGoldenQr isOpen={showInfo} onClose={() => setShowInfo(false)}/>
         </div>
         // {turnOnOnCam && 
         //     <>
@@ -57,28 +57,25 @@ export default function GoldenQr() {
         // }
 }
 
-function SubmitScan({qrAccount, setQrAccount}) {
-    const absensi = useSelector(state => state.source.absensi)
+function SubmitScan({absensi, setAbsensi}) {
     const account = useSelector(state => state.source.account)
 
     const [isLoading, setIsLoading] = useState(false)
 
     const handleHadir = useCallback(async () => {
         setIsLoading(true)
-        const centerCoordinates = getCenterCoordinates(absensi?.coordinates)
-        console.log(absensi?.coordinates, centerCoordinates);
 
         const dataToSend = {
-            user: qrAccount._id,
-            userCoordinate: centerCoordinates,
+            user: account._id,
+            userCoordinate: getCenterCoordinates(absensi?.coordinates),
         }
         if (account.peran.includes('admin')) {
             const promise = loadingToast('Melakukan absensi sebagai admin')
             try {
-                await axios.post(API + '/absen/hadir/' + absensi?._id, dataToSend)
+                await axios.post(API + '/absen/hadir/' + absensi?.id, dataToSend)
                 .then(res => {
                     promise.onSuccess(res?.data?.msg)
-                    setQrAccount(null)
+                    setAbsensi(null)
                     setIsLoading(false)
                 }).catch(err => {
                     console.log(err)
@@ -109,7 +106,7 @@ function SubmitScan({qrAccount, setQrAccount}) {
                             await axios.post(API + '/absen/hadir/' + absensi?._id, dataToSend)
                             .then(res => {
                                 promise.onSuccess(res?.data?.msg)
-                                setQrAccount(null)
+                                setAbsensi(null)
                                 setIsLoading(false)
                             }).catch(err => {
                                 console.log(err)
@@ -137,16 +134,15 @@ function SubmitScan({qrAccount, setQrAccount}) {
             }
         }
         
-    }, [absensi?.coordinates, absensi?._id, qrAccount._id, account.peran, setQrAccount])
+    }, [account._id, account.peran, absensi?.coordinates, absensi?.id, absensi?._id, setAbsensi])
 
     return <div className='break-all flex flex-col gap-2 absolute inset-0'>
         <div className='flex flex-col gap-2 shadow-lg shadow-primary/50 p-2 rounded-md text-center justify-center items-center h-full bg-neutral-200 z-[100]'>
             <div className='flex flex-col'>
-                <p>{qrAccount.nama}</p>
-                <p>{qrAccount.kelas}{qrAccount.nomorKelas}/{qrAccount.nomorAbsen}</p>
+                <p>{absensi?.title}</p>
             </div>
             <div className='flex gap-2'>
-                <div className='flex gap-2 items-center p-2 click-animation rounded-lg cursor-pointer border border-solid border-primary text-primary' onClick={() => setQrAccount(null)}>
+                <div className='flex gap-2 items-center p-2 click-animation rounded-lg cursor-pointer border border-solid border-primary text-primary' onClick={() => setAbsensi(null)}>
                     <FontAwesomeIcon icon={faTrash}/>
                 </div>
                 {isLoading ? 

@@ -195,8 +195,9 @@ export default function TombolAksiAbsensi({ item }) {
         <Modal isOpen={showGoldenQr} onClose={() => setShowGoldenQr(false)} fluid={true}>
             <div className='bg-yellow-500 p-4'>
                 <QRCode value={encryptObject({
-                    absensiId: absensi?._id,
-                    title: absensi?.title
+                    id: absensi?._id,
+                    title: absensi?.title,
+                    coordinates: absensi?.coordinates
                 })}/> 
             </div>
         </Modal>

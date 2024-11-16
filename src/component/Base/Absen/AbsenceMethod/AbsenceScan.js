@@ -41,7 +41,7 @@ export default function AbsenceScan() {
             }
             {qrAccount && <SubmitScan setQrAccount={(value) => setQrAccount(value)} qrAccount={qrAccount}/>}
         </div>
-        <InfoScanSubmit isOpen={showInfo} onClose={() => setShowInfo(false)} setQrAccount={value => setQrAccount(value)}/>
+        <InfoScanSubmit isOpen={showInfo} onClose={() => setShowInfo(false)}/>
     </div>
 }
 
