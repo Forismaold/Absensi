@@ -1,7 +1,7 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faBoxOpen, faDoorClosed, faEllipsisV, faExternalLink, faFloppyDisk, faLink, faPenToSquare, faQrcode, faTable, faTrash } from '@fortawesome/free-solid-svg-icons'
 import { useSelector } from "react-redux"
-import { API, encryptObject, formatBeautyDate } from "../../../utils"
+import { API, encryptObject, formatBeautyDate, getCenterCoordinates } from "../../../utils"
 import axios from "axios"
 import { blankToast, loadingToast } from '../../utils/myToast'
 import { useEffect, useState } from 'react'
@@ -197,7 +197,7 @@ export default function TombolAksiAbsensi({ item }) {
                 <QRCode value={encryptObject({
                     id: absensi?._id,
                     title: absensi?.title,
-                    coordinates: absensi?.coordinates
+                    centerCoordinates: getCenterCoordinates(absensi?.coordinates)
                 })}/> 
             </div>
         </Modal>

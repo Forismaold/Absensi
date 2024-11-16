@@ -21,7 +21,7 @@ export default function AbsenceScan() {
             <p>Kirim absen sebagai teman</p>
             <button className='flex items-center justify-center px-3 text-neutral-500 p-2 click-animation' onClick={() => setShowInfo(true)}><FontAwesomeIcon icon={faQuestion}/></button>
         </div>
-        <div className={`p-2 click-animation rounded shadow shadow-primary/50 text-center ${turnOnOnCam ? 'text-primary' : 'text-neutral-100 bg-secondary' }`} onClick={() => {
+        <div className={`p-2 click-animation rounded shadow shadow-primary/50 text-center cursor-pointer ${turnOnOnCam ? 'text-primary' : 'text-neutral-100 bg-secondary' }`} onClick={() => {
             if (turnOnOnCam) return window.location.reload()
             setTurnOnOnCam(true)
         }}>{turnOnOnCam ? 'Matikan' : 'Nyalakan'} kamera</div>

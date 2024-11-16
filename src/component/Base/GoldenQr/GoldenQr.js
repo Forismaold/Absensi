@@ -2,7 +2,7 @@ import { faQuestion, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useCallback, useState } from "react";
 import { QrScanner } from "react-qrcode-scanner";
-import { API, decryptObject, getCenterCoordinates, isUserWithinBounds } from "../../../utils";
+import { API, decryptObject, isUserWithinBounds } from "../../../utils";
 import LoadingIcon from "../../utils/LoadingIcon";
 import axios from "axios";
 import { loadingToast } from "../../utils/myToast";
@@ -21,7 +21,7 @@ export default function GoldenQr() {
                 <p>Pindai Golden QR</p>
                 <button className='flex items-center justify-center px-3 text-neutral-500 p-2 click-animation' onClick={() => setShowInfo(true)}><FontAwesomeIcon icon={faQuestion}/></button>
             </div>
-            <div className={`p-2 click-animation rounded shadow shadow-primary/50 text-center ${turnOnOnCam ? 'text-primary' : 'text-neutral-100 bg-secondary' }`} onClick={() => {
+            <div className={`p-2 click-animation rounded shadow shadow-primary/50 text-center cursor-pointer ${turnOnOnCam ? 'text-primary' : 'text-neutral-100 bg-secondary' }`} onClick={() => {
                 if (turnOnOnCam) return window.location.reload()
                 setTurnOnOnCam(true)
             }}>{turnOnOnCam ? 'Matikan' : 'Nyalakan'} kamera</div>
@@ -67,7 +67,7 @@ function SubmitScan({absensi, setAbsensi}) {
 
         const dataToSend = {
             user: account._id,
-            userCoordinate: getCenterCoordinates(absensi?.coordinates),
+            userCoordinate: absensi?.centerCoordinates,
         }
         if (account.peran.includes('admin')) {
             const promise = loadingToast('Melakukan absensi sebagai admin')
@@ -134,7 +134,7 @@ function SubmitScan({absensi, setAbsensi}) {
             }
         }
         
-    }, [account._id, account.peran, absensi?.coordinates, absensi?.id, absensi?._id, setAbsensi])
+    }, [account._id, account.peran, absensi?.centerCoordinates, absensi?.id, absensi?._id, setAbsensi])
 
     return <div className='break-all flex flex-col gap-2 absolute inset-0'>
         <div className='flex flex-col gap-2 shadow-lg shadow-primary/50 p-2 rounded-md text-center justify-center items-center h-full bg-neutral-200 z-[100]'>
@@ -151,7 +151,7 @@ function SubmitScan({absensi, setAbsensi}) {
                     </div>
                     :
                     <div className='flex flex-1 gap-2 items-center bg-secondary p-2 px-4 shadow-lg shadow-primary/50 click-animation rounded-lg text-neutral-100 cursor-pointer' onClick={handleHadir}>
-                        Kirim dan selanjutnya
+                        Kirim absen
                     </div>
                 }
             </div>
