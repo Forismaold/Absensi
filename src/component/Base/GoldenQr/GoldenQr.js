@@ -30,6 +30,7 @@ export default function GoldenQr() {
                     <>
                         <QrScanner onScan={value => {
                                 const [absensiId, title] = decryptObject(value)
+                                console.log("scan detected")
                                 console.log(decryptObject(value))
                                 setQrAccount({absensiId, title})
                             }}

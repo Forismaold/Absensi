@@ -1,7 +1,7 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faBoxOpen, faDoorClosed, faEllipsisV, faExternalLink, faFloppyDisk, faLink, faPenToSquare, faQrcode, faTable, faTrash } from '@fortawesome/free-solid-svg-icons'
 import { useSelector } from "react-redux"
-import { API, formatBeautyDate } from "../../../utils"
+import { API, encryptObject, formatBeautyDate } from "../../../utils"
 import axios from "axios"
 import { blankToast, loadingToast } from '../../utils/myToast'
 import { useEffect, useState } from 'react'
@@ -194,10 +194,10 @@ export default function TombolAksiAbsensi({ item }) {
         <AbsensiEditor isOpen={openEdit} onClose={() => setOpenEdit(false)} callBack={editAbsensi} submitText='Simpan' title={absensi?.title} note={absensi?.note} coordinates={absensi?.coordinates || {}}/>
         <Modal isOpen={showGoldenQr} onClose={() => setShowGoldenQr(false)} fluid={true}>
             <div className='bg-yellow-500 p-4'>
-                <QRCode value={{
+                <QRCode value={encryptObject({
                     absensiId: absensi?._id,
                     title: absensi?.title
-                }}/> 
+                })}/> 
             </div>
         </Modal>
         <Modal isOpen={showUsers} onClose={() => setShowUsers(false)}>
