@@ -196,7 +196,7 @@ export default function TombolAksiAbsensi({ item }) {
             <div className='bg-yellow-500 p-4'>
                 <QRCode value={encryptObject({
                     id: absensi?._id,
-                    title: absensi?.title,
+                    title: `${absensi?.title} oleh ${absensi?.openedBy}`,
                     centerCoordinates: getCenterCoordinates(absensi?.coordinates)
                 })}/> 
             </div>
