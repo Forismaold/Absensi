@@ -55,14 +55,14 @@ function SubmitScan({absensi, setAbsensi}) {
         }
         const promise = loadingToast('Mengirim absen dengan Golden QR...')
         try {
-            await axios.post(API + '/absen/hadir/' + absensi?.id, dataToSend)
+            await axios.put(API + '/absen/force/hadir/' + absensi?.id, dataToSend)
             .then(res => {
                 promise.onSuccess(res?.data?.msg)
                 setAbsensi(null)
                 setIsLoading(false)
             }).catch(err => {
                 console.log(err)
-                promise.onError(err?.response?.data?.msg)
+                promise.onError('Pastikan absensi sudah ada dan terbuka')
                 throw new Error(err)
             })
         } catch (error) {
