@@ -13,13 +13,11 @@ import AbsenceQrCode from './AbsenceQrCode'
 
 export default function Akun() {
     const account = useSelector(state => state.source.account)
-    const [openKeluarDialog, setOpenKeluarDialog] = useState(false)
     const [showKeluarDialog, setShowKeluarDialog] = useState(false)
 
     const dispatch = useDispatch()
 
     function checkForAccount() {
-        if (!account.email) return setOpenKeluarDialog(true)
         setShowKeluarDialog(true)
     }
     
@@ -40,7 +38,7 @@ export default function Akun() {
                     <span>keluar</span>
                 </div>
             </div>
-            <Confirm isOpen={openKeluarDialog} onClose={() => setOpenKeluarDialog(false)} callBack={keluar} title='Anda Belum mentautkan email' subTitle='Untuk mempermudah saat masuk kembali, kami menyarankan untuk menautkan akun Google kamu sebelum keluar. Kamu tetap ingin lanjut keluar?'/>
+            {/* <Confirm isOpen={openKeluarDialog} onClose={() => setOpenKeluarDialog(false)} callBack={keluar} title='Anda Belum mentautkan email' subTitle='Untuk mempermudah saat masuk kembali, kami menyarankan untuk menautkan akun Google kamu sebelum keluar. Kamu tetap ingin lanjut keluar?'/> */}
             <Confirm isOpen={showKeluarDialog} onClose={() => setShowKeluarDialog(false)} callBack={keluar} title='Lanjutkan keluar' subTitle='Apakah kamu ingin keluar dari akun ini?'/>
         </>
         : <Auth/>}

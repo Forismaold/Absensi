@@ -100,8 +100,6 @@ function GoogleLoginButton() {
             .then(res => {
                 setLocalStorage('account', res.data.user)
                 dispatch(refreshAccount())
-                // dispatch(setAbsensi())
-                // dispatch(setStatus())
                 navigate('/akun')
                 promise.onSuccess('Berhasil masuk ke akun')
             })
