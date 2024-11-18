@@ -20,7 +20,6 @@ export default function Auth() {
     const [userDecode, setUserDecode] = useState(null)
     async function handleSuccess(credential) {
         const promise = loadingToast('Mencari akun')
-        console.log('credential', jwtDecode(credential.credential))
         try {
             await axios.post(API + '/akun/login/google', {...credential})
             .then(res => {

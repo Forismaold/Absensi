@@ -24,6 +24,7 @@ export default function Akun() {
     function keluar() {
         localStorage.removeItem('account')
         dispatch(refreshAccount())
+        setShowKeluarDialog(false)
     }
 
     return <div>
@@ -33,7 +34,7 @@ export default function Akun() {
             <hr />
             <div className='mt-2 items-center flex gap-2 flex-wrap'>
                 {account.email ? <p>{account.email}</p> : <TautkanDenganGoogle/>}
-                <div className='flex gap-2 rounded p-2 px-3 items-center bg-neutral-200 text-neutral-600 cursor-pointer shadow click-animation' onClick={checkForAccount}>
+                <div className='flex gap-2 rounded p-2 px-3 items-center bg-neutral-200 text-neutral-600 cursor-pointer shadow click-animation' onClick={() => checkForAccount()}>
                     <FontAwesomeIcon icon={faArrowRightFromBracket}/>
                     <span>keluar</span>
                 </div>
