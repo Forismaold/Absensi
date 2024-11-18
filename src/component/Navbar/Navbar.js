@@ -102,7 +102,7 @@ export default function Navbar() {
                             }
                         </div>
                         <div className="flex gap-2">
-                            <Link to={'/akun'} className='w-full'>
+                            <Link to={'/akun'} className='w-full' onClick={() => setShow(false)}>
                                 <div className={`${routeName === 'AKUN' ? 'text-primary shadow-tertiary' : 'text-neutral-500'} h-full flex place-items-center pointer p-1 px-4 gap-2 click-animation w-full`}>
                                     {akun ? <img src={akun?.avatar} alt={akun?.nickname || akun?.nama} referrerPolicy="no-referrer" className="w-[20px] h-[20px] rounded-full shadow"/>: <FontAwesomeIcon icon={faUser} className='text-xl'/>}
                                     <span className="text-[7px] pt-1">Profil</span>
