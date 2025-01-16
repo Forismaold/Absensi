@@ -25,6 +25,7 @@ function ListAbsen() {
     const account = useSelector(state => state.source.account)
     const [list, setList] = useState(null)
     const [isLoading, setIsLoading] = useState(false)
+    const [showAll, setShowAll] = useState(false)
     const fetchData = useCallback(async () => {
         setIsLoading(true)
         try {
@@ -42,6 +43,10 @@ function ListAbsen() {
         }
     },[])
 
+    const handleCheckboxChange = (event) => {
+        setShowAll(event.target.checked);
+      };
+
     useEffect(() => {
         if (!list) fetchData()
     },[fetchData, list])
@@ -52,8 +57,12 @@ function ListAbsen() {
                 <FontAwesomeIcon icon={faRefresh} className={`${isLoading && 'animate-spin'}`}/> Segarkan
             </div>
         </div>
-        {list?.length === 0 && <span className='text-center'>Tidak ada absensi</span>}
-        {list?.filter(i => i.allowedGrades.includes(account?.kelas))?.map(item => <AbsenCard data={item} key={item._id}/>) || []}
+        <label className='flex gap-2 cursor-pointer items-center' htmlFor='showall'>
+            <span>Tampilkan semua</span>
+            <input type='checkbox' id='showall' checked={showAll} onChange={handleCheckboxChange} className='rounded'/>
+        </label>
+        {list?.filter(i => i.allowedGrades.includes(account?.kelas)).length === 0 && !showAll && <span className='text-center bg-neutral-200 text-neutral-500 p-2 rounded'>Belum ada absensi yang cocok untuk kamu</span>}
+        {list?.filter(i => i.allowedGrades.includes(account?.kelas) || showAll)?.map(item => <AbsenCard data={item} key={item._id}/>) || []}
     </div>
 }
 

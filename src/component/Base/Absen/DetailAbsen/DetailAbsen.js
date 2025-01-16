@@ -21,10 +21,10 @@ export default function DetailAbsen() {
     }, [dispatch])
     
     return <div className='flex flex-col'>
+        <CheckAccountExist/>
         <MuatUlangAbsensi/>
         <Note/>
         <DisplayStatusAbsenceUser/>
-        <CheckAccountExist/>
         <div className={`${!account && 'opacity-50'} flex flex-col gap-2`}>
             <MyMap/>
             <AbsenceMethod/>
@@ -37,7 +37,7 @@ function CheckAccountExist() {
 
     if (!account) return <div className='bg-quaternary p-2 py-6 rounded-md shadow-xl text-center'>
         <FontAwesomeIcon icon={faUserSlash} className='text-5xl text-primary p-2'/>
-        <div>
+        <div className="mb-4">
             <h2 className='font-bold text-3xl text-neutral-700'>Masuk ke akun</h2>
             <p className='text-neutral-600'>Harap masuk atau daftar sebelum melakukan absensi</p>
         </div>

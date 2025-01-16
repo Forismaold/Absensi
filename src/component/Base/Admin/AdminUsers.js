@@ -40,25 +40,25 @@ export default function AdminUsers() {
     </div>
     {/* <DashboardActionButton/> */}
     {/* <UsersList/> */}
-    <DisplayUsers users={users || []}/>
+    <DisplayUsers users={users || []} setUsers={setUsers}/>
 </div>
 }
 
-function DisplayUsers({users}) {
+function DisplayUsers({users, setUsers}) {
     return <div className='flex flex-col gap-4'>
         <div className='flex flex-col gap-2 p-2'>
             <h3 className='text-xl font-semibold pt-4'>Admin</h3>
             <p>Setelah seseorang dinaikkan atau diturunkan jabatannya seagai admin, pengguna perlu masuk ulang untuk memperbarui informasi akunnya</p>
-            {users.filter(user => user.peran.find(x => x === "admin")).map((user, i) => <UserRowModel user={user} key={i}/>).sort((a,b) => a.nama-b.nama)}
+            {users.filter(user => user.peran.find(x => x === "admin")).map((user, i) => <UserRowModel user={user} key={i} users={users} setUsers={setUsers}/>).sort((a,b) => a.nama-b.nama)}
         </div>
         <div className='flex flex-col gap-2 p-2'>
             <h3 className='text-xl font-semibold pt-4'>Peserta</h3>
-            {users.map((user, i) => <UserRowModel user={user} key={i}/>)}
+            {users.map((user, i) => <UserRowModel user={user} key={i} users={users} setUsers={setUsers}/>)}
         </div>
     </div>
 }
 
-function UserRowModel({user}) {
+function UserRowModel({user, setUsers}) {
     const [isOpenModal, setIsOpenModal] = useState(false)
     const [isAdmin, setIsAdmin] = useState(false)
     const [isFetchLoading, setIsFetchLoading] = useState(false)
@@ -76,9 +76,12 @@ function UserRowModel({user}) {
         axios.put(API+`/akun/${isAdmin?'deop':'op'}/${user._id}`)
         .then(res => {
             toast.onSuccess(`Berhasil merubah pangkat`)
+            setIsOpenModal(false)
+            setUsers(res.data.users)
             console.log(res.data)
         }).catch(err => {
-            toast.onSuccess(`Gagal merubah pangkat`)
+            console.log(err)
+            toast.onError(`Gagal merubah pangkat`)
         }).finally(() => {
             setIsFetchLoading(false)
         })

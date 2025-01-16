@@ -10,6 +10,8 @@ export default function ReminderWrongGrade() {
     if (!absensi) return
 
     if (absensi?.allowedGrades.includes(account?.kelas)) return
+
+if (!account) return
     
     return <div className="flex flex-col gap-2 items-start justify-start bg-yellow-300/50 text-yellow-700 rounded p-2">
         <div className="flex gap-2 items-center">

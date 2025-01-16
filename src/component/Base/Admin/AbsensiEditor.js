@@ -19,9 +19,14 @@ const localCoordinates = {
     }
 }
 
+/**
+ * 
+ * @param {{isOpen: boolean, onClose: function, callBack: function, submitText: string, title: string, note: string, coordinates: object}} props
+ * @returns 
+ */
 export default function AbsensiEditor({isOpen, onClose, callBack, submitText = 'Tambah', title = 'Dzuhur', note = '', coordinates = {}}) {
     const storeCoordinates = useSelector(state => state.coordinates)
-
+ 
     const [inputTitle, setInputTitle] = useState(title)
     const inputRef = useRef(null)
     const [inputNote, setInputNote] = useState(note)

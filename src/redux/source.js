@@ -11,7 +11,7 @@ const source = createSlice({
         absensi: null,
         status: null,
         isFetchLocation: false,
-        proMode: false
+        proMode: false,
     },
     reducers: {
         setAccount: (state, action) => {
@@ -61,7 +61,7 @@ const source = createSlice({
         },
         setProMode: (state, action) => {
             state.proMode = action.payload
-        }
+        },
     }
 })
 export const { setAccount, refreshAccount, setStatus, setRiwayats, setAbsensi, setAdminRiwayats, toggleShowAbsence, setIsWatchPosition, toggleShowMap, setShowAbsence, setShowMap, clearAbsensi, setIsFetchLocation, setProMode } = source.actions
