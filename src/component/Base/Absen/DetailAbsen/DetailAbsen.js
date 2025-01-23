@@ -1,7 +1,4 @@
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { faUserSlash } from "@fortawesome/free-solid-svg-icons"
 import { useDispatch, useSelector } from "react-redux"
-import Auth from "../../Akun/Auth"
 import MyMap from "../MyMap/MyMap"
 import { useEffect } from "react"
 import { clearAbsensi } from "../../../../redux/source"
@@ -9,6 +6,7 @@ import MuatUlangAbsensi from "./MuatUlangAbsensi"
 import Note from "../Note"
 import DisplayStatusAbsenceUser from "./DisplayStatusAbsenceUser"
 import AbsenceMethod from "../AbsenceMethod/AbsenceMethod"
+import CheckAccountExist from "../../../utils/CheckAccountExist"
 
 export default function DetailAbsen() {
     const dispatch = useDispatch()
@@ -30,19 +28,5 @@ export default function DetailAbsen() {
             <AbsenceMethod/>
         </div>
     </div>
-}
-
-function CheckAccountExist() {
-    const account = useSelector(state => state.source.account)
-
-    if (!account) return <div className='bg-quaternary p-2 py-6 rounded-md shadow-xl text-center'>
-        <FontAwesomeIcon icon={faUserSlash} className='text-5xl text-primary p-2'/>
-        <div className="mb-4">
-            <h2 className='font-bold text-3xl text-neutral-700'>Masuk ke akun</h2>
-            <p className='text-neutral-600'>Harap masuk atau daftar sebelum melakukan absensi</p>
-        </div>
-        <Auth/>
-    </div>
-    return null
 }
 

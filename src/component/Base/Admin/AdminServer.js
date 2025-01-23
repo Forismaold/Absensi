@@ -168,10 +168,13 @@ function ManageAbsence() {
 function AccordionGrades({grade = '', list = [], show = false, setShow, setOpenCreateAbsence, whichCreate}) {
     return <div className='flex flex-col shadow p-2 rounded'>
         <div className='flex gap-2 items-center cursor-pointer'>
-            <h3 onClick={() => setShow(show === grade ? false : grade)} className='font-semibold text-3xl p-2 mt-2 flex-1 justify-between flex'>{grade} <FontAwesomeIcon className='text-2xl' icon={show === grade ? faChevronDown : faChevronRight}/></h3>
-            <FontAwesomeIcon className='text-2xl flex items-center bg-primary p-2 shadow-lg shadow-primary/50 click-animation rounded-lg text-neutral-100 cursor-pointer' icon={faPlus} onClick={() => {
-                setOpenCreateAbsence(grade)
-            }}/>
+            <h3 onClick={() => setShow(show === grade ? false : grade)} className='font-semibold text-3xl p-2 flex-1 flex items-center gap-2'><span className="flex-1">{grade}</span> <FontAwesomeIcon className='text-2xl' icon={show === grade ? faChevronDown : faChevronRight}/></h3>
+            <div className="flex gap-2 items-center bg-secondary p-2 shadow-lg shadow-primary/50 click-animation rounded-lg text-neutral-100 cursor-pointer" onClick={() => {
+                    setOpenCreateAbsence(grade)
+                }}>
+                <FontAwesomeIcon className='text-2xl' icon={faPlus}/>
+                <span>({list?.filter(i => i.allowedGrades.find(x => x === grade)).length})</span>
+            </div>
         </div>
         <div className={`grid transition-all duration-300 ease-in-out overflow-hidden 
             ${show === grade ? 'grid-rows-[1fr]' : 'grid-rows-[0fr]'}
