@@ -20,7 +20,7 @@ export default function GoldenQr() {
     return <div className="flex flex-col gap-2 rounded-xl">
         <CheckAccountExist/>
         <div className='flex gap-2 items-center justify-between'>
-            <p>Pindai Golden QR</p>
+            <p>Pindai Golden QR (Baru!)</p>
             <button className='flex items-center justify-center px-3 text-neutral-500 p-2 click-animation' onClick={() => setShowInfo(true)}><FontAwesomeIcon icon={faQuestion}/></button>
         </div>
         {account ?
@@ -66,7 +66,7 @@ function SubmitScan({absensi, setAbsensi}) {
         try {
             await axios.put(API + '/absen/force/hadir/' + absensi?.id, dataToSend)
             .then(res => {
-                promise.onSuccess(res?.data?.msg, 15000)
+                promise.onSuccess("terimakasih sudah absen sobat", 30000)
                 setAbsensi(null)
                 setIsLoading(false)
             }).catch(err => {
