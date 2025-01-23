@@ -11,6 +11,7 @@ import AdminServer from './Admin/AdminServer'
 import AdminUsers from './Admin/AdminUsers'
 import GoldenQr from './GoldenQr/GoldenQr'
 import MyErrorBoundary from '../Error/MyErrorBoundary'
+import CheckAccountHealthy from '../utils/CheckAccountHealthy'
 
 export default function Base() {
     // const location = useLocation()
@@ -19,6 +20,7 @@ export default function Base() {
         <div className="w-full flex justify-center p-4 max-w-[1440px] mx-auto">
             <div className="bg-neutral-100 rounded-3xl shadow-2xl h-full p-4 self-stretch flex-1 max-w-full">
                 <MyErrorBoundary>
+                    <CheckAccountHealthy/>
                     <Routes>
                         <Route path={'/akun/masuk'} element={<BackTo to={'/akun'}/>}/>
                         <Route path={'/akun/daftar'} element={<BackTo to={'/akun'}/>}/>
