@@ -60,7 +60,7 @@ function SubmitScan({absensi, setAbsensi}) {
 
         const dataToSend = {
             user: account?._id,
-            userCoordinate: absensi?.centerCoordinates,
+            koordinat: absensi?.centerCoordinates,
         }
         const promise = loadingToast('Mengirim absen dengan Golden QR...')
         try {
