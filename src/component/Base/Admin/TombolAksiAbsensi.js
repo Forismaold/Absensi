@@ -198,6 +198,7 @@ export default function TombolAksiAbsensi({ item }) {
                     id: absensi?._id,
                     title: absensi?.title,
                     openedBy: absensi?.openedBy,
+                    date: absensi?.date,
                     centerCoordinates: getCenterCoordinates(absensi?.coordinates)
                 })}/> 
             </div>

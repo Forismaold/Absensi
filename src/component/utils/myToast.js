@@ -9,8 +9,8 @@ export function loadingToast(text = 'Loading...', timeout = 90000) {
 
     let thisTimeout
 
-    const updateToast = (type, msg) => {
-        toast.update(promise, { type, render: <p>{msg}</p>, isLoading: false, autoClose: 3000, closeOnClick: true, draggable: true })
+    const updateToast = (type, msg, autoClose = 3000) => {
+        toast.update(promise, { type, render: <p>{msg}</p>, isLoading: false, autoClose: autoClose, closeOnClick: true, draggable: true })
         clearTimeout(thisTimeout)
     }
 
@@ -20,7 +20,7 @@ export function loadingToast(text = 'Loading...', timeout = 90000) {
         } catch (error) {}
     }, timeout)
     
-    const onSuccess = (msg = 'Success') => updateToast(toast.TYPE.SUCCESS, msg)
+    const onSuccess = (msg = 'Success', autoClose) => updateToast(toast.TYPE.SUCCESS, msg, autoClose)
 
     const updateText = (msg) => {
         toast.update(promise, { render: <p>{msg}</p> })

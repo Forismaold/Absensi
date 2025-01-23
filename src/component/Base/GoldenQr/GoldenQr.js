@@ -1,8 +1,8 @@
-import { faQuestion, faTrash } from "@fortawesome/free-solid-svg-icons";
+import { faQuestion, faXmark } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useCallback, useState } from "react";
 import { QrScanner } from "react-qrcode-scanner";
-import { API, decryptObject } from "../../../utils";
+import { API, decryptObject, formatBeautyDate } from "../../../utils";
 import LoadingIcon from "../../utils/LoadingIcon";
 import axios from "axios";
 import { loadingToast } from "../../utils/myToast";
@@ -66,7 +66,7 @@ function SubmitScan({absensi, setAbsensi}) {
         try {
             await axios.put(API + '/absen/force/hadir/' + absensi?.id, dataToSend)
             .then(res => {
-                promise.onSuccess(res?.data?.msg)
+                promise.onSuccess(res?.data?.msg, 15000)
                 setAbsensi(null)
                 setIsLoading(false)
             }).catch(err => {
@@ -82,12 +82,17 @@ function SubmitScan({absensi, setAbsensi}) {
 
     return <div className='break-all flex flex-col gap-2 absolute inset-0'>
         <div className='flex flex-col gap-2 shadow-lg shadow-primary/50 p-2 rounded-md text-center justify-center items-center h-full bg-neutral-200 z-[100]'>
-            <div className='p-2'>
-                <p className='text-xl font-semibold'>{absensi.title} <span className='text-sm font-normal'>oleh {absensi.openedBy}</span></p>
+            <div className='flex flex-col gap-2 p-2 items-center'>
+                <div className="flex gap-2 items-center">
+                    <p className='text-xl font-semibold'>{absensi.title}</p>
+                    <span className='text-sm font-normal'>oleh</span>
+                    <div className='text-sm font-normal w-16 truncate'>{`${absensi.openedBy+absensi.openedBy+absensi.openedBy}`}</div>
+                </div>
+                <p>{formatBeautyDate(absensi?.date)}</p>
             </div>
             <div className='flex gap-2'>
                 <div className='flex gap-2 items-center p-2 click-animation rounded-lg cursor-pointer border border-solid border-primary text-primary' onClick={() => setAbsensi(null)}>
-                    <FontAwesomeIcon icon={faTrash}/>
+                    <FontAwesomeIcon icon={faXmark}/>
                 </div>
                 {isLoading ? 
                     <div className='flex flex-1 gap-2 items-center bg-secondary p-2 px-4 shadow-lg shadow-primary/50 click-animation rounded-lg text-neutral-100 cursor-pointer'>
