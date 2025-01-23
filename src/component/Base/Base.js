@@ -10,6 +10,7 @@ import AdminRiwayat from './Admin/AdminRiwayat'
 import AdminServer from './Admin/AdminServer'
 import AdminUsers from './Admin/AdminUsers'
 import GoldenQr from './GoldenQr/GoldenQr'
+import MyErrorBoundary from '../Error/MyErrorBoundary'
 
 export default function Base() {
     // const location = useLocation()
@@ -17,22 +18,24 @@ export default function Base() {
     return (
         <div className="w-full flex justify-center p-4 max-w-[1440px] mx-auto">
             <div className="bg-neutral-100 rounded-3xl shadow-2xl h-full p-4 self-stretch flex-1 max-w-full">
-                <Routes>
-                    <Route path={'/akun/masuk'} element={<BackTo to={'/akun'}/>}/>
-                    <Route path={'/akun/daftar'} element={<BackTo to={'/akun'}/>}/>
-                </Routes>
-                {/* <h5 className="text-3xl font-bold text-neutral-700 capitalize pt-4">{pathSegments[pathSegments.length - 1] || 'Absen'}</h5> */}
-                <Routes>
-                    <Route path={'*'} element={<Absen/>}></Route>
-                    <Route path={'/absengoldenqr'} element={<GoldenQr/>}></Route>
-                    <Route path={'/dashboard'} element={<Dahsboard/>}></Route>
-                    <Route path={'/admin/server/*'} element={<AdminServer/>}></Route>
-                    <Route path={'/admin/riwayat'} element={<AdminRiwayat/>}></Route>
-                    <Route path={'/admin/users'} element={<AdminUsers/>}></Route>
-                    <Route path={'/akun'} element={<Akun/>}></Route>
-                    <Route path={'/akun/masuk'} element={<Login/>}></Route>
-                    <Route path={'/akun/daftar'} element={<Register/>}></Route>
-                </Routes>
+                <MyErrorBoundary>
+                    <Routes>
+                        <Route path={'/akun/masuk'} element={<BackTo to={'/akun'}/>}/>
+                        <Route path={'/akun/daftar'} element={<BackTo to={'/akun'}/>}/>
+                    </Routes>
+                    {/* <h5 className="text-3xl font-bold text-neutral-700 capitalize pt-4">{pathSegments[pathSegments.length - 1] || 'Absen'}</h5> */}
+                    <Routes>
+                        <Route path={'*'} element={<Absen/>}></Route>
+                        <Route path={'/absengoldenqr'} element={<GoldenQr/>}></Route>
+                        <Route path={'/dashboard'} element={<Dahsboard/>}></Route>
+                        <Route path={'/admin/server/*'} element={<AdminServer/>}></Route>
+                        <Route path={'/admin/riwayat'} element={<AdminRiwayat/>}></Route>
+                        <Route path={'/admin/users'} element={<AdminUsers/>}></Route>
+                        <Route path={'/akun'} element={<Akun/>}></Route>
+                        <Route path={'/akun/masuk'} element={<Login/>}></Route>
+                        <Route path={'/akun/daftar'} element={<Register/>}></Route>
+                    </Routes>
+                </MyErrorBoundary>
             </div>
         </div>
     )

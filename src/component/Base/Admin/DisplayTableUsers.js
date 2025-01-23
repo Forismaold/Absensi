@@ -103,7 +103,7 @@ function UserRowModel({data, tickets, absensiData}) {
     }
 
     useEffect(() => {
-        let userExist = tickets?.find(ticket => ticket.user._id === data._id)
+        let userExist = tickets?.find(ticket => ticket?.user?._id === data._id)
         if (userExist) {
             setTicket(userExist)
         }

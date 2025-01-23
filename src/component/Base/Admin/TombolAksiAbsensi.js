@@ -20,7 +20,7 @@ export default function TombolAksiAbsensi({ item }) {
     const [showBuangConfirm, setShowBuangConfirm] = useState(false)
     const [isOpenMore, setIsOpenMore] = useState(false)
     const [showUsers, setShowUsers] = useState(false)
-    const [showGoldenQr, setShowGoldenQr] = useState(false)
+    const [d, setd] = useState(false)
 
     const navigate = useNavigate()
 
@@ -165,7 +165,7 @@ export default function TombolAksiAbsensi({ item }) {
                     <FontAwesomeIcon icon={faLink}/> Salin link Absensi
                 </div>
                 <div className='flex gap-2 items-center click-animation cursor-pointer p-2 hover:bg-tertiary rounded' onClick={() => {
-                    setShowGoldenQr(true)
+                    setd(true)
                 }}>
                     <FontAwesomeIcon icon={faQrcode}/> Golden QR
                 </div>
@@ -192,11 +192,12 @@ export default function TombolAksiAbsensi({ item }) {
         <Confirm isOpen={showSaveConfirm} title='Tutup dan simpan' subTitle={`Menutup absensi ${absensi?.title} dan menyimpannya sekarang?`} onClose={() => setShowSaveConfirm(false)} callBack={saveAbsensi} textConfirm='Simpan'/>
         <Confirm isOpen={showBuangConfirm} title='Buang' subTitle={`Menutup absensi ${absensi?.title} dan membuang perubahan absensi?`} onClose={() => setShowBuangConfirm(false)} callBack={buangAbsensi} textConfirm='Buang'/>
         <AbsensiEditor isOpen={openEdit} onClose={() => setOpenEdit(false)} callBack={editAbsensi} submitText='Simpan' title={absensi?.title} note={absensi?.note} coordinates={absensi?.coordinates || {}}/>
-        <Modal isOpen={showGoldenQr} onClose={() => setShowGoldenQr(false)} fluid={true}>
+        <Modal isOpen={d} onClose={() => setd(false)} fluid={true}>
             <div className='bg-yellow-500 p-4'>
                 <QRCode value={encryptObject({
                     id: absensi?._id,
-                    title: `${absensi?.title} oleh ${absensi?.openedBy}`,
+                    title: absensi?.title,
+                    openedBy: absensi?.openedBy,
                     centerCoordinates: getCenterCoordinates(absensi?.coordinates)
                 })}/> 
             </div>

@@ -48,7 +48,7 @@ export default function AdminRiwayat() {
     </div>
 
     return <div className='flex flex-col gap-2'>
-        <div className='flex items-center rounded shadow overflow-hidden'>
+        <div className='flex items-center rounded shadow overflow-auto'>
             <Link to={'/admin/server'} className='flex flex-1 px-4 items-center py-2 gap-2 click-animation border-b-2 border-transparent text-neutral-500 bg-neutral-200'>
                 <FontAwesomeIcon icon={faServer}/> Server
             </Link>
