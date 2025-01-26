@@ -120,7 +120,6 @@ function ManageAbsence() {
     async function createAbsence(title, note, coordinates) {
         const promise = loadingToast('Membuat absensi baru')
         try {
-            console.log('absensi api:',API + '/absensi');
             await axios.post(API + '/absensi', {
                 title,
                 note,
@@ -130,7 +129,8 @@ function ManageAbsence() {
             }).then(res => {
                 promise.onSuccess('berhasil menambahkan absensi')
                 setOpenCreateAbsence(false)
-                setAbsenceList(res.data.data)
+                setAbsenceList(res.data.list)
+                console.log(res.data)
             }).catch(err => {
                 throw new Error(err)
             })
@@ -151,9 +151,9 @@ function ManageAbsence() {
         </div>
         {fetchError && <span>Gagal mendapatkan data!</span>}
         {isLoading ? <LoadingSkeleton/> : <div>
-            <AccordionGrades setOpenCreateAbsence={setOpenCreateAbsence} show={show} setShow={setShow} list={absenceList} grade='X.E'/>
-            <AccordionGrades setOpenCreateAbsence={setOpenCreateAbsence} show={show} setShow={setShow} list={absenceList} grade='XI.F'/>
-            <AccordionGrades setOpenCreateAbsence={setOpenCreateAbsence} show={show} setShow={setShow} list={absenceList} grade='XII.F'/>
+            <AccordionGrades setOpenCreateAbsence={setOpenCreateAbsence} show={show} setShow={setShow} list={absenceList} grade='X.E' setAbsenceList={setAbsenceList}/>
+            <AccordionGrades setOpenCreateAbsence={setOpenCreateAbsence} show={show} setShow={setShow} list={absenceList} grade='XI.F' setAbsenceList={setAbsenceList}/>
+            <AccordionGrades setOpenCreateAbsence={setOpenCreateAbsence} show={show} setShow={setShow} list={absenceList} grade='XII.F' setAbsenceList={setAbsenceList}/>
         </div>}
         {absenceList?.filter(Boolean)?.length === 0 && <span className='text-center'>Tidak ada absensi</span>}
         {/* <div className='flex items-center justify-end' onClick={() => setOpenCreateAbsence(true)}>
@@ -165,7 +165,7 @@ function ManageAbsence() {
     </div>
 }
 
-function AccordionGrades({grade = '', list = [], show = false, setShow, setOpenCreateAbsence, whichCreate}) {
+function AccordionGrades({grade = '', list = [], show = false, setShow, setOpenCreateAbsence, setAbsenceList}) {
     return <div className='flex flex-col shadow p-2 rounded'>
         <div className='flex gap-2 items-center cursor-pointer'>
             <h3 onClick={() => setShow(show === grade ? false : grade)} className='font-semibold text-3xl p-2 flex-1 flex items-center gap-2'><span className="flex-1">{grade}</span> <FontAwesomeIcon className='text-2xl' icon={show === grade ? faChevronDown : faChevronRight}/></h3>
@@ -173,14 +173,14 @@ function AccordionGrades({grade = '', list = [], show = false, setShow, setOpenC
                     setOpenCreateAbsence(grade)
                 }}>
                 <FontAwesomeIcon className='text-2xl' icon={faPlus}/>
-                <span>({list?.filter(i => i.allowedGrades.find(x => x === grade)).length})</span>
+                <span>({list?.filter(i => i.allowedGrades.find(x => x === grade)).length || 0})</span>
             </div>
         </div>
         <div className={`grid transition-all duration-300 ease-in-out overflow-hidden 
             ${show === grade ? 'grid-rows-[1fr]' : 'grid-rows-[0fr]'}
             `}>
             <div className='overflow-hidden flex flex-col gap-2'>
-                {list?.filter(i => i.allowedGrades.find(x => x === grade)).map(item => <TombolAksiAbsensi item={item} key={item._id}/>) || []}
+                {list?.filter(i => i.allowedGrades.find(x => x === grade)).map(item => <TombolAksiAbsensi item={item} key={item._id} callbackList={setAbsenceList}/>) || []}
             </div>
         </div>
     </div>

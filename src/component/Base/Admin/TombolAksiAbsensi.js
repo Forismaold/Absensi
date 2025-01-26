@@ -11,7 +11,7 @@ import AbsensiEditor from './AbsensiEditor'
 import DisplayTableUsers from './DisplayTableUsers'
 import QRCode from 'react-qr-code'
 
-export default function TombolAksiAbsensi({ item }) {
+export default function TombolAksiAbsensi({ item, callbackList = () => {} }) {
     const [absensi, setAbsensi] = useState(item)
     const account = useSelector(state => state.source.account)
 
@@ -34,6 +34,7 @@ export default function TombolAksiAbsensi({ item }) {
             await axios.post(API + '/absensi/buka/' + absensi?._id, {status: absensi.status})
             .then(res => {
                 promise.onSuccess(res.data.msg)
+                callbackList(res.data?.list || null)
                 setAbsensi(res.data.absensi)
             }).catch(err => {
                 console.log(err)
@@ -51,6 +52,7 @@ export default function TombolAksiAbsensi({ item }) {
             .then(res => {
                 promise.onSuccess(res.data.msg)
                 setOpenEdit(false)
+                callbackList(res.data?.list || null)
                 setAbsensi(res.data.absensi)
             }).catch(err => {
                 console.log(err)
@@ -69,6 +71,7 @@ export default function TombolAksiAbsensi({ item }) {
             .then(res => {
                 setShowSaveConfirm(false)
                 setAbsensi(null)
+                callbackList(res.data?.list || null)
                 navigate('/admin/server')
                 promise.onSuccess('Berhasil menyimpan data')
             }).catch(err => {
@@ -84,6 +87,7 @@ export default function TombolAksiAbsensi({ item }) {
             await axios.post(API + '/absensi/tutup/' + absensi?._id, { closedBy: account?.nama, status: absensi?.status })
             .then(res => {
                 promise.onSuccess(res.data.msg)
+                callbackList(res.data?.list || null)
                 setAbsensi(res.data.absensi)
             })
         } catch (error) {
@@ -103,6 +107,7 @@ export default function TombolAksiAbsensi({ item }) {
             .then(res => {
                 promise.onSuccess('Absensi berhasil dihapus')
                 setShowBuangConfirm(false)
+                callbackList(res.data?.list || null)
                 navigate('/admin/server')
                 setAbsensi(null)
             }).catch(err => {
