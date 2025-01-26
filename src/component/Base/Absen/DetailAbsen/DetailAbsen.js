@@ -20,7 +20,7 @@ export default function DetailAbsen() {
     
     return <div className='flex flex-col'>
         <CheckAccountExist/>
-        <MuatUlangAbsensi/>
+        <MuatUlangAbsensi/> {/* absensi difetch disini */}
         <Note/>
         <DisplayStatusAbsenceUser/>
         <div className={`${!account && 'opacity-50'} flex flex-col gap-2`}>

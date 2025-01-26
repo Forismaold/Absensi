@@ -6,13 +6,25 @@ import { API, decryptObject, formatBeautyDate } from "../../../utils";
 import LoadingIcon from "../../utils/LoadingIcon";
 import axios from "axios";
 import { loadingToast } from "../../utils/myToast";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { InfoGoldenQr } from "../Absen/InfoModals";
 import CheckAccountExist from "../../utils/CheckAccountExist";
+import { useNavigate } from "react-router-dom";
+import { setAbsensi } from "../../../redux/source";
 
 export default function GoldenQr() {
     const account = useSelector(state => state.source.account)
     const [absence, setAbsence] = useState(null)
+    // const [absence, setAbsence] = useState({
+    //     "id": "6792704ff646461a4e8b1248",
+    //     "title": "soundcoree",
+    //     "openedBy": "Gary",
+    //     "date": "2025-01-23T16:37:45.496Z",
+    //     "centerCoordinates": [
+    //         -7.482127219338983,
+    //         110.2221420478633
+    //     ]
+    // })
     const [showInfo, setShowInfo] = useState(false)
     const [turnOnOnCam, setTurnOnOnCam] = useState(false)
     const [flipHorizontally, setFlipHorizontally] = useState(true)
@@ -41,7 +53,7 @@ export default function GoldenQr() {
                             <span className='click-animation text-primary text-xs p-2 underline' onClick={() => setFlipHorizontally(prev => !prev)}>Balikkan horizontal</span>
                         </>
                     }
-                    {absence && <SubmitScan setAbsensi={(value) => setAbsence(value)} absensi={absence}/>}
+                    {absence && <SubmitScan setParentAbsensi={(value) => setAbsence(value)} absensi={absence}/>}
                 </div>
             </>
         :
@@ -51,9 +63,12 @@ export default function GoldenQr() {
     </div>
 }
 
-function SubmitScan({absensi, setAbsensi}) {
+function SubmitScan({absensi, setParentAbsensi}) {
     const account = useSelector(state => state.source.account)
     const [isLoading, setIsLoading] = useState(false)
+
+    const dispatch = useDispatch()
+    const navigate = useNavigate()
 
     const handleHadir = useCallback(async () => {
         setIsLoading(true)
@@ -67,8 +82,11 @@ function SubmitScan({absensi, setAbsensi}) {
             await axios.put(API + '/absen/force/hadir/' + absensi?.id, dataToSend)
             .then(res => {
                 promise.onSuccess("terimakasih sudah absen sobat", 30000)
-                setAbsensi(null)
+                setParentAbsensi(null)
                 setIsLoading(false)
+                dispatch(setAbsensi(res.data))
+                navigate('/absen/' + res.data?.data?._id)
+                console.log("response", res.data)
             }).catch(err => {
                 console.log(err)
                 promise.onError(err?.response?.data?.msg || 'Pastikan absensi sudah ada dan terbuka')
@@ -78,7 +96,7 @@ function SubmitScan({absensi, setAbsensi}) {
             setIsLoading(false)
             console.log('your error', error)
         }
-    }, [account, absensi, setAbsensi])
+    }, [account, absensi, setParentAbsensi, dispatch, navigate])
 
     return <div className='break-all flex flex-col gap-2 absolute inset-0'>
         <div className='flex flex-col gap-2 shadow-lg shadow-primary/50 p-2 rounded-md text-center justify-center items-center h-full bg-neutral-200 z-[100]'>
@@ -91,7 +109,7 @@ function SubmitScan({absensi, setAbsensi}) {
                 <p>{formatBeautyDate(absensi?.date)}</p>
             </div>
             <div className='flex gap-2'>
-                <div className='flex gap-2 items-center p-2 click-animation rounded-lg cursor-pointer border border-solid border-primary text-primary' onClick={() => setAbsensi(null)}>
+                <div className='flex gap-2 items-center p-2 click-animation rounded-lg cursor-pointer border border-solid border-primary text-primary' onClick={() => setParentAbsensi(null)}>
                     <FontAwesomeIcon icon={faXmark}/>
                 </div>
                 {isLoading ? 
