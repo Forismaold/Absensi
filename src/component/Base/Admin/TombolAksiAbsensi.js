@@ -90,6 +90,12 @@ export default function TombolAksiAbsensi({ item }) {
             promise.onError('Internal server error')
         }
     }
+
+    async function handleAbsensi(action) {
+        if (action === 'tutup') tutupAbsensi()
+        if (action === 'buka') bukaAbsensi()
+    }
+
     async function buangAbsensi() {
         const promise = loadingToast('Membuang absensi')
         try {
@@ -109,7 +115,7 @@ export default function TombolAksiAbsensi({ item }) {
 
     if (!absensi) return <p className='bg-neutral-200 p-2 text-center rounded'>Absensi belum di load atau sudah dihapus!</p>
     
-    return <div className="relative flex gap-2 flex-col shadow-lg p-2 rounded bg-neutral-200">
+    return <div className={`relative flex gap-2 flex-col shadow-lg p-2 rounded bg-neutral-200 ${absensi?.status ? 'bg-secondary text-neutral-200' : 'bg-neutral-200'}`}>
         <div className='flex'>
             <p className='flex-1 text-xl font-semibold'>{absensi.title} <span className='text-sm font-normal'>oleh {absensi.openedBy}</span></p>
             <div className='cursor-pointer click-animation grid items-center px-4 py-2' onClick={() => setIsOpenMore(true)}>
@@ -132,25 +138,15 @@ export default function TombolAksiAbsensi({ item }) {
         </div>
 
         <div className='flex gap-2 justify-end flex-wrap'>
-            <div className='flex gap-2 shadow-lg shadow-primary/50 cursor-pointer text-primary items-center p-2 rounded border-primary border-2 border-solid click-animation' onClick={() => setShowSaveConfirm(true)}>
+            <div className={`flex gap-2 shadow-lg ${absensi?.status ? 'bg-secondary-200 border-neutral-200 text-neutral-200' : 'bg-neutral-200 border-secondary text-secondary'} shadow-secondary/50 cursor-pointer  items-center p-2 rounded  border-2 border-solid click-animation`} onClick={() => setShowSaveConfirm(true)}>
                 <FontAwesomeIcon icon={faFloppyDisk}/>
                 <p>Simpan</p>
             </div>
-            {absensi?.status ?
-                <>
-                    <div onClick={tutupAbsensi} className='flex gap-2 bg-primary shadow-lg shadow-primary/50 cursor-pointer items-center p-2 rounded text-neutral-200 click-animation'>
-                        <FontAwesomeIcon icon={faDoorClosed}/>
-                        <p>Tutup</p>
-                    </div>
-                </>
-                :
-                <>
-                <div onClick={bukaAbsensi} className='flex flex-1 justify-center gap-2 shadow-lg shadow-primary/50 cursor-pointer bg-primary items-center p-2 rounded text-neutral-200 click-animation'>
-                    <FontAwesomeIcon icon={faBoxOpen}/>
-                    <p>Buka</p>
-                </div>
-                </>
-            }
+            <div onClick={() => absensi?.status ? handleAbsensi('tutup'):handleAbsensi('buka')} className={`flex flex-1 justify-center gap-2 shadow-lg ${absensi?.status ? 'bg-neutral-200  text-secondary' : 'bg-secondary text-neutral-200'} shadow-secondary/50 cursor-pointer items-center p-2 rounded click-animation`}>
+                <FontAwesomeIcon icon={absensi?.status ? faDoorClosed : faBoxOpen}/>
+                <p>{absensi?.status ? 'Tutup' : 'Buka'}</p>
+            </div>
+
         </div>
         <Modal isOpen={isOpenMore} onClose={() => setIsOpenMore(false)}>
             <div className='flex flex-col gap-2'>
