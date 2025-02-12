@@ -38,9 +38,9 @@ export function Confirm({isOpen = false, title = 'Lanjutkan operasi', subTitle =
             <div className="bg-neutral-200 text-neutral-600 rounded-md w-full max-h-full overflow-auto p-4 flex flex-col gap-2">
                 <p className="font-medium">{title}</p>
                 <p>{subTitle}</p>
-                <div className="flex gap-2 justify-end">
-                    <p className="p-3 cursor-pointer px-12 sm:px-16 bg-neutral-300 rounded shadow-lg shadow-neutral-500/50 click-animation" onClick={onClose}>{textCancel}</p>
-                    <p className="p-3 cursor-pointer px-12 sm:px-16 bg-primary text-neutral-200 rounded shadow-lg shadow-primary/50 click-animation" onClick={callBack}>{textConfirm}</p>
+                <div className="flex flex-col sm:flex-row gap-2 justify-end">
+                    <p className="p-3 text-center cursor-pointer px-12 sm:px-16 bg-neutral-300 rounded shadow-lg shadow-neutral-500/50 click-animation" onClick={onClose}>{textCancel}</p>
+                    <p className="p-3 text-center cursor-pointer px-12 sm:px-16 bg-primary text-neutral-200 rounded shadow-lg shadow-primary/50 click-animation" onClick={callBack}>{textConfirm}</p>
                 </div>
             </div>
         </MyOverlay>

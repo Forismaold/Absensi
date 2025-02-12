@@ -155,6 +155,9 @@ export default function TombolAksiAbsensi({ item, callbackList = () => {} }) {
         </div>
         <Modal isOpen={isOpenMore} onClose={() => setIsOpenMore(false)}>
             <div className='flex flex-col gap-2'>
+                <div className='p-2'>
+                    <p className='text-xl font-semibold'>{absensi.title} <span className='text-sm font-normal'>oleh {absensi.openedBy}</span></p>
+                </div>
                 <div className='flex gap-2 items-center click-animation cursor-pointer p-2 hover:bg-tertiary rounded' onClick={() => navigate(`/admin/server/detail?q=${absensi._id}`)}>
                     <FontAwesomeIcon icon={faExternalLink}/> Detail
                 </div>
@@ -190,8 +193,8 @@ export default function TombolAksiAbsensi({ item, callbackList = () => {} }) {
                 </div>
             </div>
         </Modal>
-        <Confirm isOpen={showSaveConfirm} title='Tutup dan simpan' subTitle={`Menutup absensi ${absensi?.title} dan menyimpannya sekarang?`} onClose={() => setShowSaveConfirm(false)} callBack={saveAbsensi} textConfirm='Simpan'/>
-        <Confirm isOpen={showBuangConfirm} title='Buang' subTitle={`Menutup absensi ${absensi?.title} dan membuang perubahan absensi?`} onClose={() => setShowBuangConfirm(false)} callBack={buangAbsensi} textConfirm='Buang'/>
+        <Confirm isOpen={showSaveConfirm} title={`Tutup dan simpan ${absensi?.title}`} subTitle={`Menutup absensi ${absensi?.title} dan menyimpannya sekarang?`} onClose={() => setShowSaveConfirm(false)} callBack={saveAbsensi} textConfirm={`Simpan ${absensi?.tickets?.length > 0 ? `(${absensi?.tickets?.length})` : ''}`}/>
+        <Confirm isOpen={showBuangConfirm} title={`Buang ${absensi?.title}`} subTitle={`Menutup absensi ${absensi?.title} dan membuang perubahan absensi?`} onClose={() => setShowBuangConfirm(false)} callBack={buangAbsensi} textConfirm={`Buang ${absensi?.tickets?.length > 0 ? `(${absensi?.tickets?.length})` : ''}`}/>
         <AbsensiEditor isOpen={openEdit} onClose={() => setOpenEdit(false)} callBack={editAbsensi} submitText='Simpan' title={absensi?.title} note={absensi?.note} coordinates={absensi?.coordinates || {}}/>
         <Modal isOpen={d} onClose={() => setd(false)} fluid={true}>
             <div className='bg-yellow-500 p-4'>

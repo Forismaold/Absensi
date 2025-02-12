@@ -12,11 +12,23 @@ const classList = [
     {classNumberRank: 'XII.F', classCount: 8}
 ]
 
+const groupByKelas = (data) => {
+    if (!data) return
+    const returnedData = data.reduce((acc, item) => {
+        const key = `${item?.user?.kelas}-${item?.user?.nomorKelas}`
+        acc[key] = (acc[key] || 0) + 1
+        return acc
+    }, {})
+    console.log(returnedData)
+    return returnedData
+}
+
 export default function DisplayTableUsers({usersTicket, absensi}) {
     const [tickets, setTickets] = useState(null)
     const [users, setUsers] = useState(null)
     const [selectedClass, setSelectedClass] = useState(null)
     const [isFetch, setIsFetch] = useState(false)
+    const [groupKelas, setGroupKelas] = useState(null)
 
     function changeSelectedClass(item) {
         if (isFetch) {
@@ -54,18 +66,22 @@ export default function DisplayTableUsers({usersTicket, absensi}) {
     }, [fetchData, selectedClass])
 
     useEffect(() => {
+        console.log(absensi, usersTicket)
+    }, [absensi, usersTicket])
+    useEffect(() => {
         setTickets(usersTicket)
+        setGroupKelas(groupByKelas(usersTicket))
     }, [usersTicket])
     
     
     if (!absensi) return <div><p>menungu absensi...</p></div>
 
     return <div className="flex flex-col gap-2">
-        <div className="flex flex-wrap">
+        <div className="flex flex-wrap gap-2">
             <div className={`p-2 cursor-pointer click-animation border-b-2 ${!selectedClass && 'border-secondary text-secondary bg-quaternary'}`} onClick={()=>changeSelectedClass(null)}><FontAwesomeIcon icon={faCircleXmark}/></div>
             <div className={`p-2 cursor-pointer click-animation border-b-2 ${selectedClass === 'semua' && 'border-secondary text-secondary bg-quaternary'}`} onClick={()=>changeSelectedClass('semua')}>semua</div>
             {classList.filter(x => absensi.allowedGrades.includes(x.classNumberRank)).map((item, i) => Array.from({ length: item.classCount }, (_, index) => (
-                    <div key={index + 1} className={`p-2 cursor-pointer click-animation border-b-2 ${selectedClass === `${item.classNumberRank}-${index + 1}` && 'border-secondary text-secondary bg-quaternary'} ${isFetch && 'opacity-50'}`} onClick={()=>changeSelectedClass(`${item.classNumberRank}-${index + 1}`)}>{item.classNumberRank}-{index + 1}</div>
+                    <div key={index + 1} className={`p-2 cursor-pointer click-animation border-b-2 ${selectedClass === `${item.classNumberRank}-${index + 1}` && 'border-secondary text-secondary bg-quaternary'} ${isFetch && 'opacity-50'}`} onClick={()=>changeSelectedClass(`${item.classNumberRank}-${index + 1}`)}>{`${item.classNumberRank}-${index + 1}${groupKelas && groupKelas[`${item.classNumberRank}-${index + 1}`] ? ` (${groupKelas[`${item.classNumberRank}-${index + 1}`]})` : ''}`}</div>
                 ))
             )}
         </div>
@@ -122,7 +138,7 @@ function UserRowModel({data, tickets, absensiData}) {
             <Cell prop={'Waktu Absen'} value={formatTime(ticket?.waktuAbsen)}/>
             {isUserWithinBounds(ticket?.koordinat || [0,0], absensi?.coordinates) ? '' : 
                 isLoading ? <div className='flex gap-2 bg-primary shadow-lg shadow-primary/50 cursor-pointer items-center p-2 rounded text-neutral-200 click-animation'>Loading</div> :
-                <div onClick={setUserInBounds} className='flex gap-2 bg-primary shadow-lg shadow-primary/50 cursor-pointer items-center p-2 rounded text-neutral-200 click-animation'>{msg ? msg : 'Ubah koordinat di dalam area'}</div>
+                <div onClick={setUserInBounds} className='flex gap-2 bg-primary shadow-lg shadow-primary/50 cursor-pointer items-center p-2 rounded text-neutral-200 click-animation'>{msg ? msg : 'Absen'}</div>
             }
         </Modal>
     </>

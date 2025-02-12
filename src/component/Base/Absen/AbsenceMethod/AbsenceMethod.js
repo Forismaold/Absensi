@@ -6,9 +6,10 @@ import { useDispatch, useSelector } from "react-redux";
 import { blankToast, loadingToast } from "../../../utils/myToast";
 import axios from "axios";
 import { setAbsensi, setIsWatchPosition, setShowMap } from "../../../../redux/source";
-import { AbsenceStandar, AbsenceWatch } from "./AbsenceList";
+import AbsenceForm, { AbsenceStandar, AbsenceWatch } from "./AbsenceList";
 import { InfoAutoSubmit, InfoCommonProblem, InfoManualSubmit, InfoScanSubmit } from "../InfoModals";
 import Modal from "../../../utils/Modal";
+import { setUserCoordinate } from "../../../../redux/coordinates";
 
 export default function AbsenceMethod() {
     const account = useSelector(state => state.source.account)
@@ -46,6 +47,7 @@ export default function AbsenceMethod() {
                 promise.onSuccess(res?.data?.msg)
                 // dispatch(setShowAbsence(false))
                 dispatch(setShowMap(false))
+                dispatch(setUserCoordinate(null))
                 dispatch(setAbsensi(res?.data?.data))
                 setIsLoading(false)
             }).catch(err => {
@@ -61,7 +63,7 @@ export default function AbsenceMethod() {
     useEffect(() => {
         if (!status && absensi?.status === true && isUserWithinBounds(userCoordinate) && account) {
             if (isLoading) return
-            blankToast('Lokasi tercapai!')
+            // blankToast('Lokasi tercapai!')
             handleHadir()
             dispatch(setIsWatchPosition(false)) // disable watch position status if require
         }
@@ -73,7 +75,7 @@ export default function AbsenceMethod() {
         console.log('user status', status)
     },[absensi, status])
 
-    // if (!account || !absensi) return 
+    if (!account || !absensi) return 
 
     // if (!showAbsence && (status !== null)) {
     //         if (proMode) return <div className={`flex flex-col gap-2 p-2 rounded`}>
@@ -118,6 +120,7 @@ export default function AbsenceMethod() {
         </div>
         {methodSelected === 'GPS Standar (Boosted)' && <AbsenceStandar/>}
         {methodSelected === 'GPS Watch (Boosted)' && <AbsenceWatch/>}
+        {methodSelected === 'Form Manual' && <AbsenceForm/>}
         {/* <button className='flex flex-1 shadow-lg shadow-primary/50 items-center justify-center rounded text-neutral-100 px-2 click-animation bg-secondary min-h-[32px] mt-auto'>Absen dummy</button> */}
         <Modal onClose={() => setOpenListMethod(false)} zIndex={'z-[1001]'} isOpen={openListMethod} className='w-full flex flex-col gap-4 max-w-sm p-3'>
             <h1>Pilih model</h1>

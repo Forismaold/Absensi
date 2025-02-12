@@ -30,7 +30,7 @@ export default function Navbar() {
     return <nav>
         <div className="pl-2 pr-4 py-1 mt-auto border-t bg-neutral-200 shadow-inner max-w-md rounded-s-md sm:flex hidden">
             <div className="flex justify-between items-center text-neutral-700 max-w-sm">
-                <span onClick={() => dispatch(setProMode(!proMode))} className="flex gap-2 items-center bg-secondary mr-4 p-2 shadow-lg shadow-primary/50 click-animation rounded-lg text-neutral-100 cursor-pointer">{proMode ? 'Pro' : 'Lite'}<FontAwesomeIcon icon={faArrowRightArrowLeft}/></span>
+                <span onClick={() => dispatch(setProMode(!proMode))} className="flex gap-2 items-center bg-secondary mr-4 p-2 shadow shadow-primary/50 click-animation rounded-lg text-neutral-100 cursor-pointer">{proMode ? 'Pro' : 'Lite'}<FontAwesomeIcon icon={faArrowRightArrowLeft}/></span>
                 <div className="flex gap-4 items-center">
                     <Link to={'/absen'} className={`${routeName === 'ABSEN' ? 'text-primary shadow-tertiary' : 'text-neutral-500'} flex px-4 gap-2 justify-center items-center pointer click-animation`}>
                         <FontAwesomeIcon className='text-xl' icon={faHouse}/>
@@ -58,7 +58,7 @@ export default function Navbar() {
                 <div onClick={() => {
                     dispatch(setProMode(!proMode))
                     setShow(false)
-                }} className="flex gap-2 items-center justify-between bg-secondary p-2 shadow-lg shadow-primary/50 click-animation rounded-lg text-neutral-100 cursor-pointer"><span>Mode {proMode ? 'Pro' : 'Lite'}</span> <FontAwesomeIcon icon={faArrowRightArrowLeft}/></div>
+                }} className="flex gap-2 items-center justify-between bg-secondary p-2 shadow shadow-primary/50 click-animation rounded-lg text-neutral-100 cursor-pointer"><span>Mode {proMode ? 'Pro' : 'Lite'}</span> <FontAwesomeIcon icon={faArrowRightArrowLeft}/></div>
                     <div className="flex flex-col gap-4">
                         <Link to={'/absen'} onClick={() => setShow(false)}>
                         <div className={`${routeName === 'ABSEN' ? 'text-primary shadow-tertiary' : 'text-neutral-500'} flex p-1 gap-2 items-center pointer click-animation`}>
