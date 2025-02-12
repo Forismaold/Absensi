@@ -4,7 +4,7 @@ import Modal from '../../utils/Modal'
 import { useSelector } from 'react-redux'
 
 export function InfoCommonProblem({isOpen, onClose}) {
-    return <Modal isOpen={isOpen} onClose={onClose} zIndex={'z-[1001]'}>
+    return <Modal isOpen={isOpen} onClose={onClose} zIndex={'z-[1002]'}>
         <div className='text-neutral-500 p-2'>
             <h3 className='font-semibold'>GPS</h3>
             <p>Mungkin koordinat yang browser anda berikan tidak presisi. kamu bisa meminta teman untuk mengirimkannya dengan menunjukkan kode QR</p>
@@ -24,7 +24,7 @@ export function InfoCommonProblem({isOpen, onClose}) {
     </Modal>
 }
 export function InfoAutoSubmit({isOpen, onClose}) {
-    return <Modal isOpen={isOpen} onClose={onClose} zIndex={'z-[1001]'}>
+    return <Modal isOpen={isOpen} onClose={onClose} zIndex={'z-[1002]'}>
         <div className='text-neutral-500 p-2'>
             <h3 className='font-semibold mt-2'>Cara Menggunakan</h3>
             <span>Bagian ini akan mengirim absen secara otomatis jika lokasi gps kamu menunjukkan didalam area absensi</span>
@@ -43,7 +43,7 @@ export function InfoAutoSubmit({isOpen, onClose}) {
 }
 
 export function InfoManualSubmit({isOpen, onClose}) {
-    return <Modal isOpen={isOpen} onClose={onClose} zIndex={'z-[1001]'}>
+    return <Modal isOpen={isOpen} onClose={onClose} zIndex={'z-[1002]'}>
         <div className='text-neutral-500 p-2'>
             <h3 className='font-semibold mt-2'>Cara Menggunakan</h3>
             <span>Gunakan bagian ini untuk mengirim absen secara manual, bahkan bisa diluar area.</span>
@@ -60,7 +60,7 @@ export function InfoManualSubmit({isOpen, onClose}) {
 }
 
 export function InfoScanSubmit({isOpen, onClose}) {
-    return <Modal isOpen={isOpen} onClose={onClose} zIndex={'z-[1001]'}>
+    return <Modal isOpen={isOpen} onClose={onClose} zIndex={'z-[1002]'}>
         <div className='text-neutral-500 p-2'>
             <h3 className='font-semibold mt-2'>Cara Menggunakan</h3>
             <p>Gunakan bagian ini untuk mengirim absen temanmu.</p>
@@ -78,7 +78,7 @@ export function InfoScanSubmit({isOpen, onClose}) {
 }
 
 export function InfoGoldenQr({isOpen, onClose}) {
-    return <Modal isOpen={isOpen} onClose={onClose} zIndex={'z-[1001]'}>
+    return <Modal isOpen={isOpen} onClose={onClose} zIndex={'z-[1002]'}>
         <div className='text-neutral-500 p-2'>
             <h3 className='font-semibold mt-2'>Cara Menggunakan Golden QR</h3>
             <p>Memindai QR untuk melakukan absensi tanpa akses lokasi, dapatkan QR di setiap absensi dari admin.</p>
@@ -98,7 +98,7 @@ export function InfoGoldenQr({isOpen, onClose}) {
 export function InfoCostumCoordinate({isOpen, onClose}) {
     const coordinates = useSelector(state => state.coordinates)
 
-    return <Modal isOpen={isOpen} onClose={onClose} zIndex={'z-[1001]'} portalName='portalDeeper'>
+    return <Modal isOpen={isOpen} onClose={onClose} zIndex={'z-[1002]'} portalName='portalDeeper'>
         <div className='text-neutral-500 p-2'>
             <h3 className='font-semibold mt-2'>Cara Menyetel Koordinat</h3>
             <h3 className='font-semibold mt-2'>Format</h3>

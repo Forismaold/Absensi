@@ -14,6 +14,7 @@ import { createSlice } from "@reduxjs/toolkit";
 // second: [-7.482209927696517, 110.22228020994946],
 // center: [-7.482137557891397, 110.22213944103149],
 
+// halol le
 
 // const developerArea = JSON.parse(process.env.REACT_APP_DEVELOPER_AREA)
 // console.log(developerArea);
@@ -28,16 +29,12 @@ const coordinates = createSlice({
         first: [-7.482044510981448, 110.22200388577714],
         second: [-7.482209927696517, 110.22228020994946],
         center: [-7.482137557891397, 110.22213944103149],
-        user: null,
-        focusOnLocation: null
+        user: null, // [latitude,longitude]
     },
     reducers: {
         setUserCoordinate: (state, action) => {
             state.user = action.payload
         },
-        setFocusOnLocation: (state, action) => {
-            state.focusOnLocation = action.payload
-        }
     }
 })
 export const { setUserCoordinate } = coordinates.actions

@@ -28,40 +28,28 @@ export default function Navbar() {
     }, [akun])
 
     return <nav>
-        <div className="px-3 py-1 mt-auto border-t bg-neutral-200 shadow-inner max-w-md rounded-s-md sm:flex hidden">
-            <div className="flex justify-between text-neutral-700 max-w-sm">
-                <span onClick={() => dispatch(setProMode(!proMode))} className="flex gap-2 items-center bg-secondary p-2 shadow-lg shadow-primary/50 click-animation rounded-lg text-neutral-100 cursor-pointer">{proMode ? 'Pro' : 'Lite'}<FontAwesomeIcon icon={faArrowRightArrowLeft}/></span>
+        <div className="pl-2 pr-4 py-1 mt-auto border-t bg-neutral-200 shadow-inner max-w-md rounded-s-md sm:flex hidden">
+            <div className="flex justify-between items-center text-neutral-700 max-w-sm">
+                <span onClick={() => dispatch(setProMode(!proMode))} className="flex gap-2 items-center bg-secondary mr-4 p-2 shadow-lg shadow-primary/50 click-animation rounded-lg text-neutral-100 cursor-pointer">{proMode ? 'Pro' : 'Lite'}<FontAwesomeIcon icon={faArrowRightArrowLeft}/></span>
                 <div className="flex gap-4 items-center">
-                    <Link to={'/absen'} className='h-full flex items-center'>
-                    <div className={`${routeName === 'ABSEN' ? 'text-primary shadow-tertiary' : 'text-neutral-500'} flex p-1 px-4 gap-2 justify-center items-center pointer click-animation`}>
+                    <Link to={'/absen'} className={`${routeName === 'ABSEN' ? 'text-primary shadow-tertiary' : 'text-neutral-500'} flex px-4 gap-2 justify-center items-center pointer click-animation`}>
                         <FontAwesomeIcon className='text-xl' icon={faHouse}/>
-                    </div>
                     </Link>
-                    <Link to={'/absengoldenqr'} className='h-full flex items-center'>
-                    <div className={`${routeName === 'ABSENGOLDENQR' ? 'text-primary shadow-tertiary' : 'text-neutral-500'} flex p-1 px-4 gap-2 justify-center items-center pointer click-animation`}>
+                    <Link to={'/absengoldenqr'} className={`${routeName === 'ABSENGOLDENQR' ? 'text-primary shadow-tertiary' : 'text-neutral-500'} flex px-4 gap-2 justify-center items-center pointer click-animation`}>
                         <FontAwesomeIcon className='text-xl' icon={faQrcode}/>
-                    </div>
                     </Link>
-                    <Link to={'/dashboard'} className='h-full flex items-center'>
-                    <div className={`${routeName === 'DASHBOARD' && !isAdminRoute ? 'text-primary shadow-tertiary' : 'text-neutral-500'} flex p-1 px-4 gap-2 justify-center items-center pointer click-animation`}>
+                    <Link to={'/dashboard'} className={`${routeName === 'DASHBOARD' && !isAdminRoute ? 'text-primary shadow-tertiary' : 'text-neutral-500'} flex px-4 gap-2 justify-center items-center pointer click-animation`}>
                         <FontAwesomeIcon className='text-xl' icon={faBarsStaggered}/>
-                    </div>
                     </Link>
                     {permission && 
-                        <Link to={'/admin/server'} className='h-full flex items-center'>
-                            <div className={`${isAdminRoute ? 'text-primary shadow-tertiary' : 'text-neutral-500'} flex p-1 px-4 gap-2 justify-center items-center pointer click-animation`}>
-                                <FontAwesomeIcon className='text-xl' icon={faPenRuler}/>
-                            </div>
+                        <Link to={'/admin/server'} className={`${isAdminRoute ? 'text-primary shadow-tertiary' : 'text-neutral-500'} flex px-4 gap-2 justify-center items-center pointer click-animation`}>
+                            <FontAwesomeIcon className='text-xl' icon={faPenRuler}/>
                         </Link>
                     }
                 </div>
-                <div className="flex gap-2">
-                    <Link to={'/akun'} className='w-full'>
-                        <div className={`${routeName === 'AKUN' ? 'text-primary shadow-tertiary' : 'text-neutral-500'} h-full flex place-items-center pointer px-4 gap-2 click-animation w-full`}>
-                            {akun ? <img src={akun?.avatar} alt={akun?.nickname || akun?.nama} referrerPolicy="no-referrer" className="w-[20px] h-[20px] rounded-full shadow"/>: <FontAwesomeIcon icon={faUser} className='text-xl'/>}
-                        </div>
-                    </Link>
-                </div>
+                <Link to={'/akun'} className={`${routeName === 'AKUN' ? 'text-primary shadow-tertiary' : 'text-neutral-500'} flex justify-center items-center pl-4 pointer gap-2 click-animation`}>
+                    {akun ? <img src={akun?.avatar} alt={akun?.nickname || akun?.nama} referrerPolicy="no-referrer" className="rounded-full shadow w-[28px] h-[28px]"/>: <FontAwesomeIcon icon={faUser} className='text-xl'/>}
+                </Link>
             </div>
         </div>
         <div className='sm:hidden'>

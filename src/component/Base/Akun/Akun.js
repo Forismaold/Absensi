@@ -67,7 +67,7 @@ function Profile() {
             { prop: 'Jenis Kelamin', value: akun.jenisKelamin },
         ])
     },[akun])
-    return <div className="flex flex-col shadow-md bg-primary-300/10 rounded-3xl overflow-hidden">
+    return <div className="flex flex-col bg-primary-300/10 rounded-3xl overflow-hidden">
         <div className="flex flex-col sm:flex-row shadow-md rounded-2xl p-2 items-center gap-2 bg-primary py-6 shadow-primary/50 m-2 ">
             <img src={akun.avatar} alt={akun.nama} className="h-24 w-24 shadow rounded-full mx-6" referrerPolicy="no-referrer"/>
             <div className="flex flex-col p-2 justify-center font-medium text-neutral-700 items-center sm:items-start">

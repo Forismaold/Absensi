@@ -92,7 +92,7 @@ export default function AbsenceForm() {
             .then(res => {
                 promise.onSuccess(res.data.msg)
                 setIsLoading(false)
-                dispatch(setShowAbsence(false))
+                // dispatch(setShowAbsence(false))
                 dispatch(setShowMap(false))
                 dispatch(setAbsensi(res.data.data))
                 console.log(res.data.data);

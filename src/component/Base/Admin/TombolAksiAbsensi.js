@@ -118,7 +118,7 @@ export default function TombolAksiAbsensi({ item, callbackList = () => {} }) {
         }
     }
 
-    if (!absensi) return <p className='bg-neutral-200 p-2 text-center rounded'>Absensi belum di load atau sudah dihapus!</p>
+    if (!absensi) return null
     
     return <div className={`relative flex gap-2 flex-col shadow-lg p-2 rounded bg-neutral-200 ${absensi?.status ? 'bg-secondary text-neutral-200' : 'bg-neutral-200'}`}>
         <div className='flex'>

@@ -15,7 +15,7 @@ export default function Note() {
         <ReminderWrongGrade/>
         <div className="flex flex-col gap-2 p-2 text-neutral-500">
             <div className='flex flex-wrap justify-between'>
-                <div className='flex gap-2'>
+                <div className='flex items-center gap-2'>
                     <FontAwesomeIcon icon={absensi?.status ? faDoorOpen : faDoorClosed}/>
                     {absensi?.status ?
                         <p>dibuka sejak</p>

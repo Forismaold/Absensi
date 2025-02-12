@@ -30,8 +30,8 @@ export default function AbsensiEditor({isOpen, onClose, callBack, submitText = '
     const [inputTitle, setInputTitle] = useState(title)
     const inputRef = useRef(null)
     const [inputNote, setInputNote] = useState(note)
-    const [firstCoor, setFirstCoor] = useState(coordinates?.first || localCoordinates.masjid.first)
-    const [secondCoor, setSecondCoor] = useState(coordinates?.second || localCoordinates.masjid.second)
+    const [firstCoor, setFirstCoor] = useState(coordinates?.first?.join(',') || localCoordinates.masjid.first)
+    const [secondCoor, setSecondCoor] = useState(coordinates?.second?.join(',') || localCoordinates.masjid.second)
     
     const [showDetail, setShowDetail] = useState(false)
     const [showQuestion, setShowQuestion] = useState(false)
@@ -39,9 +39,9 @@ export default function AbsensiEditor({isOpen, onClose, callBack, submitText = '
     function handleInput(e) {
         setInputTitle(e.target.value)
     }
+    // -7.482790317308299, 110.23105125743606
 
     function handleCallback() {
-
         let first = firstCoor.replace(' ', ''), second = secondCoor.replace(' ', ''), inputCoordinates = {}
         const regex = /^[-]?\d+(\.\d+)?,[-]?\d+(\.\d+)?$/
         if (firstCoor === '') {

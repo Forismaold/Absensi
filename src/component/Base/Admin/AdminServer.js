@@ -23,19 +23,22 @@ export default function AdminServer() {
     </div>
 
     return <div className='flex flex-col gap-2'>
-        <div className='flex items-center rounded shadow overflow-auto'>
-            <Link to={'/admin/server'} className='flex flex-1 px-4 items-center py-2 gap-2 click-animation border-b-2 border-secondary text-secondary bg-quaternary'>
-                <FontAwesomeIcon icon={faServer}/> Server
-            </Link>
-            <Link to={'/admin/riwayat'} className='flex flex-1 px-4 items-center py-2 gap-2 click-animation border-b-2 border-transparent text-neutral-500 bg-neutral-200'>
-                <FontAwesomeIcon icon={faClockRotateLeft}/> Riwayat
-            </Link>
-            <Link to={'/admin/users'} className='flex flex-1 px-4 items-center py-2 gap-2 click-animation border-b-2 border-transparent  text-neutral-500 bg-neutral-200'>
-                <FontAwesomeIcon icon={faUserGroup}/> User
-            </Link>
-        </div>
+        
         <Routes>
-            <Route path='/' Component={ManageAbsence}/>
+            <Route path='/' element={<>
+                <div className='flex items-center rounded shadow overflow-auto'>
+                    <Link to={'/admin/server'} className='flex flex-1 px-4 items-center py-2 gap-2 click-animation border-b-2 border-secondary text-secondary bg-quaternary'>
+                        <FontAwesomeIcon icon={faServer}/> Server
+                    </Link>
+                    <Link to={'/admin/riwayat'} className='flex flex-1 px-4 items-center py-2 gap-2 click-animation border-b-2 border-transparent text-neutral-500 bg-neutral-200'>
+                        <FontAwesomeIcon icon={faClockRotateLeft}/> Riwayat
+                    </Link>
+                    <Link to={'/admin/users'} className='flex flex-1 px-4 items-center py-2 gap-2 click-animation border-b-2 border-transparent  text-neutral-500 bg-neutral-200'>
+                        <FontAwesomeIcon icon={faUserGroup}/> User
+                    </Link>
+                </div>
+                <ManageAbsence/>
+            </>}/>
             <Route path='/detail' Component={DetailAbsence}/>
         </Routes>
     </div>
@@ -59,6 +62,7 @@ function DetailAbsence() {
                 throw new Error(err)
             })
         } catch (error) {
+            console.log('why error?', error)
             setIsLoading(false)
         }
     }, [searchParams])
