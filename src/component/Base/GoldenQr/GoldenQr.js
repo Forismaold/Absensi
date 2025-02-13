@@ -118,7 +118,7 @@ function SubmitScan({absensi, setParentAbsensi}) {
                     </div>
                     :
                     <div className='flex flex-1 gap-2 items-center bg-secondary p-2 px-4 shadow-lg shadow-primary/50 click-animation rounded-lg text-neutral-100 cursor-pointer' onClick={handleHadir}>
-                        Kirim absen
+                        Absen
                     </div>
                 }
             </div>

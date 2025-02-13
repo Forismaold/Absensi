@@ -5,11 +5,12 @@ import { API, getPermission } from "../../../utils"
 import axios from "axios"
 import { loadingToast } from '../../utils/myToast'
 import { useCallback, useEffect, useState } from 'react'
-import { Link, Route, Routes, useSearchParams } from 'react-router-dom'
+import { Link, Route, Routes, useNavigate, useSearchParams } from 'react-router-dom'
 import LoadingSkeleton from '../../utils/LoadingSkeleton'
 import AbsensiEditor from './AbsensiEditor'
-import DisplayTableUsers from './DisplayTableUsers'
+// import DisplayTableUsers from './DisplayTableUsers'
 import TombolAksiAbsensi from './TombolAksiAbsensi'
+// import QRCode from 'react-qr-code'
 
 export default function AdminServer() {
     const [permission, setPermission] = useState(false)
@@ -92,7 +93,14 @@ function DetailAbsence() {
         </div>
         {isLoading && <LoadingSkeleton/>}
         <TombolAksiAbsensi item={absensi}/>
-        <DisplayTableUsers usersTicket={absensi?.tickets} absensi={absensi}/>
+        {/* <div className={`flex gap-2 shadow-lg ${absensi?.status ? 'bg-secondary-200 border-neutral-200 text-neutral-200' : 'bg-neutral-200 border-secondary text-secondary'} shadow-secondary/50 cursor-pointer  items-center p-2 rounded  border-2 border-solid click-animation`} onClick={() => setShowSaveConfirm(true)}>
+            <FontAwesomeIcon icon={faFloppyDisk}/>
+            <p>Simpan</p>
+        </div> */}
+        {/* <div onClick={() => absensi?.status ? handleAbsensi('tutup'):handleAbsensi('buka')} className={`flex flex-1 justify-center gap-2 shadow-lg ${absensi?.status ? 'bg-neutral-200  text-secondary' : 'bg-secondary text-neutral-200'} shadow-secondary/50 cursor-pointer items-center p-2 rounded click-animation`}>
+            <FontAwesomeIcon icon={absensi?.status ? faDoorClosed : faBoxOpen}/>
+            <p>{absensi?.status ? 'Tutup' : 'Buka'}</p>
+        </div> */}
     </div>
 }
 
@@ -103,6 +111,8 @@ function ManageAbsence() {
     const [fetchError, setFetchError] = useState(false)
     const [absenceList, setAbsenceList] = useState(null)
     const [openCreateAbsence, setOpenCreateAbsence] = useState(false)
+
+    const navigate = useNavigate()
 
     const fetchAbsence = useCallback(async () => {
         setIsLoading(true)
@@ -134,6 +144,8 @@ function ManageAbsence() {
                 promise.onSuccess('berhasil menambahkan absensi')
                 setOpenCreateAbsence(false)
                 setAbsenceList(res.data.list)
+                console.log(res.data.createdAbsence?._id)
+                navigate(`/admin/server/detail?q=${res.data.createdAbsence?._id}`)
                 console.log(res.data)
             }).catch(err => {
                 throw new Error(err)
@@ -177,14 +189,15 @@ function AccordionGrades({grade = '', list = [], show = false, setShow, setOpenC
                     setOpenCreateAbsence(grade)
                 }}>
                 <FontAwesomeIcon className='text-2xl' icon={faPlus}/>
-                <span>({list?.filter(i => i.allowedGrades.find(x => x === grade)).length || 0})</span>
+                {list?.filter(i => i.allowedGrades.find(x => x === grade)).length > 0 && <span>({list?.filter(i => i.allowedGrades.find(x => x === grade)).length || 0})</span>}
             </div>
         </div>
         <div className={`grid transition-all duration-300 ease-in-out overflow-hidden 
             ${show === grade ? 'grid-rows-[1fr]' : 'grid-rows-[0fr]'}
             `}>
-            <div className='overflow-hidden flex flex-col gap-2'>
-                {list?.filter(i => i.allowedGrades.find(x => x === grade)).map(item => <TombolAksiAbsensi item={item} key={item._id} callbackList={setAbsenceList}/>) || []}
+            {/* <div className='overflow-hidden flex flex-col gap-2'> */}
+            <div className='overflow-hidden grid gap-2 grid-cols-1 sm:grid-cols-2'>
+                {list?.filter(i => i.allowedGrades.find(x => x === grade)).map(item => <TombolAksiAbsensi item={item} key={item._id} callbackList={setAbsenceList} lite={true}/>) || []}
             </div>
         </div>
     </div>

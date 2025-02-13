@@ -1,26 +1,27 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faBoxOpen, faDoorClosed, faEllipsisV, faExternalLink, faFloppyDisk, faLink, faPenToSquare, faQrcode, faTable, faTrash } from '@fortawesome/free-solid-svg-icons'
+import { faBoxOpen, faDoorClosed, faEllipsisV, faFloppyDisk, faLink, faPenToSquare, faQrcode, faTable, faTrash } from '@fortawesome/free-solid-svg-icons'
 import { useSelector } from "react-redux"
 import { API, encryptObject, formatBeautyDate, getCenterCoordinates } from "../../../utils"
 import axios from "axios"
 import { blankToast, loadingToast } from '../../utils/myToast'
 import { useEffect, useState } from 'react'
 import Modal, { Confirm } from '../../utils/Modal'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useSearchParams } from 'react-router-dom'
 import AbsensiEditor from './AbsensiEditor'
-import DisplayTableUsers from './DisplayTableUsers'
+// import DisplayTableUsers from './DisplayTableUsers'
 import QRCode from 'react-qr-code'
+import DisplayTableUsers from './DisplayTableUsers'
 
-export default function TombolAksiAbsensi({ item, callbackList = () => {} }) {
+export default function TombolAksiAbsensi({ item, callbackList = () => {}, lite = false }) {
     const [absensi, setAbsensi] = useState(item)
     const account = useSelector(state => state.source.account)
+    const [searchParams, ] = useSearchParams()
 
     const [openEdit, setOpenEdit] = useState(false)
     const [showSaveConfirm, setShowSaveConfirm] = useState(false)
     const [showBuangConfirm, setShowBuangConfirm] = useState(false)
     const [isOpenMore, setIsOpenMore] = useState(false)
-    const [showUsers, setShowUsers] = useState(false)
-    const [d, setd] = useState(false)
+    const [selectedOpen, setSelectedOpen] = useState(null)
 
     const navigate = useNavigate()
 
@@ -118,86 +119,94 @@ export default function TombolAksiAbsensi({ item, callbackList = () => {} }) {
         }
     }
 
+    useEffect(() => {
+        setSelectedOpen(searchParams.get('open'))
+        console.log(searchParams.get('open'), selectedOpen)
+
+    },[searchParams, selectedOpen])
+
+    const optionList = <div className='flex flex-col gap-2 bg-neutral-100 text-neutral-500 rounded'>
+        {lite && <div className='p-2' onClick={() => navigate(`/admin/server/detail?q=${absensi._id}`)}>
+            <p className='text-xl font-semibold'>{absensi.title} <span className='text-sm font-normal'>oleh {absensi.openedBy}</span></p>
+        </div>
+        }
+        <div className='flex gap-2 items-center click-animation cursor-pointer p-2 hover:bg-tertiary rounded' onClick={() => {
+            navigator.clipboard.writeText(window.location.origin + '/absen/' + absensi?._id)
+            blankToast('Link disimpan di papan klip')
+            setIsOpenMore(false)
+        }}>
+            <FontAwesomeIcon icon={faLink}/> Salin link Absensi
+        </div>
+        <div className='flex gap-2 items-center click-animation cursor-pointer p-2 hover:bg-tertiary rounded' onClick={() => {
+            navigate(`/admin/server/detail?q=${absensi._id}&&open=goldenQr`)
+        }}>
+            <FontAwesomeIcon icon={faQrcode}/> Golden QR
+        </div>
+        <div className='flex gap-2 items-center click-animation cursor-pointer p-2 hover:bg-tertiary rounded' onClick={() => {
+            navigate(`/admin/server/detail?q=${absensi._id}&&open=userTable`)
+            setIsOpenMore(false)
+            }}>
+            <FontAwesomeIcon icon={faTable}/> Peserta
+        </div>
+        <div className='flex gap-2 items-center click-animation cursor-pointer p-2 hover:bg-tertiary rounded' onClick={() => {
+            setOpenEdit(true)
+            setIsOpenMore(false)
+        }}>
+            <FontAwesomeIcon icon={faPenToSquare}/> Edit
+        </div>
+        <div className='flex gap-2 items-center click-animation cursor-pointer p-2 hover:bg-tertiary rounded' onClick={() => {
+            setIsOpenMore(false)
+            setShowSaveConfirm(true)
+        }}>
+            <FontAwesomeIcon icon={faFloppyDisk}/> Simpan
+        </div>
+        <div className='flex gap-2 items-center click-animation cursor-pointer p-2 hover:bg-tertiary rounded' onClick={() => {
+            setIsOpenMore(false)
+            setShowBuangConfirm(true)
+        }}>
+            <FontAwesomeIcon icon={faTrash}/> Buang
+        </div>
+    </div>
+
     if (!absensi) return null
     
-    return <div className={`relative flex gap-2 flex-col shadow-lg p-2 rounded bg-neutral-200 ${absensi?.status ? 'bg-secondary text-neutral-200' : 'bg-neutral-200'}`}>
-        <div className='flex'>
-            <p className='flex-1 text-xl font-semibold'>{absensi.title} <span className='text-sm font-normal'>oleh {absensi.openedBy}</span></p>
-            <div className='cursor-pointer click-animation grid items-center px-4 py-2' onClick={() => setIsOpenMore(true)}>
-                <FontAwesomeIcon icon={faEllipsisV}/>
-            </div>
-        </div>
-        <div className='flex flex-col'>
-            <div className='flex flex-wrap flex-col sm:flex-row'>
-                <p className='sm:w-2/6 font-semibold'>{absensi?.status ? "Buka" : "Tutup"}</p>
-                <p>{formatBeautyDate(absensi?.date)}</p>
-            </div>
-            <div className='flex flex-wrap flex-col sm:flex-row'>
-                <p className='sm:w-2/6 font-semibold'>Catatan</p>
-                <p>{absensi?.note || '-'}</p>
-            </div>
-            <div className='flex flex-wrap flex-col sm:flex-row'>
-                <p className='sm:w-2/6 font-semibold'>Jumlah Peserta</p>
-                <p>{absensi?.tickets?.length || '-'}</p>
-            </div>
-        </div>
-
-        <div className='flex gap-2 justify-end flex-wrap'>
-            <div className={`flex gap-2 shadow-lg ${absensi?.status ? 'bg-secondary-200 border-neutral-200 text-neutral-200' : 'bg-neutral-200 border-secondary text-secondary'} shadow-secondary/50 cursor-pointer  items-center p-2 rounded  border-2 border-solid click-animation`} onClick={() => setShowSaveConfirm(true)}>
-                <FontAwesomeIcon icon={faFloppyDisk}/>
-                <p>Simpan</p>
-            </div>
-            <div onClick={() => absensi?.status ? handleAbsensi('tutup'):handleAbsensi('buka')} className={`flex flex-1 justify-center gap-2 shadow-lg ${absensi?.status ? 'bg-neutral-200  text-secondary' : 'bg-secondary text-neutral-200'} shadow-secondary/50 cursor-pointer items-center p-2 rounded click-animation`}>
-                <FontAwesomeIcon icon={absensi?.status ? faDoorClosed : faBoxOpen}/>
-                <p>{absensi?.status ? 'Tutup' : 'Buka'}</p>
-            </div>
-
-        </div>
-        <Modal isOpen={isOpenMore} onClose={() => setIsOpenMore(false)}>
+    return <>
+        <div className={`relative flex gap-2 p-2 flex-col shadow-lg rounded bg-neutral-200 ${absensi?.status ? 'bg-secondary text-neutral-200' : 'bg-neutral-200'}`}>
             <div className='flex flex-col gap-2'>
-                <div className='p-2'>
-                    <p className='text-xl font-semibold'>{absensi.title} <span className='text-sm font-normal'>oleh {absensi.openedBy}</span></p>
+                <div className='flex'>
+                    <p className='flex-1 text-xl font-semibold' onClick={() => navigate(`/admin/server/detail?q=${absensi._id}`)}>{absensi.title} <span className='text-sm font-normal'>oleh {absensi.openedBy}</span></p>
+                    {lite && <div className='cursor-pointer click-animation grid items-center px-4 py-2' onClick={() => setIsOpenMore(true)}>
+                        <FontAwesomeIcon icon={faEllipsisV}/>
+                    </div>}
                 </div>
-                <div className='flex gap-2 items-center click-animation cursor-pointer p-2 hover:bg-tertiary rounded' onClick={() => navigate(`/admin/server/detail?q=${absensi._id}`)}>
-                    <FontAwesomeIcon icon={faExternalLink}/> Detail
-                </div>
-                <div className='flex gap-2 items-center click-animation cursor-pointer p-2 hover:bg-tertiary rounded' onClick={() => {
-                    navigator.clipboard.writeText(window.location.origin + '/absen/' + absensi?._id)
-                    blankToast('Link disimpan di papan klip')
-                    setIsOpenMore(false)
-                }}>
-                    <FontAwesomeIcon icon={faLink}/> Salin link Absensi
-                </div>
-                <div className='flex gap-2 items-center click-animation cursor-pointer p-2 hover:bg-tertiary rounded' onClick={() => {
-                    setd(true)
-                }}>
-                    <FontAwesomeIcon icon={faQrcode}/> Golden QR
-                </div>
-                <div className='flex gap-2 items-center click-animation cursor-pointer p-2 hover:bg-tertiary rounded' onClick={() => {
-                    setShowUsers(true)
-                    setIsOpenMore(false)
-                    }}>
-                    <FontAwesomeIcon icon={faTable}/> Peserta
-                </div>
-                <div className='flex gap-2 items-center click-animation cursor-pointer p-2 hover:bg-tertiary rounded' onClick={() => {
-                    setOpenEdit(true)
-                    setIsOpenMore(false)
-                }}>
-                    <FontAwesomeIcon icon={faPenToSquare}/> Edit
-                </div>
-                <div className='flex gap-2 items-center click-animation cursor-pointer p-2 hover:bg-tertiary rounded' onClick={() => {
-                    setIsOpenMore(false)
-                    setShowBuangConfirm(true)
-                }}>
-                    <FontAwesomeIcon icon={faTrash}/> Buang
+                <div className='flex flex-col' onClick={() => navigate(`/admin/server/detail?q=${absensi._id}`)}>
+                    <p><span className='font-semibold'>{absensi?.status ? "Buka" : "Tutup"}</span> {formatBeautyDate(absensi?.date)}</p>
+                    {absensi?.note && <p>{absensi?.note}</p>}
+                    <p>{absensi?.tickets?.length || '0'} Peserta</p>
                 </div>
             </div>
-        </Modal>
-        <Confirm isOpen={showSaveConfirm} title={`Tutup dan simpan ${absensi?.title}`} subTitle={`Menutup absensi ${absensi?.title} dan menyimpannya sekarang?`} onClose={() => setShowSaveConfirm(false)} callBack={saveAbsensi} textConfirm={`Simpan ${absensi?.tickets?.length > 0 ? `(${absensi?.tickets?.length})` : ''}`}/>
-        <Confirm isOpen={showBuangConfirm} title={`Buang ${absensi?.title}`} subTitle={`Menutup absensi ${absensi?.title} dan membuang perubahan absensi?`} onClose={() => setShowBuangConfirm(false)} callBack={buangAbsensi} textConfirm={`Buang ${absensi?.tickets?.length > 0 ? `(${absensi?.tickets?.length})` : ''}`}/>
-        <AbsensiEditor isOpen={openEdit} onClose={() => setOpenEdit(false)} callBack={editAbsensi} submitText='Simpan' title={absensi?.title} note={absensi?.note} coordinates={absensi?.coordinates || {}}/>
-        <Modal isOpen={d} onClose={() => setd(false)} fluid={true}>
-            <div className='bg-yellow-500 p-4'>
+
+            {lite && <div className='flex gap-2 justify-end flex-wrap'>
+                <div onClick={() => absensi?.status ? handleAbsensi('tutup'):handleAbsensi('buka')} className={`flex flex-1 justify-center gap-2 shadow-lg ${absensi?.status ? 'bg-neutral-200  text-secondary' : 'bg-secondary text-neutral-200'} shadow-secondary/50 cursor-pointer items-center p-2 rounded click-animation`}>
+                    <FontAwesomeIcon icon={absensi?.status ? faDoorClosed : faBoxOpen}/>
+                    <p>{absensi?.status ? 'Tutup' : 'Buka'}</p>
+                </div>
+            </div>}
+            {lite && <Modal isOpen={isOpenMore} onClose={() => setIsOpenMore(false)}>
+                    {optionList}
+                </Modal>
+            }
+            <Confirm isOpen={showSaveConfirm} title={`Tutup dan simpan ${absensi?.title}`} subTitle={`Menutup absensi ${absensi?.title} dan menyimpannya sekarang?`} onClose={() => setShowSaveConfirm(false)} callBack={saveAbsensi} textConfirm={`Simpan ${absensi?.tickets?.length > 0 ? `(${absensi?.tickets?.length})` : ''}`}/>
+            <Confirm isOpen={showBuangConfirm} title={`Buang ${absensi?.title}`} subTitle={`Menutup absensi ${absensi?.title} dan membuang perubahan absensi?`} onClose={() => setShowBuangConfirm(false)} callBack={buangAbsensi} textConfirm={`Buang ${absensi?.tickets?.length > 0 ? `(${absensi?.tickets?.length})` : ''}`}/>
+            <AbsensiEditor isOpen={openEdit} onClose={() => setOpenEdit(false)} callBack={editAbsensi} submitText='Simpan' title={absensi?.title} note={absensi?.note} coordinates={absensi?.coordinates || {}}/>
+        </div>
+        {selectedOpen !== 'userTable' && selectedOpen !== 'goldenQr' && !lite && <div className='flex flex-col'>
+            {optionList}
+        </div>}
+        {selectedOpen === 'userTable' && <DisplayTableUsers usersTicket={absensi?.tickets} absensi={absensi}/>}
+        {selectedOpen === 'goldenQr' && <div className='flex flex-col gap-2'>
+            <p className='pt-4 font-semibold text-xl'>Golden Qr</p>
+            <div className='bg-yellow-500 p-4 w-fit mx-auto'>
                 <QRCode value={encryptObject({
                     id: absensi?._id,
                     title: absensi?.title,
@@ -206,31 +215,10 @@ export default function TombolAksiAbsensi({ item, callbackList = () => {} }) {
                     centerCoordinates: getCenterCoordinates(absensi?.coordinates)
                 })}/> 
             </div>
-        </Modal>
-        <Modal isOpen={showUsers} onClose={() => setShowUsers(false)}>
-            <div className="flex flex-col p-2">
-                <div className='flex flex-wrap flex-col sm:flex-row'>
-                    <p className='sm:w-2/6 font-semibold'>Judul</p>
-                    <p>{absensi?.title}</p>
-                </div>
-                <div className='flex flex-wrap flex-col sm:flex-row'>
-                    <p className='sm:w-2/6 font-semibold'>Status</p>
-                    <p>{absensi?.status ? "Buka" : "Tutup"}</p>
-                </div>
-                <div className='flex flex-wrap flex-col sm:flex-row'>
-                    <p className='sm:w-2/6 font-semibold'>{absensi?.status ? 'Dibuka oleh': 'Ditutup oleh'}</p>
-                    <p>{absensi?.openedBy || 'Anon'}</p>
-                </div>
-                <div className='flex flex-wrap flex-col sm:flex-row'>
-                    <p className='sm:w-2/6 font-semibold'>Pada</p>
-                    <p>{formatBeautyDate(absensi?.date)}</p>
-                </div>
-                <div className='flex flex-wrap flex-col sm:flex-row'>
-                    <p className='sm:w-2/6 font-semibold'>Catatan</p>
-                    <p>{absensi?.note || '-'}</p>
-                </div>
-            </div>
-            <DisplayTableUsers usersTicket={absensi?.tickets} absensi={absensi}/>
-        </Modal>
-    </div>
+            <p className='font-semibold'>Cara menggunakan</p>
+            <p className='text-xs'>Buka halaman https://absensiswa.netlify.app/absengoldenqr</p>
+            <p className='text-xs'>Nyalakan kamera</p>
+            <p className='text-xs'>Pindai kode QR ini dan kirim absen</p>
+        </div>}
+    </>
 }

@@ -1,5 +1,5 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faExternalLink, faRefresh } from '@fortawesome/free-solid-svg-icons'
+import { faRefresh } from '@fortawesome/free-solid-svg-icons'
 import { useCallback, useEffect, useState } from 'react'
 import axios from 'axios'
 import { API, formatBeautyDate } from '../../../utils'
@@ -73,12 +73,11 @@ function AbsenCard ({data}) {
         setIsOpened(data.status)
     },[data])
     
-    return <div className={`relative flex p-2 py-4 pt-5 gap-2 flex-col shadow-lg rounded my-2 cursor-pointer ${isOpened ? 'bg-secondary text-neutral-200' : 'bg-neutral-200'}`} onClick={() => navigate('/absen/' + data?._id)}>
+    return <div className={`relative flex p-2 py-4 gap-2 flex-col shadow-lg rounded cursor-pointer ${isOpened ? 'bg-secondary text-neutral-200' : 'bg-neutral-200'}`} onClick={() => navigate('/absen/' + data?._id)}>
         <div className='flex flex-col'>
             <p className='text-lg font-semibold'>{data?.title} <span className='text-xs font-normal'>oleh {data.openedBy}</span></p>
-            <p className='text-sm'>{data?.note}</p>
             <p className='text-sm'>{isOpened ? 'Dibuka' : 'Ditutup'} {formatBeautyDate(data?.date)}</p>
-            <FontAwesomeIcon icon={faExternalLink} className='absolute top-2 right-2'/>
+            <p className='text-sm'>{data?.note}</p>
         </div>
     </div>
 }
