@@ -186,7 +186,7 @@ export default function TombolAksiAbsensi({ item, callbackList = () => {}, lite 
                 </div>
             </div>
 
-            {lite && <div className='flex gap-2 justify-end flex-wrap'>
+            {(lite || (selectedOpen !== 'userTable' && selectedOpen !== 'goldenQr'))  && <div className='flex gap-2 justify-end flex-wrap'>
                 <div onClick={() => absensi?.status ? handleAbsensi('tutup'):handleAbsensi('buka')} className={`flex flex-1 justify-center gap-2 shadow-lg ${absensi?.status ? 'bg-neutral-200  text-secondary' : 'bg-secondary text-neutral-200'} shadow-secondary/50 cursor-pointer items-center p-2 rounded click-animation`}>
                     <FontAwesomeIcon icon={absensi?.status ? faDoorClosed : faBoxOpen}/>
                     <p>{absensi?.status ? 'Tutup' : 'Buka'}</p>
