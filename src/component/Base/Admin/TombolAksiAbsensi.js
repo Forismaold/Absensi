@@ -1,5 +1,5 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faBoxOpen, faDoorClosed, faEllipsisV, faFloppyDisk, faLink, faPenToSquare, faQrcode, faTable, faTrash } from '@fortawesome/free-solid-svg-icons'
+import { faArrowUpRightFromSquare, faBoxOpen, faClipboard, faDoorClosed, faEllipsisV, faFloppyDisk, faPenToSquare, faQrcode, faTable, faTrash } from '@fortawesome/free-solid-svg-icons'
 import { useSelector } from "react-redux"
 import { API, encryptObject, formatBeautyDate, getCenterCoordinates } from "../../../utils"
 import axios from "axios"
@@ -8,7 +8,6 @@ import { useEffect, useState } from 'react'
 import Modal, { Confirm } from '../../utils/Modal'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import AbsensiEditor from './AbsensiEditor'
-// import DisplayTableUsers from './DisplayTableUsers'
 import QRCode from 'react-qr-code'
 import DisplayTableUsers from './DisplayTableUsers'
 
@@ -125,47 +124,62 @@ export default function TombolAksiAbsensi({ item, callbackList = () => {}, lite 
 
     },[searchParams, selectedOpen])
 
-    const optionList = <div className='flex flex-col gap-2 bg-neutral-100 text-neutral-500 rounded'>
-        {lite && <div className='p-2' onClick={() => navigate(`/admin/server/detail?q=${absensi._id}`)}>
+    const optionList = <div className='flex flex-col gap-2 p-2 bg-neutral-100 text-neutral-500 rounded'>
+        {lite && <div className='cursor-pointer' onClick={() => navigate(`/admin/server/detail?q=${absensi._id}`)}>
             <p className='text-xl font-semibold'>{absensi.title} <span className='text-sm font-normal'>oleh {absensi.openedBy}</span></p>
         </div>
         }
-        <div className='flex gap-2 items-center click-animation cursor-pointer p-2 hover:bg-tertiary rounded' onClick={() => {
-            navigator.clipboard.writeText(window.location.origin + '/absen/' + absensi?._id)
-            blankToast('Link disimpan di papan klip')
-            setIsOpenMore(false)
-        }}>
-            <FontAwesomeIcon icon={faLink}/> Salin link Absensi
-        </div>
-        <div className='flex gap-2 items-center click-animation cursor-pointer p-2 hover:bg-tertiary rounded' onClick={() => {
+            <div className='flex items-stretch bg-white rounded shadow'>
+                <input className='flex-1 rounded border-none bg-transparent' onChange={() => null} type='text' value={window.location.origin + '/absen/' + absensi?._id}/>
+                
+                <div className='flex gap-2 items-center click-animation cursor-pointer px-4 hover:bg-tertiary rounded shadow' onClick={() => {
+                    navigator.clipboard.writeText(window.location.origin + '/absen/' + absensi?._id)
+                    blankToast('Link disimpan di papan klip')
+                    setIsOpenMore(false)
+                }}>
+                    <FontAwesomeIcon icon={faClipboard}/>
+                </div>
+                <div className='flex gap-2 items-center click-animation cursor-pointer px-4 hover:bg-tertiary rounded shadow' onClick={() => {
+                    navigate('/absen/' + absensi?._id)
+                    setIsOpenMore(false)
+                }}>
+                    <FontAwesomeIcon icon={faArrowUpRightFromSquare}/>
+                </div>
+            </div>
+        <div className='flex gap-2 items-center click-animation cursor-pointer p-2 hover:bg-tertiary rounded shadow' onClick={() => {
             navigate(`/admin/server/detail?q=${absensi._id}&&open=goldenQr`)
         }}>
             <FontAwesomeIcon icon={faQrcode}/> Golden QR
         </div>
-        <div className='flex gap-2 items-center click-animation cursor-pointer p-2 hover:bg-tertiary rounded' onClick={() => {
+        <div className='flex gap-2 items-center click-animation cursor-pointer p-2 hover:bg-tertiary rounded shadow' onClick={() => {
             navigate(`/admin/server/detail?q=${absensi._id}&&open=userTable`)
             setIsOpenMore(false)
             }}>
             <FontAwesomeIcon icon={faTable}/> Peserta
         </div>
-        <div className='flex gap-2 items-center click-animation cursor-pointer p-2 hover:bg-tertiary rounded' onClick={() => {
-            setOpenEdit(true)
-            setIsOpenMore(false)
-        }}>
-            <FontAwesomeIcon icon={faPenToSquare}/> Edit
+        <div className='flex gap-2'>
+            <div className='flex flex-1 flex-col gap-2'>
+                <div className='flex w-full gap-2 items-center justify-center click-animation cursor-pointer p-2 hover:bg-tertiary rounded shadow' onClick={() => {
+                        setIsOpenMore(false)
+                        setShowSaveConfirm(true)
+                    }}>
+                    <FontAwesomeIcon icon={faFloppyDisk}/> Simpan
+                </div>
+                <div className='flex w-full gap-2 items-center justify-center click-animation cursor-pointer p-2 hover:bg-tertiary rounded shadow' onClick={() => {
+                        setIsOpenMore(false)
+                        setShowBuangConfirm(true)
+                    }}>
+                    <FontAwesomeIcon icon={faTrash}/> Buang
+                </div>
+            </div>
+            <div className='flex flex-1 gap-2 items-center justify-center click-animation cursor-pointer p-2 hover:bg-tertiary rounded shadow' onClick={() => {
+                setOpenEdit(true)
+                setIsOpenMore(false)
+            }}>
+                <FontAwesomeIcon icon={faPenToSquare}/> Edit
+            </div>
         </div>
-        <div className='flex gap-2 items-center click-animation cursor-pointer p-2 hover:bg-tertiary rounded' onClick={() => {
-            setIsOpenMore(false)
-            setShowSaveConfirm(true)
-        }}>
-            <FontAwesomeIcon icon={faFloppyDisk}/> Simpan
-        </div>
-        <div className='flex gap-2 items-center click-animation cursor-pointer p-2 hover:bg-tertiary rounded' onClick={() => {
-            setIsOpenMore(false)
-            setShowBuangConfirm(true)
-        }}>
-            <FontAwesomeIcon icon={faTrash}/> Buang
-        </div>
+        
     </div>
 
     if (!absensi) return null
@@ -192,7 +206,7 @@ export default function TombolAksiAbsensi({ item, callbackList = () => {}, lite 
                     <p>{absensi?.status ? 'Tutup' : 'Buka'}</p>
                 </div>
             </div>}
-            {lite && <Modal isOpen={isOpenMore} onClose={() => setIsOpenMore(false)}>
+            {lite && <Modal isOpen={isOpenMore} onClose={() => setIsOpenMore(false)} className='max-w-sm'>
                     {optionList}
                 </Modal>
             }
@@ -207,6 +221,8 @@ export default function TombolAksiAbsensi({ item, callbackList = () => {}, lite 
         {selectedOpen === 'goldenQr' && <div className='flex flex-col gap-2'>
             <p className='pt-4 font-semibold text-xl'>Golden Qr</p>
             <div className='bg-yellow-500 p-4 w-fit mx-auto'>
+            {absensi?.status === false ? <p className='font-semibold text-xl text-red-500'>Buka absensi terlebih dahulu!</p>
+            :
                 <QRCode value={encryptObject({
                     id: absensi?._id,
                     title: absensi?.title,
@@ -214,6 +230,7 @@ export default function TombolAksiAbsensi({ item, callbackList = () => {}, lite 
                     date: absensi?.date,
                     centerCoordinates: getCenterCoordinates(absensi?.coordinates)
                 })}/> 
+            }
             </div>
             <p className='font-semibold'>Cara menggunakan</p>
             <p className='text-xs'>Buka halaman https://absensiswa.netlify.app/absengoldenqr</p>
