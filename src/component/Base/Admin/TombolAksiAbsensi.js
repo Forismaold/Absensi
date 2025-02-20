@@ -212,7 +212,7 @@ export default function TombolAksiAbsensi({ item, callbackList = () => {}, lite 
             }
             <Confirm isOpen={showSaveConfirm} title={`Tutup dan simpan ${absensi?.title}`} subTitle={`Menutup absensi ${absensi?.title} dan menyimpannya sekarang?`} onClose={() => setShowSaveConfirm(false)} callBack={saveAbsensi} textConfirm={`Simpan ${absensi?.tickets?.length > 0 ? `(${absensi?.tickets?.length})` : ''}`}/>
             <Confirm isOpen={showBuangConfirm} title={`Buang ${absensi?.title}`} subTitle={`Menutup absensi ${absensi?.title} dan membuang perubahan absensi?`} onClose={() => setShowBuangConfirm(false)} callBack={buangAbsensi} textConfirm={`Buang ${absensi?.tickets?.length > 0 ? `(${absensi?.tickets?.length})` : ''}`}/>
-            <AbsensiEditor isOpen={openEdit} onClose={() => setOpenEdit(false)} callBack={editAbsensi} submitText='Simpan' title={absensi?.title} note={absensi?.note} coordinates={absensi?.coordinates || {}}/>
+            <AbsensiEditor isOpen={openEdit} onClose={() => setOpenEdit(false)} callBack={editAbsensi} submitText='Simpan' title={absensi?.title} note={absensi?.note} coordinates={absensi?.coordinates || {}} absensi={absensi || null}/>
         </div>
         {selectedOpen !== 'userTable' && selectedOpen !== 'goldenQr' && !lite && <div className='flex flex-col'>
             {optionList}

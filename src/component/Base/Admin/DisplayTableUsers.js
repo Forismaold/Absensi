@@ -118,6 +118,25 @@ function UserRowModel({data, tickets, absensiData}) {
         }
     }
 
+    // function setUserOutBounds() {
+    //     setIsLoading(true)
+    //     try {
+    //         axios.put(API + '/absen/delete/hadir/' + absensi._id, { user: data._id })
+    //         .then(res => {
+    //             if (res.data.success) {
+    //                 setMsg('berhasil diperbarui')
+    //                 setTicket(res.data.ticket)
+    //             } else {
+    //                 setMsg('something error')
+    //             }
+    //         })
+    //     } catch (error) {
+    //         setMsg('error, try again')
+    //     } finally {
+    //         setIsLoading(false)
+    //     }
+    // }
+
     useEffect(() => {
         let userExist = tickets?.find(ticket => ticket?.user?._id === data._id)
         if (userExist) {

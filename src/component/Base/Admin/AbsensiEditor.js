@@ -24,8 +24,9 @@ const localCoordinates = {
  * @param {{isOpen: boolean, onClose: function, callBack: function, submitText: string, title: string, note: string, coordinates: object}} props
  * @returns 
  */
-export default function AbsensiEditor({isOpen, onClose, callBack, submitText = 'Tambah', title = 'Dzuhur', note = '', coordinates = {}}) {
+export default function AbsensiEditor({isOpen, onClose, callBack, submitText = 'Tambah', title = 'Dzuhur', note = '', coordinates = {}, absensi = null}) {
     const storeCoordinates = useSelector(state => state.coordinates)
+    const account = useSelector(state => state.source.account)
  
     const [inputTitle, setInputTitle] = useState(title)
     const inputRef = useRef(null)
@@ -63,7 +64,8 @@ export default function AbsensiEditor({isOpen, onClose, callBack, submitText = '
 
     return <Modal isOpen={isOpen} onClose={onClose}>
         <div className='text-neutral-500 flex flex-col gap-2 p-2'>
-            <div className='flex flex-col'>
+            <div className='flex flex-col gap-2'>
+                <p className='text-xl font-semibold'>{inputTitle || 'Dzuhur'} <span className='text-sm font-normal'>oleh {absensi?.openedBy || account?.nama}</span></p>
                 <p className='flex-1'>Ketik judul absensi</p>
                 <input autoFocus ref={inputRef} type="text" placeholder='Bawaan: Dzuhur' className='shadow-lg shadow-primary/50 border-secondary rounded focus:ring-primary text-neutral-700' onChange={handleInput} value={inputTitle} maxLength={50}/>
                 <p className='flex-1 mt-2 click-animation cursor-pointer' onClick={() => setShowDetail(prev => !prev)}>Lainnya <FontAwesomeIcon icon={showDetail ? faChevronDown : faChevronRight}/></p>

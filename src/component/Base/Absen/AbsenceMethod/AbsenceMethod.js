@@ -25,7 +25,7 @@ export default function AbsenceMethod() {
     const [scanInfo, setScanInfo] = useState(false)
     const [isLoading, setIsLoading] = useState(false)
     const [openListMethod, setOpenListMethod] = useState(false)
-    const [methodSelected, setMethodSelected] = useState('GPS Standar (Boosted)')
+    const [methodSelected, setMethodSelected] = useState('GPS Watch (Boosted)')
 
     const dispatch = useDispatch()
 
