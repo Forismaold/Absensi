@@ -129,8 +129,8 @@ export default function TombolAksiAbsensi({ item, callbackList = () => {}, lite 
             <p className='text-xl font-semibold'>{absensi.title} <span className='text-sm font-normal'>oleh {absensi.openedBy}</span></p>
         </div>
         }
-            <div className='flex items-stretch bg-white rounded shadow'>
-                <input className='flex-1 rounded border-none bg-transparent' onChange={() => null} type='text' value={window.location.origin + '/absen/' + absensi?._id}/>
+            <div className='flex w-full items-stretch bg-white rounded shadow'>
+                <input className='flex-1 min-w-0 rounded border-none bg-transparent' onChange={() => null} type='text' value={window.location.origin + '/absen/' + absensi?._id}/>
                 
                 <div className='flex gap-2 items-center click-animation cursor-pointer px-4 hover:bg-tertiary rounded shadow' onClick={() => {
                     navigator.clipboard.writeText(window.location.origin + '/absen/' + absensi?._id)
