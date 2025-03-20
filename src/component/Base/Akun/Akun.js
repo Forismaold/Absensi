@@ -137,7 +137,7 @@ function ProfileEditor({closeEditor}) {
         }
     }
     return <form className='flex flex-col gap-2' onSubmit={handleSubmit}>
-        <input className='p-2 rounded shadow w-full' type="text" value={nama} onChange={handleChangeName} placeholder='Nama' autoComplete='off' required/>
+        {/* <input className='p-2 rounded shadow w-full' type="text" value={nama} onChange={handleChangeName} placeholder='Nama' autoComplete='off' required/>
         <input className='p-2 rounded shadow w-full' type="text" value={panggilan} onChange={e => setPanggilan(e.target.value)} placeholder='Panggilan' autoComplete='off'/>
         <div className='flex gap-2 items-center'>
             <select value={kelas} onChange={(e) => setKelas(e.target.value)} className='min-h-[40px] shadow p-2 rounded flex-1' required>
@@ -153,7 +153,43 @@ function ProfileEditor({closeEditor}) {
             <option value="-" defaultValue>-</option>
             <option value="L">L</option>
             <option value="P">P</option>
-        </select>
+        </select> */}
+        <div className="flex flex-col sm:flex-row sm:items-center border-b-[1px] border-solid border-neutral-300 last:border-transparent py-2">
+            <label htmlFor="nama" className="sm:w-2/6 font-medium">Nama</label>
+            <input id="nama" className="p-2 rounded shadow w-full sm:flex-1" type="text" value={nama} onChange={handleChangeName} placeholder="Nama" autoComplete="off" required />
+        </div>
+
+        <div className="flex flex-col sm:flex-row sm:items-center border-b-[1px] border-solid border-neutral-300 last:border-transparent py-2">
+            <label htmlFor="panggilan" className="sm:w-2/6 font-medium">Panggilan</label>
+            <input id="panggilan" className="p-2 rounded shadow w-full sm:flex-1" type="text" value={panggilan} onChange={e => setPanggilan(e.target.value)} placeholder="Panggilan" autoComplete="off" />
+        </div>
+
+        <div className="flex flex-col sm:flex-row sm:items-center border-b-[1px] border-solid border-neutral-300 last:border-transparent py-2">
+            <label htmlFor="kelas" className="sm:w-2/6 font-medium">Kelas & Nomor Kelas</label>
+            <div className="flex flex-1 items-center">
+                <select id="kelas" value={kelas} onChange={(e) => setKelas(e.target.value)} className="min-h-[40px] shadow p-2 rounded flex-1" required>
+                    <option value="X.E">X.E</option>
+                    <option value="XI.F">XI.F</option>
+                    <option value="XII.F">XII.F</option>
+                </select>
+                <span className="px-1">-</span>
+                <input id="nomorKelas" className="p-2 rounded shadow flex-1 w-full" type="number" value={nomorKelas} onChange={e => setNomorKelas(e.target.value)} placeholder="Nomor Kelas" autoComplete="off" required max={10} />
+            </div>
+        </div>
+
+        <div className="flex flex-col sm:flex-row sm:items-center border-b-[1px] border-solid border-neutral-300 last:border-transparent py-2">
+            <label htmlFor="nomorAbsen" className="sm:w-2/6 font-medium">Nomor Absen</label>
+            <input id="nomorAbsen" className="p-2 rounded shadow w-full sm:flex-1" type="text" value={nomorAbsen} onChange={e => setNomorAbsen(e.target.value)} placeholder="Nomor Absen" autoComplete="off" max={40} />
+        </div>
+
+        <div className="flex flex-col sm:flex-row sm:items-center border-b-[1px] border-solid border-neutral-300 last:border-transparent py-2">
+            <label htmlFor="jenisKelamin" className="sm:w-2/6 font-medium">Jenis Kelamin</label>
+            <select id="jenisKelamin" value={jenisKelamin} onChange={(e) => setJenisKelamin(e.target.value)} className="min-h-[40px] shadow p-2 rounded w-full sm:flex-1">
+                <option value="-">-</option>
+                <option value="L">L</option>
+                <option value="P">P</option>
+            </select>
+        </div>
         <button className='flex gap-2 text-center bg-secondary p-2 shadow-lg shadow-primary/50 click-animation rounded-lg text-neutral-100 cursor-pointer' type='submit'>
             Simpan
         </button>
