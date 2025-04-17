@@ -44,11 +44,11 @@ export default function AdminUsers() {
 </div>
 }
 
-function DisplayUsers({users, setUsers}) {
+function DisplayUsers({users = null, setUsers}) {
     const [userWhoWantUpdate, setUserWhoWantUpdate] = useState(null)
     useEffect(() => {
-      console.log(userWhoWantUpdate)
-    }, [userWhoWantUpdate])
+        console.log(users)
+    }, [users])
     
     return <div className='flex flex-col gap-4'>
         <div className='flex flex-col gap-2 p-2'>
@@ -110,6 +110,7 @@ function UserRowModel({user, setUsers, setUserWhoWantUpdate}) {
             <Cell prop={'Nama'} value={user?.nama || ''}/>
             <Cell prop={'Panggilan'} value={user?.panggilan || ''}/>
             <Cell prop={'kelas/absen'} value={`${user?.kelas || ''}-${user?.nomorKelas || ''}/${user?.nomorAbsen || ''}`}/>
+            <Cell prop={'email'} value={user?.email || ''}/>
             <div className="w-full click-animation cursor-pointer bg-secondary rounded shadow text-neutral-200 p-2 " onClick={() => {
                 setUserWhoWantUpdate(user)
                 setIsOpenModal(false)
@@ -130,6 +131,7 @@ function AdminUpdateUser({userWhoWantUpdate, setUserWhoWantUpdate, setUsers}) {
     const [kelas, setKelas] = useState(userWhoWantUpdate?.kelas || 'X.E')
     const [nomorKelas, setNomorKelas] = useState(userWhoWantUpdate?.nomorKelas || '')
     const [nomorAbsen, setNomorAbsen] = useState(userWhoWantUpdate?.nomorAbsen || '')
+    const [email, setEmail] = useState('')
     const [isChanged, setIsChanged] = useState(false);
 
     function handleChangeName(e) {
@@ -158,6 +160,10 @@ function AdminUpdateUser({userWhoWantUpdate, setUserWhoWantUpdate, setUsers}) {
             kelas,
             nomorKelas,
             nomorAbsen,
+        }
+
+        if (email) {
+            dataToSend.email = email.trim()
         }
 
         const toast = loadingToast('Memperbarui akun')
@@ -205,6 +211,14 @@ function AdminUpdateUser({userWhoWantUpdate, setUserWhoWantUpdate, setUsers}) {
             <div className="flex flex-col sm:flex-row sm:items-center border-b-[1px] border-solid border-neutral-300 last:border-transparent py-2">
                 <label htmlFor="nomorAbsen" className="sm:w-2/6 font-medium">Nomor Absen</label>
                 <input id="nomorAbsen" className="p-2 rounded shadow w-full sm:flex-1" type="text" value={nomorAbsen} onChange={e => setNomorAbsen(e.target.value)} placeholder="Nomor Absen" autoComplete="off" max={40} />
+            </div>
+
+            <div className="flex flex-col sm:flex-row sm:items-center border-b-[1px] border-solid border-neutral-300 last:border-transparent py-2">
+                <label htmlFor="email" className="sm:w-2/6 font-medium flex flex-col">
+                    <span>Email</span>
+                    <span className="text-sm opacity-75">{userWhoWantUpdate?.email || 'Tidak ada email'}</span>
+                </label>
+                <input id="email" className="p-2 rounded shadow w-full sm:flex-1" type="text" value={email} onChange={e => setEmail(e.target.value)} placeholder='email' autoComplete="off" />
             </div>
 
             <button 
