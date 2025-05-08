@@ -1,5 +1,5 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faClockRotateLeft, faServer, faUserGroup, faCrown, faUser } from '@fortawesome/free-solid-svg-icons'
+import { faClockRotateLeft, faServer, faUserGroup, faCrown, faUser, faMagnifyingGlass, faArrowLeft } from '@fortawesome/free-solid-svg-icons'
 import { Link } from 'react-router-dom'
 import { useCallback, useEffect, useState } from 'react'
 import axios from '../../utils/axios'
@@ -43,25 +43,171 @@ export default function AdminUsers() {
 </div>
 }
 
-function DisplayUsers({users = null, setUsers}) {
+function DisplayUsers({ users = null, setUsers }) {
     const [userWhoWantUpdate, setUserWhoWantUpdate] = useState(null)
+    const [showAllUsers, setShowAllUsers] = useState(false)
+    const [openFindUser, setOpenFindUser] = useState(false)
+    const [searchQuery, setSearchQuery] = useState('')
+    const [manualSearchTriggered, setManualSearchTriggered] = useState(false)
+
     useEffect(() => {
         console.log(users)
     }, [users])
-    
-    return <div className='flex flex-col gap-4'>
-        <div className='flex flex-col gap-2 p-2'>
-            <h3 className='text-xl font-semibold pt-4'>Admin</h3>
-            <p>Setelah seseorang dinaikkan atau diturunkan jabatannya seagai admin, pengguna perlu masuk ulang untuk memperbarui informasi akunnya</p>
-            {users.filter(user => user.peran.find(x => x === "admin")).map((user, i) => <UserRowModel user={user} key={i} users={users} setUsers={setUsers} setUserWhoWantUpdate={setUserWhoWantUpdate}/>).sort((a,b) => a.nama-b.nama)}
+
+    const isAdmin = (user) => user.peran.find(x => x === "admin")
+    const nonAdminUsers = users.filter(user => !isAdmin(user))
+
+    const displayedUsers = showAllUsers ? nonAdminUsers : nonAdminUsers.slice(0, 10)
+
+    const filteredUsers = searchQuery.length >= 3
+        ? nonAdminUsers.filter(user =>
+            user.nama.toLowerCase().includes(searchQuery.toLowerCase())
+        )
+        : manualSearchTriggered
+            ? nonAdminUsers.filter(user =>
+                user.nama.toLowerCase().includes(searchQuery.toLowerCase())
+            )
+            : []
+
+    const handleSearchClick = () => {
+        if (searchQuery.length >= 1) {
+            setManualSearchTriggered(true)
+        }
+    }
+
+    const handleCloseModal = () => {
+        setOpenFindUser(false)
+        setSearchQuery('')
+        setManualSearchTriggered(false)
+    }
+
+    return (
+        <div className='flex flex-col gap-4'>
+            {/* Admin Section */}
+            <div className='flex flex-col gap-2 p-2'>
+                <h3 className='text-xl font-semibold pt-4'>Admin</h3>
+                <p>
+                    Setelah seseorang dinaikkan atau diturunkan jabatannya sebagai admin, pengguna perlu masuk ulang untuk memperbarui informasi akunnya
+                </p>
+                {users
+                    .filter(isAdmin)
+                    .sort((a, b) => a.nama.localeCompare(b.nama))
+                    .map((user, i) => (
+                        <UserRowModel
+                            user={user}
+                            key={`admin-${i}`}
+                            users={users}
+                            setUsers={setUsers}
+                            setUserWhoWantUpdate={setUserWhoWantUpdate}
+                        />
+                    ))}
+            </div>
+
+            {/* Peserta Section */}
+            <div className='flex flex-col gap-2 p-2 pt-4'>
+                <div className='flex items-center justify-between'>
+                    <h3 className='text-xl font-semibold'>Peserta</h3>
+                    <button
+                        className='flex gap-2 items-center justify-center p-2 rounded-xl shadow bg-secondary text-neutral-100 hover:bg-tertiary'
+                        onClick={() => setOpenFindUser(true)}
+                    >
+                        <FontAwesomeIcon icon={faMagnifyingGlass} />
+                        <span>Temukan Pengguna</span>
+                    </button>
+                </div>
+
+                {/* Modal Pencarian */}
+                <Modal isOpen={openFindUser} onClose={handleCloseModal} zIndex={'z-[2]'} className='h-full bg-neutral-100 '>
+                    <div className="flex flex-col gap-4">
+                        <div className="flex gap-2 items-center">
+                            <button
+                                onClick={handleCloseModal}
+                                className="flex items-center p-2 rounded-full text-gray-700"
+                            >
+                                <FontAwesomeIcon icon={faArrowLeft} />
+                            </button>
+                            <input
+                                className="p-2 rounded-xl shadow w-full border-none"
+                                type="text"
+                                placeholder="Nama peserta"
+                                autoComplete="off"
+                                value={searchQuery}
+                                onChange={(e) => {
+                                    const val = e.target.value
+                                    setSearchQuery(val)
+                                    if (val.length >= 3) {
+                                        setManualSearchTriggered(false)
+                                    }
+                                }}
+                            />
+                            {searchQuery.length < 3 && (
+                                <button
+                                    onClick={handleSearchClick}
+                                    className='p-2 px-4 rounded-xl bg-secondary text-white hover:bg-tertiary'
+                                >
+                                    Cari
+                                </button>
+                            )}
+                        </div>
+
+                        <div className="flex flex-col gap-2 max-h-[60vh] overflow-y-auto">
+                            {filteredUsers.length > 0 ? (
+                                filteredUsers.map((user, i) => (
+                                    <UserRowModel
+                                        key={`search-${i}`}
+                                        user={user}
+                                        users={users}
+                                        setUsers={setUsers}
+                                        setUserWhoWantUpdate={setUserWhoWantUpdate}
+                                    />
+                                ))
+                            ) : (
+                                <p className="text-center text-gray-500">
+                                    {searchQuery.length < 3 && !manualSearchTriggered
+                                        ? ''
+                                        : 'Tidak ditemukan pengguna dengan nama tersebut.'}
+                                </p>
+                            )}
+                        </div>
+                    </div>
+                </Modal>
+
+                {/* Daftar Peserta */}
+                {displayedUsers.map((user, i) => (
+                    <UserRowModel
+                        user={user}
+                        key={`user-${i}`}
+                        users={users}
+                        setUsers={setUsers}
+                        setUserWhoWantUpdate={setUserWhoWantUpdate}
+                    />
+                ))}
+
+                {/* Tombol Tampilkan Semua */}
+                {!showAllUsers && nonAdminUsers.length > 10 && (
+                    <div className="flex justify-center items-center mt-2">
+                        <button
+                            onClick={() => setShowAllUsers(true)}
+                            className='text-secondary font-semibold'
+                        >
+                            Tampilkan seluruhnya ({nonAdminUsers.length})
+                        </button>
+                    </div>
+                )}
+            </div>
+
+            {/* Modal Update User */}
+            {userWhoWantUpdate && (
+                <AdminUpdateUser
+                    userWhoWantUpdate={userWhoWantUpdate}
+                    setUserWhoWantUpdate={setUserWhoWantUpdate}
+                    setUsers={setUsers}
+                />
+            )}
         </div>
-        <div className='flex flex-col gap-2 p-2'>
-            <h3 className='text-xl font-semibold pt-4'>Peserta</h3>
-            {users.map((user, i) => <UserRowModel user={user} key={i} users={users} setUsers={setUsers} setUserWhoWantUpdate={setUserWhoWantUpdate}/>)}
-        </div>
-        {userWhoWantUpdate && <AdminUpdateUser userWhoWantUpdate={userWhoWantUpdate} setUserWhoWantUpdate={setUserWhoWantUpdate} setUsers={setUsers}/>}
-    </div>
+    )
 }
+
 
 function UserRowModel({user, setUsers, setUserWhoWantUpdate}) {
     const [isOpenModal, setIsOpenModal] = useState(false)
@@ -104,7 +250,7 @@ function UserRowModel({user, setUsers, setUserWhoWantUpdate}) {
             </div>
         </div>
 
-        <Modal isOpen={isOpenModal} onClose={() => setIsOpenModal(false)} zIndex={'z-[2]'}>
+        <Modal isOpen={isOpenModal} onClose={() => setIsOpenModal(false)} zIndex={'z-[3]'}>
             <Cell prop={'ID'} value={user?._id || ''}/>
             <Cell prop={'Nama'} value={user?.nama || ''}/>
             <Cell prop={'Panggilan'} value={user?.panggilan || ''}/>
@@ -182,7 +328,7 @@ function AdminUpdateUser({userWhoWantUpdate, setUserWhoWantUpdate, setUsers}) {
         }
     }
 
-    return <Modal isOpen={userWhoWantUpdate} onClose={() => setUserWhoWantUpdate(null)} zIndex={'z-[2]'}>
+    return <Modal isOpen={userWhoWantUpdate} onClose={() => setUserWhoWantUpdate(null)} zIndex={'z-[4]'}>
         <form className='flex flex-col gap-2' onSubmit={handleSubmit}>
             <div className="flex flex-col sm:flex-row sm:items-center border-b-[1px] border-solid border-neutral-300 last:border-transparent py-2">
                 <label htmlFor="nama" className="sm:w-2/6 font-medium">Nama</label>
