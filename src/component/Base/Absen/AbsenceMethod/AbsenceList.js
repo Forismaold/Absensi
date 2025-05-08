@@ -1,8 +1,8 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faArrowRightArrowLeft } from '@fortawesome/free-solid-svg-icons'
 import { loadingToast } from "../../../utils/myToast"
-import axios from "axios"
-import { API, isUserWithinBounds } from "../../../../utils"
+import axios from '../../../utils/axios'
+import { isUserWithinBounds } from "../../../../utils"
 import LoadingIcon from '../../../utils/LoadingIcon'
 import { setAbsensi, setShowMap } from '../../../../redux/source'
 import Modal from '../../../utils/Modal'
@@ -169,7 +169,7 @@ export default function AbsenceForm() {
         const promise = loadingToast('Mengirim keterangan tidak hadir')
         setIsLoading(true)
         try {
-            await axios.post(API + '/absen/tidakHadir/' + absensi?._id, dataToSend)
+            await axios.get( '/absen/tidakHadir/' + absensi?._id, dataToSend)
             .then(res => {
                 promise.onSuccess(res.data.msg)
                 handleTidakHadir()
@@ -207,7 +207,7 @@ export default function AbsenceForm() {
         // if (!isUserWithinBounds(userCoordinate)) blankToast('Kamu berada diluar area, pengiriman tetap dilanjutkan')
 
         try {
-            await axios.post(API + '/absen/hadir/' + absensi?._id, dataToSend)
+            await axios.get( '/absen/hadir/' + absensi?._id, dataToSend)
             .then(res => {
                 promise.onSuccess(res.data.msg)
                 setIsLoading(false)

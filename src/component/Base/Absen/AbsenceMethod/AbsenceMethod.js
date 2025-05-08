@@ -1,10 +1,10 @@
 import { useCallback, useEffect, useState } from "react";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faInfo, faArrowRightArrowLeft } from '@fortawesome/free-solid-svg-icons'
-import { API, isUserWithinBounds } from "../../../../utils";
+import { isUserWithinBounds } from "../../../../utils";
 import { useDispatch, useSelector } from "react-redux";
 import { blankToast, loadingToast } from "../../../utils/myToast";
-import axios from "axios";
+import axios from "../../../utils/axios";
 import { setAbsensi, setIsWatchPosition, setShowMap } from "../../../../redux/source";
 import AbsenceForm, { AbsenceStandar, AbsenceWatch } from "./AbsenceList";
 import { InfoAutoSubmit, InfoCommonProblem, InfoManualSubmit, InfoScanSubmit } from "../InfoModals";
@@ -42,7 +42,7 @@ export default function AbsenceMethod() {
         if (!isUserWithinBounds(userCoordinate)) blankToast('Kamu berada diluar area, pengiriman tetap dilanjutkan')
 
         try {
-            await axios.post(API + '/absen/hadir/' + absensi?._id, dataToSend)
+            await axios.get( '/absen/hadir/' + absensi?._id, dataToSend)
             .then(res => {
                 promise.onSuccess(res?.data?.msg)
                 // dispatch(setShowAbsence(false))

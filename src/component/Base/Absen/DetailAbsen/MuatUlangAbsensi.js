@@ -1,8 +1,7 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faRefresh } from "@fortawesome/free-solid-svg-icons"
 import { useCallback, useEffect, useState } from "react"
-import axios from "axios"
-import { API } from "../../../../utils"
+import axios from "../../../utils/axios"
 import { clearAbsensi, setAbsensi } from '../../../../redux/source'
 import { useDispatch, useSelector } from "react-redux"
 import StatusAbsensi from "./StatusAbsensi"
@@ -23,7 +22,7 @@ export default function MuatUlangAbsensi() {
     const fetchData = useCallback(async () => {
         setIsFetchLoading(true)
         try {
-            await axios.get(API + '/absensi/' + param.absenceId)
+            await axios.get( '/absensi/' + param.absenceId)
             .then(res => {
                 dispatch(setAbsensi(res.data.data))
             }).catch(err => {

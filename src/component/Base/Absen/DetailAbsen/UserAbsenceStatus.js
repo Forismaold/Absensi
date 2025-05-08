@@ -12,7 +12,7 @@ export default function UserAbsenceStatus() {
     // const fetchStatus = useCallback(async () => {
     //     setIsFetchLoading(true)
     //     try {
-    //         await axios.get(API + '/absen/status/' + account?._id)
+    //         await axios.get( '/absen/status/' + account?._id)
     //         .then(res => {
     //             dispatch(setStatus(res.data.status))
     //             dispatch(setAbsensi(res.data.absensi))

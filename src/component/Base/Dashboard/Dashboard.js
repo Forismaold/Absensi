@@ -1,8 +1,8 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCheck, faCheckDouble, faMinus, faRotate, faXmark } from '@fortawesome/free-solid-svg-icons'
-import axios from "axios"
+import axios from '../../utils/axios'
 import { useCallback, useEffect, useState } from "react"
-import { API, formatDate, isUserWithinBounds } from "../../../utils"
+import { formatDate, isUserWithinBounds } from "../../../utils"
 import { useSelector } from "react-redux"
 import { Link } from "react-router-dom"
 
@@ -15,7 +15,7 @@ export default function Dahsboard() {
     const fetchRiwayats = useCallback(async () => {
         setIsLoading(true)
         try {
-            await axios.get(API+'/riwayats/' + account?._id)
+            await axios.get('/riwayats/' + account?._id)
             .then(res => {
                 setRiwayats(res.data.riwayats)
             })

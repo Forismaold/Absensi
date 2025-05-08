@@ -4,8 +4,8 @@ import { useEffect, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import Modal, { Confirm } from '../../utils/Modal'
 import { GoogleOAuthProvider, GoogleLogin } from '@react-oauth/google'
-import { API, decryptObject, setLocalStorage } from '../../../utils'
-import axios from 'axios'
+import { decryptObject, setLocalStorage } from '../../../utils'
+import axios from '../../utils/axios'
 import { refreshAccount } from '../../../redux/source'
 import { loadingToast } from '../../utils/myToast'
 import Auth from './Auth'
@@ -121,7 +121,7 @@ function ProfileEditor({closeEditor}) {
 
         const promise = loadingToast('Memperbarui akun')
         try {
-            await axios.put(API + '/akun/' + account._id, dataToSend)
+            await axios.get( '/akun/' + account._id, dataToSend)
             .then(res => {
                 setLocalStorage('account', res.data.user)
                 dispatch(refreshAccount())
@@ -212,7 +212,7 @@ function TautkanDenganGoogle() {
     async function handleSuccess(credential) {
         const promise = loadingToast('Menautkan dengan Google')
         try {
-            await axios.post(API + '/akun/bind/google', {
+            await axios.get( '/akun/bind/google', {
                 ...credential, _id: user._id
             }).then(res => {
                 setLocalStorage('account', res.data.user)

@@ -1,8 +1,8 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faChevronDown, faChevronRight, faEllipsisH, faUser } from '@fortawesome/free-solid-svg-icons'
 import { useNavigate } from 'react-router-dom'
-import { API, setLocalStorage } from "../../../utils"
-import axios from "axios"
+import { setLocalStorage } from "../../../utils"
+import axios from '../../utils/axios'
 import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { refreshAccount } from '../../../redux/source'
@@ -60,7 +60,7 @@ function RegisterForm() {
 
         const promise = loadingToast('Membuat akun')
         try {
-            await axios.post(API + '/akun/daftar', dataToSend)
+            await axios.get( '/akun/daftar', dataToSend)
             .then(res => {
                 setLocalStorage('account', res.data.user)
                 dispatch(refreshAccount())

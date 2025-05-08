@@ -1,11 +1,12 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faRefresh } from '@fortawesome/free-solid-svg-icons'
 import { useCallback, useEffect, useState } from 'react'
-import axios from 'axios'
-import { API, formatBeautyDate } from '../../../utils'
+import axios from '../../utils/axios'
+import { formatBeautyDate } from '../../../utils'
 import { Route, Routes, useNavigate } from 'react-router-dom'
 import DetailAbsen from './DetailAbsen/DetailAbsen'
 import { useSelector } from 'react-redux'
+import { blankToast } from '../../utils/myToast'
 
 export default function Absen() {
     return <div className={'flex flex-col gap-2'}>
@@ -29,12 +30,13 @@ function ListAbsen() {
     const fetchData = useCallback(async () => {
         setIsLoading(true)
         try {
-            await axios.get(API + '/absensi/short')
+            await axios.get( '/absensi/short')
             .then(res => {
                 setList(res.data.data)
                 console.log(res.data.data)
             }).catch(err => {
                 console.log(err);
+                blankToast('Tidak dapat memuat list absensi')
             })
         } catch (error) {
             

@@ -2,9 +2,9 @@ import { faQuestion, faXmark } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useCallback, useState } from "react";
 import { QrScanner } from "react-qrcode-scanner";
-import { API, decryptObject, formatBeautyDate } from "../../../utils";
+import { decryptObject, formatBeautyDate } from "../../../utils";
 import LoadingIcon from "../../utils/LoadingIcon";
-import axios from "axios";
+import axios from "../../utils/axios";
 import { loadingToast } from "../../utils/myToast";
 import { useDispatch, useSelector } from "react-redux";
 import { InfoGoldenQr } from "../Absen/InfoModals";
@@ -79,7 +79,7 @@ function SubmitScan({absensi, setParentAbsensi}) {
         }
         const promise = loadingToast('Mengirim absen dengan Golden QR...')
         try {
-            await axios.put(API + '/absen/force/hadir/' + absensi?.id, dataToSend)
+            await axios.get( '/absen/force/hadir/' + absensi?.id, dataToSend)
             .then(res => {
                 promise.onSuccess("terimakasih sudah absen sobat", 30000)
                 setParentAbsensi(null)

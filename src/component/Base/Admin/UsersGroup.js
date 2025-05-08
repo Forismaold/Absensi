@@ -25,7 +25,7 @@
 //     function setUserInBounds() {
 //         setIsLoading(true)
 //         try {
-//             axios.put(API + '/absen/force/hadir/' + absenceData._id, {koordinat: getCenterCoordinates(absenceData?.coordinates), userId: data._id})
+//             axios.get( '/absen/force/hadir/' + absenceData._id, {koordinat: getCenterCoordinates(absenceData?.coordinates), userId: data._id})
 //             .then(res => {
 //                 if (res.data.success) {
 //                     setMsg('berhasil diperbarui')

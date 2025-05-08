@@ -1,13 +1,12 @@
-import axios from "axios";
+import axios from "./axios";
 import { loadingToast } from "./myToast"
-import { API } from "../../utils";
 
 
 export default function ButtonSendText({text = 'Hello'}) {
     async function SendSomething() {
         const promise = loadingToast()
         try {
-            await axios.post(API + '/test', {text: text})
+            await axios.get( '/test', {text: text})
             .then(res => {
                 console.log(res.data);
                 promise.onSuccess()
@@ -26,7 +25,7 @@ export function ButtonGet({route}) {
     async function SendSomething() {
         const promise = loadingToast()
         try {
-            await axios.get(API + route)
+            await axios.get( route)
             .then(res => {
                 console.log(res.data)
                 promise.onSuccess()

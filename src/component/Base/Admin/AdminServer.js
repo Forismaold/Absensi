@@ -1,8 +1,8 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faClockRotateLeft, faPlus, faRefresh, faSearch, faServer, faUserGroup, faChevronDown, faChevronRight } from '@fortawesome/free-solid-svg-icons'
 import { useSelector } from "react-redux"
-import { API, getPermission } from "../../../utils"
-import axios from "axios"
+import { getPermission } from "../../../utils"
+import axios from '../../utils/axios'
 import { loadingToast } from '../../utils/myToast'
 import { useCallback, useEffect, useState } from 'react'
 import { Link, Route, Routes, useNavigate, useSearchParams } from 'react-router-dom'
@@ -54,7 +54,7 @@ function DetailAbsence() {
 
     const fetchData = useCallback(async () => {
         try {
-            await axios.get(API + '/absensi/detail/' + searchParams.get('q'))
+            await axios.get( '/absensi/detail/' + searchParams.get('q'))
             .then(res => {
                 setIsLoading(false)
                 setAbsensi(res.data.data)
@@ -118,7 +118,7 @@ function ManageAbsence() {
         setIsLoading(true)
         setFetchError(false)
         try {
-            await axios.get(API + '/absensi').then(res => {
+            await axios.get( '/absensi').then(res => {
                 setAbsenceList(res.data.data)
             }).catch(err => {
                 throw new Error(err)
@@ -134,7 +134,7 @@ function ManageAbsence() {
     async function createAbsence(title, note, coordinates) {
         const promise = loadingToast('Membuat absensi baru')
         try {
-            await axios.post(API + '/absensi', {
+            await axios.get( '/absensi', {
                 title,
                 note,
                 coordinates,

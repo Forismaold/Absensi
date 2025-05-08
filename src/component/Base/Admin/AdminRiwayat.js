@@ -1,8 +1,8 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faClockRotateLeft, faRotate, faServer, faEllipsisV, faTrash, faTable, faUserGroup } from '@fortawesome/free-solid-svg-icons'
 import { useCallback, useEffect, useState } from "react"
-import axios from "axios"
-import { API, formatBeautyDate, formatDate, getPermission, isUserWithinBoundsCSV } from "../../../utils"
+import axios from '../../utils/axios'
+import { formatBeautyDate, formatDate, getPermission, isUserWithinBoundsCSV } from "../../../utils"
 import LoadingIcon from '../../utils/LoadingIcon'
 import { Link } from 'react-router-dom'
 import Modal, { Confirm } from '../../utils/Modal'
@@ -23,7 +23,7 @@ export default function AdminRiwayat() {
     const fetchRiwayats = useCallback(async () => {
         setIsLoading(true)
         try {
-            await axios.get(API+'/riwayats/all')
+            await axios.get('/riwayats/all')
             .then(res => {
                 setRiwayats(res.data.riwayats)
                 console.log(res.data)
@@ -75,7 +75,7 @@ function RiwayatControlDashboard({riwayat, setRiwayats}) {
     async function deleteRiwayat() {
         const promise = loadingToast('Menghapus Riwayat')
         try {
-            await axios.delete(API+'/riwayats/'+riwayat._id)
+            await axios.get('/riwayats/'+riwayat._id)
             .then(res => {
                 setShowDeleteConfirm(false)
                 setShowOption(false)
@@ -147,7 +147,7 @@ function DownloadCSVButton({onClose, riwayat}) {
     async function handleDownload() {
         let usersWithTicketsAndTheTickets = []
         try {
-            await axios.get(API + '/users/all').then(res => {
+            await axios.get( '/users/all').then(res => {
                 const users = res.data
                 usersWithTicketsAndTheTickets = riwayat.tickets.map(ticket => {
                     const getUser = users.find(u => u._id === ticket.user?._id);

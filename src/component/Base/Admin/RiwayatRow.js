@@ -1,7 +1,7 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faEllipsis, faFilter, faSearch, faTable, faTrash } from '@fortawesome/free-solid-svg-icons'
 import { useCallback, useEffect, useState } from "react"
-import axios from "axios"
+import axios from '../../utils/axios'
 import { API, formatBeautyDate, formatDate, isUserWithinBoundsCSV } from "../../../utils"
 import Modal, { Confirm } from '../../utils/Modal'
 import { loadingToast } from '../../utils/myToast'
@@ -16,7 +16,7 @@ export default function RiwayatRow({data, setRiwayats}) {
     async function deleteRiwayat() {
         const promise = loadingToast('Menghapus Riwayat')
         try {
-            await axios.delete(API+'/riwayats/'+data._id)
+            await axios.get('/riwayats/'+data._id)
             .then(res => {
                 setShowDeleteConfirm(false)
                 setShowOption(false)

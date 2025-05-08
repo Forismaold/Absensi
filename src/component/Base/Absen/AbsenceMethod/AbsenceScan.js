@@ -3,10 +3,10 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useCallback, useState } from 'react'
 import {QrScanner} from "react-qrcode-scanner";
 import { InfoScanSubmit } from '../InfoModals';
-import { API, decryptObject, getCenterCoordinates, isUserWithinBounds } from '../../../../utils';
+import { decryptObject, getCenterCoordinates, isUserWithinBounds } from '../../../../utils';
 import { useSelector } from 'react-redux';
 import { loadingToast } from '../../../utils/myToast';
-import axios from 'axios';
+import axios from '../../../utils/axios';
 import LoadingIcon from '../../../utils/LoadingIcon';
 
 
@@ -63,7 +63,7 @@ function SubmitScan({qrAccount, setQrAccount}) {
         if (account.peran.includes('admin')) {
             const promise = loadingToast('Melakukan absensi sebagai admin')
             try {
-                await axios.post(API + '/absen/hadir/' + absensi?._id, dataToSend)
+                await axios.get( '/absen/hadir/' + absensi?._id, dataToSend)
                 .then(res => {
                     promise.onSuccess(res?.data?.msg)
                     setQrAccount(null)
@@ -94,7 +94,7 @@ function SubmitScan({qrAccount, setQrAccount}) {
                         promise.updateText('Mengirim absen teman')
                 
                         try {
-                            await axios.post(API + '/absen/hadir/' + absensi?._id, dataToSend)
+                            await axios.get( '/absen/hadir/' + absensi?._id, dataToSend)
                             .then(res => {
                                 promise.onSuccess(res?.data?.msg)
                                 setQrAccount(null)

@@ -2,8 +2,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faClockRotateLeft, faServer, faUserGroup, faCrown, faUser } from '@fortawesome/free-solid-svg-icons'
 import { Link } from 'react-router-dom'
 import { useCallback, useEffect, useState } from 'react'
-import { API } from '../../../utils'
-import axios from 'axios'
+import axios from '../../utils/axios'
 import Cell from '../../utils/Cell'
 import Modal from '../../utils/Modal'
 import { loadingToast } from '../../utils/myToast'
@@ -12,7 +11,7 @@ export default function AdminUsers() {
     const [users, setUsers] = useState(null)
     const fetchData = useCallback(async () => {
         try {
-            await axios.get(API + '/users/adminGetAll')
+            await axios.get( '/users/adminGetAll')
             .then(res => {
                 setUsers(res.data)
                 console.log(res.data)
@@ -80,7 +79,7 @@ function UserRowModel({user, setUsers, setUserWhoWantUpdate}) {
     async function admin() {
         setIsFetchLoading(true)
         const toast = loadingToast()
-        axios.put(API+`/akun/${isAdmin?'deop':'op'}/${user._id}`)
+        axios.put(`/akun/${isAdmin?'deop':'op'}/${user._id}`)
         .then(res => {
             toast.onSuccess(`Berhasil merubah pangkat`)
             setIsOpenModal(false)
@@ -168,7 +167,7 @@ function AdminUpdateUser({userWhoWantUpdate, setUserWhoWantUpdate, setUsers}) {
 
         const toast = loadingToast('Memperbarui akun')
         try {
-            await axios.put(API + '/akun/' + userWhoWantUpdate._id, dataToSend, {params: {alsoreturnallusers: true}})
+            await axios.get( '/akun/' + userWhoWantUpdate._id, dataToSend, {params: {alsoreturnallusers: true}})
             .then(res => {
                 toast.onSuccess(`Berhasil memperbarui akun`)
                 setUsers(res.data.users)
@@ -261,7 +260,7 @@ function AdminUpdateUser({userWhoWantUpdate, setUserWhoWantUpdate, setUsers}) {
 
 //         const promise = loadingToast('Memperbarui akun')
 //         try {
-//             await axios.put(API + '/akun/' + account._id, dataToSend)
+//             await axios.get( '/akun/' + account._id, dataToSend)
 //             .then(res => {
 //                 setLocalStorage('account', res.data.user)
 //                 dispatch(refreshAccount())

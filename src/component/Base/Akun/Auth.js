@@ -3,8 +3,8 @@
 // import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { GoogleLogin, GoogleOAuthProvider } from "@react-oauth/google";
 import { blankToast, loadingToast } from "../../utils/myToast";
-import axios from "axios";
-import { API, decryptObject, setLocalStorage } from "../../../utils";
+import axios from "../../utils/axios";
+import { decryptObject, setLocalStorage } from "../../../utils";
 import { useDispatch } from "react-redux";
 import { refreshAccount } from "../../../redux/source";
 import { useNavigate } from "react-router-dom";
@@ -21,7 +21,7 @@ export default function Auth() {
     async function handleSuccess(credential) {
         const promise = loadingToast('Mencari akun')
         try {
-            await axios.post(API + '/akun/login/google', {...credential})
+            await axios.get( '/akun/login/google', {...credential})
             .then(res => {
                 const userInfo = decryptObject(res.data.user)
                 setLocalStorage('account', res.data.user)
@@ -71,7 +71,7 @@ export default function Auth() {
 
         const promise = loadingToast('Membuat akun')
         try {
-            await axios.post(API + '/akun/register/google', dataToSend)
+            await axios.get( '/akun/register/google', dataToSend)
             .then(res => {
                 setLocalStorage('account', res.data.user)
                 dispatch(refreshAccount())
