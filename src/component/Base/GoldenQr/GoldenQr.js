@@ -79,7 +79,7 @@ function SubmitScan({absensi, setParentAbsensi}) {
         }
         const promise = loadingToast('Mengirim absen dengan Golden QR...')
         try {
-            await axios.get( '/absen/force/hadir/' + absensi?.id, dataToSend)
+            await axios.put('/absen/force/hadir/' + absensi?.id, dataToSend)
             .then(res => {
                 promise.onSuccess("terimakasih sudah absen sobat", 30000)
                 setParentAbsensi(null)

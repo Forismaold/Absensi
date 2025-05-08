@@ -63,7 +63,7 @@ function SubmitScan({qrAccount, setQrAccount}) {
         if (account.peran.includes('admin')) {
             const promise = loadingToast('Melakukan absensi sebagai admin')
             try {
-                await axios.get( '/absen/hadir/' + absensi?._id, dataToSend)
+                await axios.post('/absen/hadir/' + absensi?._id, dataToSend)
                 .then(res => {
                     promise.onSuccess(res?.data?.msg)
                     setQrAccount(null)
@@ -94,7 +94,7 @@ function SubmitScan({qrAccount, setQrAccount}) {
                         promise.updateText('Mengirim absen teman')
                 
                         try {
-                            await axios.get( '/absen/hadir/' + absensi?._id, dataToSend)
+                            await axios.post('/absen/hadir/' + absensi?._id, dataToSend)
                             .then(res => {
                                 promise.onSuccess(res?.data?.msg)
                                 setQrAccount(null)

@@ -54,7 +54,7 @@ function DetailAbsence() {
 
     const fetchData = useCallback(async () => {
         try {
-            await axios.get( '/absensi/detail/' + searchParams.get('q'))
+            await axios.get('/absensi/detail/' + searchParams.get('q'))
             .then(res => {
                 setIsLoading(false)
                 setAbsensi(res.data.data)
@@ -118,7 +118,7 @@ function ManageAbsence() {
         setIsLoading(true)
         setFetchError(false)
         try {
-            await axios.get( '/absensi').then(res => {
+            await axios.get('/absensi').then(res => {
                 setAbsenceList(res.data.data)
             }).catch(err => {
                 throw new Error(err)
@@ -134,7 +134,7 @@ function ManageAbsence() {
     async function createAbsence(title, note, coordinates) {
         const promise = loadingToast('Membuat absensi baru')
         try {
-            await axios.get( '/absensi', {
+            await axios.post('/absensi', {
                 title,
                 note,
                 coordinates,

@@ -42,7 +42,7 @@ export default function AbsenceMethod() {
         if (!isUserWithinBounds(userCoordinate)) blankToast('Kamu berada diluar area, pengiriman tetap dilanjutkan')
 
         try {
-            await axios.get( '/absen/hadir/' + absensi?._id, dataToSend)
+            await axios.post('/absen/hadir/' + absensi?._id, dataToSend)
             .then(res => {
                 promise.onSuccess(res?.data?.msg)
                 // dispatch(setShowAbsence(false))

@@ -169,7 +169,7 @@ export default function AbsenceForm() {
         const promise = loadingToast('Mengirim keterangan tidak hadir')
         setIsLoading(true)
         try {
-            await axios.get( '/absen/tidakHadir/' + absensi?._id, dataToSend)
+            await axios.post('/absen/tidakHadir/' + absensi?._id, dataToSend)
             .then(res => {
                 promise.onSuccess(res.data.msg)
                 handleTidakHadir()
@@ -207,7 +207,7 @@ export default function AbsenceForm() {
         // if (!isUserWithinBounds(userCoordinate)) blankToast('Kamu berada diluar area, pengiriman tetap dilanjutkan')
 
         try {
-            await axios.get( '/absen/hadir/' + absensi?._id, dataToSend)
+            await axios.post('/absen/hadir/' + absensi?._id, dataToSend)
             .then(res => {
                 promise.onSuccess(res.data.msg)
                 setIsLoading(false)

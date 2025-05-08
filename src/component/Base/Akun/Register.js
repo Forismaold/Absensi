@@ -60,7 +60,7 @@ function RegisterForm() {
 
         const promise = loadingToast('Membuat akun')
         try {
-            await axios.get( '/akun/daftar', dataToSend)
+            await axios.post('/akun/daftar', dataToSend)
             .then(res => {
                 setLocalStorage('account', res.data.user)
                 dispatch(refreshAccount())

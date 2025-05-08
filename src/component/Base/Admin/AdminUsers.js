@@ -11,7 +11,7 @@ export default function AdminUsers() {
     const [users, setUsers] = useState(null)
     const fetchData = useCallback(async () => {
         try {
-            await axios.get( '/users/adminGetAll')
+            await axios.get('/users/adminGetAll')
             .then(res => {
                 setUsers(res.data)
                 console.log(res.data)
@@ -167,7 +167,7 @@ function AdminUpdateUser({userWhoWantUpdate, setUserWhoWantUpdate, setUsers}) {
 
         const toast = loadingToast('Memperbarui akun')
         try {
-            await axios.get( '/akun/' + userWhoWantUpdate._id, dataToSend, {params: {alsoreturnallusers: true}})
+            await axios.put('/akun/' + userWhoWantUpdate._id, dataToSend, {params: {alsoreturnallusers: true}})
             .then(res => {
                 toast.onSuccess(`Berhasil memperbarui akun`)
                 setUsers(res.data.users)

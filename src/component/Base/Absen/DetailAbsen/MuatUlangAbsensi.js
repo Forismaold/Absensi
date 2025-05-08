@@ -22,7 +22,7 @@ export default function MuatUlangAbsensi() {
     const fetchData = useCallback(async () => {
         setIsFetchLoading(true)
         try {
-            await axios.get( '/absensi/' + param.absenceId)
+            await axios.get('/absensi/' + param.absenceId)
             .then(res => {
                 dispatch(setAbsensi(res.data.data))
             }).catch(err => {

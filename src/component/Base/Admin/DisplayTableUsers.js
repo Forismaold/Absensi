@@ -43,7 +43,7 @@ export default function DisplayTableUsers({usersTicket, absensi}) {
         setIsFetch(true)
         try {
             let path = selectedClass !== 'semua' ? `/users/class/${selectedClass?.split('-')?.join('/')}` : `/absensi/users/${absensi?._id || ''}`
-            await axios.get( path)
+            await axios.get(path)
             .then(res => {
                 // const userSorted = res.data.sort((a,b) => a.nomorAbsen - b.nomorAbsen)
                 const userSorted = res.data.filter((user, index, self) =>
@@ -102,7 +102,7 @@ function UserRowModel({data, tickets, absensiData}) {
     function setUserInBounds() {
         setIsLoading(true)
         try {
-            axios.get( '/absen/force/hadir/' + absensi._id, {koordinat: getCenterCoordinates(absensi?.coordinates), user: data._id})
+            axios.put('/absen/force/hadir/' + absensi._id, {koordinat: getCenterCoordinates(absensi?.coordinates), user: data._id})
             .then(res => {
                 if (res.data.success) {
                     setMsg('berhasil diperbarui')

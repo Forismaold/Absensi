@@ -31,7 +31,7 @@ export default function TombolAksiAbsensi({ item, callbackList = () => {}, lite 
     async function bukaAbsensi() {
         const promise = loadingToast('Membuka absensi')
         try {
-            await axios.get( '/absensi/buka/' + absensi?._id, {status: absensi.status})
+            await axios.post('/absensi/buka/' + absensi?._id, {status: absensi.status})
             .then(res => {
                 promise.onSuccess(res.data.msg)
                 callbackList(res.data?.list || null)
@@ -48,7 +48,7 @@ export default function TombolAksiAbsensi({ item, callbackList = () => {}, lite 
     async function editAbsensi(title, note, coordinates) {
         const promise = loadingToast('Mengedit Absensi')
         try {
-            await axios.get( '/absensi/' + absensi?._id, {title, note, coordinates, openedBy: account?.panggilan || account.nama})
+            await axios.put('/absensi/' + absensi?._id, {title, note, coordinates, openedBy: account?.panggilan || account.nama})
             .then(res => {
                 promise.onSuccess(res.data.msg)
                 setOpenEdit(false)
@@ -67,7 +67,7 @@ export default function TombolAksiAbsensi({ item, callbackList = () => {}, lite 
     async function saveAbsensi() {
         const promise = loadingToast('Menutup absensi')
         try {
-            await axios.get( '/absensi/simpan/' + absensi?._id, {status: absensi.status, closedBy: account?.nama})
+            await axios.post('/absensi/simpan/' + absensi?._id, {status: absensi.status, closedBy: account?.nama})
             .then(res => {
                 setShowSaveConfirm(false)
                 setAbsensi(null)
@@ -84,7 +84,7 @@ export default function TombolAksiAbsensi({ item, callbackList = () => {}, lite 
     async function tutupAbsensi() {
         const promise = loadingToast('Menutup absensi')
         try {
-            await axios.get( '/absensi/tutup/' + absensi?._id, { closedBy: account?.nama, status: absensi?.status })
+            await axios.post('/absensi/tutup/' + absensi?._id, { closedBy: account?.nama, status: absensi?.status })
             .then(res => {
                 promise.onSuccess(res.data.msg)
                 callbackList(res.data?.list || null)
@@ -103,7 +103,7 @@ export default function TombolAksiAbsensi({ item, callbackList = () => {}, lite 
     async function buangAbsensi() {
         const promise = loadingToast('Membuang absensi')
         try {
-            await axios.get( '/absensi/buang/' + absensi?._id)
+            await axios.delete('/absensi/buang/' + absensi?._id)
             .then(res => {
                 promise.onSuccess('Absensi berhasil dihapus')
                 setShowBuangConfirm(false)

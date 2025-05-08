@@ -21,7 +21,7 @@ export default function Auth() {
     async function handleSuccess(credential) {
         const promise = loadingToast('Mencari akun')
         try {
-            await axios.get( '/akun/login/google', {...credential})
+            await axios.post('/akun/login/google', {...credential})
             .then(res => {
                 const userInfo = decryptObject(res.data.user)
                 setLocalStorage('account', res.data.user)
@@ -71,7 +71,7 @@ export default function Auth() {
 
         const promise = loadingToast('Membuat akun')
         try {
-            await axios.get( '/akun/register/google', dataToSend)
+            await axios.post('/akun/register/google', dataToSend)
             .then(res => {
                 setLocalStorage('account', res.data.user)
                 dispatch(refreshAccount())

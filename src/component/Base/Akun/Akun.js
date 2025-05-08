@@ -121,7 +121,7 @@ function ProfileEditor({closeEditor}) {
 
         const promise = loadingToast('Memperbarui akun')
         try {
-            await axios.get( '/akun/' + account._id, dataToSend)
+            await axios.put('/akun/' + account._id, dataToSend)
             .then(res => {
                 setLocalStorage('account', res.data.user)
                 dispatch(refreshAccount())
@@ -212,7 +212,7 @@ function TautkanDenganGoogle() {
     async function handleSuccess(credential) {
         const promise = loadingToast('Menautkan dengan Google')
         try {
-            await axios.get( '/akun/bind/google', {
+            await axios.post('/akun/bind/google', {
                 ...credential, _id: user._id
             }).then(res => {
                 setLocalStorage('account', res.data.user)

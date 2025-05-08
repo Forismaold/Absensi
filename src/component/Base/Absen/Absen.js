@@ -30,7 +30,7 @@ function ListAbsen() {
     const fetchData = useCallback(async () => {
         setIsLoading(true)
         try {
-            await axios.get( '/absensi/short')
+            await axios.get('/absensi/short')
             .then(res => {
                 setList(res.data.data)
                 console.log(res.data.data)

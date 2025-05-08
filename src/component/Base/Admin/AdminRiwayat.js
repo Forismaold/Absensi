@@ -147,7 +147,7 @@ function DownloadCSVButton({onClose, riwayat}) {
     async function handleDownload() {
         let usersWithTicketsAndTheTickets = []
         try {
-            await axios.get( '/users/all').then(res => {
+            await axios.get('/users/all').then(res => {
                 const users = res.data
                 usersWithTicketsAndTheTickets = riwayat.tickets.map(ticket => {
                     const getUser = users.find(u => u._id === ticket.user?._id);

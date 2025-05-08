@@ -1,3 +1,4 @@
+// no longer used
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faKey, faUser } from '@fortawesome/free-solid-svg-icons'
 import { useNavigate } from 'react-router-dom'
@@ -45,7 +46,7 @@ function LoginForm() {
         if (!isRecaptchaVerified) return toast.error('Silakan lengkapi reCAPTCHA')
         const promise = loadingToast('Mencari akun')
         try {
-            await axios.get( '/akun/login/form', {nama: nama.trim(), password})
+            await axios.post('/akun/login/form', {nama: nama.trim(), password})
             .then(res => {
                 setLocalStorage('account', res.data.user)
                 dispatch(refreshAccount())
@@ -96,7 +97,7 @@ function GoogleLoginButton() {
     async function handleSuccess(credential) {
         const promise = loadingToast('Mencari akun')
         try {
-            await axios.get( '/akun/login/google', {...credential})
+            await axios.post('/akun/login/google', {...credential})
             .then(res => {
                 setLocalStorage('account', res.data.user)
                 dispatch(refreshAccount())
