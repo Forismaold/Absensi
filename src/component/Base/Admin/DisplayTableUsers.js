@@ -31,12 +31,16 @@ export default function DisplayTableUsers({usersTicket, absensi}) {
     const [groupKelas, setGroupKelas] = useState(null)
 
     function changeSelectedClass(item) {
-        if (isFetch) {
+        if (isFetch || selectedClass === item) {
             return
         }
         setUsers(null)
         setSelectedClass(item)
     }
+
+    useEffect(() => {
+        console.log('use effect', selectedClass)
+    }, [selectedClass])
 
     const fetchData = useCallback(async() => {
         if (!selectedClass) return
@@ -78,10 +82,13 @@ export default function DisplayTableUsers({usersTicket, absensi}) {
 
     return <div className="flex flex-col gap-2">
         <div className="flex flex-wrap gap-2">
-            <div className={`p-2 cursor-pointer click-animation border-b-2 ${!selectedClass && 'border-secondary text-secondary bg-quaternary'}`} onClick={()=>changeSelectedClass(null)}><FontAwesomeIcon icon={faCircleXmark}/></div>
+            <div className={`flex items-center justify-center p-2 cursor-pointer click-animation border-b-2 ${!selectedClass && 'border-secondary text-secondary bg-quaternary'}`} onClick={()=>changeSelectedClass(null)}><FontAwesomeIcon icon={faCircleXmark}/></div>
             <div className={`p-2 cursor-pointer click-animation border-b-2 ${selectedClass === 'semua' && 'border-secondary text-secondary bg-quaternary'}`} onClick={()=>changeSelectedClass('semua')}>semua</div>
             {classList.filter(x => absensi.allowedGrades.includes(x.classNumberRank)).map((item, i) => Array.from({ length: item.classCount }, (_, index) => (
-                    <div key={index + 1} className={`p-2 cursor-pointer click-animation border-b-2 ${selectedClass === `${item.classNumberRank}-${index + 1}` && 'border-secondary text-secondary bg-quaternary'} ${isFetch && 'opacity-50'}`} onClick={()=>changeSelectedClass(`${item.classNumberRank}-${index + 1}`)}>{`${item.classNumberRank}-${index + 1}${groupKelas && groupKelas[`${item.classNumberRank}-${index + 1}`] ? ` (${groupKelas[`${item.classNumberRank}-${index + 1}`]})` : ''}`}</div>
+                    <div key={index + 1} className={`p-2 cursor-pointer click-animation border-b-2 ${selectedClass === `${item.classNumberRank}-${index + 1}` && 'border-secondary text-secondary bg-quaternary'} ${isFetch && 'opacity-50'}`} onClick={()=>{
+                        console.log('clicked', `${item.classNumberRank}-${index + 1}`)
+                        changeSelectedClass(`${item.classNumberRank}-${index + 1}`)
+                    }}>{`${item.classNumberRank}-${index + 1}${groupKelas && groupKelas[`${item.classNumberRank}-${index + 1}`] ? ` (${groupKelas[`${item.classNumberRank}-${index + 1}`]})` : ''}`}</div>
                 ))
             )}
         </div>

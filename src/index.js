@@ -10,6 +10,7 @@ import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import './styles/index.css'
 import './styles/toastyCostum.css'
+import 'react-tooltip/dist/react-tooltip.css'
 
 
 const root = createRoot(document.getElementById('root'))

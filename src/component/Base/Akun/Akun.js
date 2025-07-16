@@ -50,17 +50,19 @@ function Profile() {
     const akun = useSelector(state => state.source.account)
     const [bioData, setBioData] = useState([
         { prop: 'Nama', value: akun.nama },
-        { prop: 'Panggilan', value: akun.panggilan },
-        { prop: 'Kelas', value: `${akun.kelas}-${akun.nomorKelas}` },
-        { prop: 'Nomor Absen', value: akun.nomorAbsen },
-        { prop: 'Agama', value: akun.agama },
-        { prop: 'Jenis Kelamin', value: akun.jenisKelamin },
+            { prop: 'Panggilan', value: akun.panggilan },
+            { prop: 'Id', value: akun._id },
+            { prop: 'Kelas', value: `${akun.kelas}-${akun.nomorKelas}` },
+            { prop: 'Nomor Absen', value: akun.nomorAbsen },
+            { prop: 'Agama', value: akun.agama },
+            { prop: 'Jenis Kelamin', value: akun.jenisKelamin },
     ])
     const [editorMode, setEditorMode] = useState(false)
     useEffect(() => {
         setBioData([
             { prop: 'Nama', value: akun.nama },
             { prop: 'Panggilan', value: akun.panggilan },
+            { prop: 'Id', value: akun._id },
             { prop: 'Kelas', value: `${akun.kelas}-${akun.nomorKelas}` },
             { prop: 'Nomor Absen', value: akun.nomorAbsen },
             { prop: 'Agama', value: akun.agama },
@@ -71,7 +73,7 @@ function Profile() {
         <div className="flex flex-col sm:flex-row shadow-md rounded-2xl p-2 items-center gap-2 bg-primary py-6 shadow-primary/50 m-2 ">
             <img src={akun.avatar} alt={akun.nama} className="h-24 w-24 shadow rounded-full mx-6" referrerPolicy="no-referrer"/>
             <div className="flex flex-col p-2 justify-center font-medium text-neutral-700 items-center sm:items-start">
-                <p className='break-all text-neutral-200'>{akun.nama_panggilan||akun.nama}<span>#{akun.NIS||akun._id}</span></p>
+                <p className='break-all text-neutral-200'>{akun.nama} {akun?.panggilan && `(${akun.panggilan})`}</p>
                 <div>{akun?.peran?.map(x => (
                     <span key={x} className="px-2 rounded-full bg-tertiary text-neutral-500 text-sm">{x}</span>
                 ))}</div>

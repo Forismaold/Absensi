@@ -61,9 +61,8 @@ export default function AdminRiwayat() {
         </div>
         <button className='flex gap-2 items-center self-end justify-center rounded text-neutral-100 bg-secondary p-2 shadow-lg shadow-primary/50 click-animation' onClick={() => fetchRiwayats()}>{isLoading?<LoadingIcon/>:<FontAwesomeIcon icon={faRotate} className='p-0.5'/>} Segarkan riwayat</button>
         <div className="flex flex-col gap-2">
-            {riwayats?.length === 0 && <span className='text-center'>Tidak ada riwayat</span>}
+            {riwayats?.length === 0 ? <span className='text-center'>Tidak ada riwayat</span> : riwayats?.map(x => <RiwayatControlDashboard riwayat={x} key={x._id} setRiwayats={setRiwayats}/>)}
             {/* {riwayats?.map(x => <RiwayatRow data={x} key={x._id} setRiwayats={setRiwayats}/>)} */}
-            {riwayats?.map(x => <RiwayatControlDashboard riwayat={x} key={x._id} setRiwayats={setRiwayats}/>)}
         </div>
     </div>
 }
@@ -75,7 +74,8 @@ function RiwayatControlDashboard({riwayat, setRiwayats}) {
     async function deleteRiwayat() {
         const promise = loadingToast('Menghapus Riwayat')
         try {
-            await axios.get('/riwayats/'+riwayat._id)
+            console.log('incoming deleted',riwayat)
+            await axios.delete('/riwayats/'+riwayat._id)
             .then(res => {
                 setShowDeleteConfirm(false)
                 setShowOption(false)
@@ -86,7 +86,6 @@ function RiwayatControlDashboard({riwayat, setRiwayats}) {
                 promise.onError(res.response.data.msg)
             })
         } catch (error) {
-            console.log(error)
             promise.onError('Internal server error')
         }
     }
